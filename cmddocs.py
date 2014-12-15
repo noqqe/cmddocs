@@ -67,8 +67,10 @@ class Prompt(cmd.Cmd):
     intro = "Welcome to cmddocs"
 
     ### list
-    def do_list(self, line):
-        return list_articles(datadir)
+    def do_list(self, cwd):
+        if not cwd:
+            cwd = os.getcwd()
+        return list_articles(cwd)
 
     def do_l(self, cwd):
         if not cwd:
@@ -111,8 +113,10 @@ class Prompt(cmd.Cmd):
     def do_status(self, line):
         return repo.git.status()
 
-    def do_log(self, line):
-        return repo.git.log(oneline=True,n=5)
+    def do_log(self, count):
+        if not count:
+            count = 10
+        print repo.git.log(oneline=True,n=count)
 
     ### exit
     def do_exit(self, line):
