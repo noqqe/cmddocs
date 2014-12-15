@@ -7,6 +7,7 @@ import git
 
 datadir = "/home/noqqe/Code/cmddocs/data"
 exclude = ".git/"
+os.chdir(datadir)
 
 try:
     repo = git.Repo(datadir)
@@ -34,14 +35,15 @@ def edit_article(article, datadir):
     # set paths
     a = os.path.join(datadir,article)
     d = os.path.dirname(a)
-    print a
-    print d
 
+    # create dir(s) 
     if not os.path.isdir(d):
         os.makedirs(d)
 
+    # start editor
     os.system('%s %s' % (os.getenv('EDITOR'),a))
 
+    # commit into git
     try:
         repo.git.add(a)
         if repo.is_dirty():
@@ -58,27 +60,50 @@ class Prompt(cmd.Cmd):
     prompt = "\033[1m\033[37mcmddocs> \033[0m"
     intro = "Welcome to cmddocs"
 
-    def do_greet(self, line):
-        print "hello"
-
+    ### list
     def do_list(self, line):
-        list_articles(datadir)
+        return list_articles(datadir)
 
     def do_l(self, line):
-        list_articles(datadir)
+        return list_articles(datadir)
 
+    def complete_l(self, text, line, begidx, endidx):
+        arg = line.split()[1:]
+    
+        if not arg:
+            completions = os.listdir('./')
+        else:
+            dir, part, base = arg[-1].rpartition('/')
+            if part == '':
+                dir = './'
+            elif dir == '':
+                dir = '/'            
+    
+            completions = []
+            for f in os.listdir(dir):
+                if f.startswith(base):
+                    if os.path.isfile(os.path.join(dir,f)):
+                        completions.append(f)
+                    else:
+                        completions.append(f+'/')
+        return completions
+ 
+
+    ### edit 
     def do_edit(self, article):
         edit_article(article, datadir)
 
     def do_e(self, article):
-        edit_article(article, datadir)
+        return edit_article(article, datadir)
 
+    ### misc 
     def do_status(self, line):
         print repo.git.status()
 
     def do_log(self, line):
         print repo.git.log(oneline=True,n=5)
 
+    ### exit 
     def do_exit(self, line):
         return True
 
@@ -86,5 +111,6 @@ class Prompt(cmd.Cmd):
         print "exit"
         return True
 
+   
 if __name__ == '__main__':
     Prompt().cmdloop()
