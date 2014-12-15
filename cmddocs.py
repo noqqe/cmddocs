@@ -36,7 +36,7 @@ def edit_article(article, datadir):
     a = os.path.join(datadir,article)
     d = os.path.dirname(a)
 
-    # create dir(s) 
+    # create dir(s)
     if not os.path.isdir(d):
         os.makedirs(d)
 
@@ -69,16 +69,17 @@ class Prompt(cmd.Cmd):
 
     def complete_l(self, text, line, begidx, endidx):
         arg = line.split()[1:]
-    
+
         if not arg:
             completions = os.listdir('./')
+            completions[:] = [d for d in completions if d not in exclude]
         else:
             dir, part, base = arg[-1].rpartition('/')
             if part == '':
                 dir = './'
             elif dir == '':
-                dir = '/'            
-    
+                dir = '/'
+
             completions = []
             for f in os.listdir(dir):
                 if f.startswith(base):
@@ -87,23 +88,23 @@ class Prompt(cmd.Cmd):
                     else:
                         completions.append(f+'/')
         return completions
- 
 
-    ### edit 
+
+    ### edit
     def do_edit(self, article):
         edit_article(article, datadir)
 
     def do_e(self, article):
         return edit_article(article, datadir)
 
-    ### misc 
+    ### misc
     def do_status(self, line):
         print repo.git.status()
 
     def do_log(self, line):
         print repo.git.log(oneline=True,n=5)
 
-    ### exit 
+    ### exit
     def do_exit(self, line):
         return True
 
@@ -111,6 +112,6 @@ class Prompt(cmd.Cmd):
         print "exit"
         return True
 
-   
+
 if __name__ == '__main__':
     Prompt().cmdloop()
