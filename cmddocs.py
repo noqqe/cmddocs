@@ -30,9 +30,16 @@ def list_articles(cwd):
         for f in files:
             print('{}{}'.format(subindent, f))
 
-def edit_article(article, datadir):
+def change_directory(dir):
+    d = os.path.join(os.getcwd(),dir)
+    try:
+        os.chdir(d)
+    except:
+        print("Directory %s not found", dir)
+
+def edit_article(article, dir):
     # set paths
-    a = os.path.join(datadir,article)
+    a = os.path.join(dir,article)
     d = os.path.dirname(a)
 
     # create dir(s)
@@ -65,7 +72,7 @@ class Prompt(cmd.Cmd):
 
     def do_l(self, cwd):
         if not cwd:
-            cwd = datadir
+            cwd = os.getcwd()
         return list_articles(cwd)
 
     def complete_l(self, text, line, begidx, endidx):
@@ -90,20 +97,22 @@ class Prompt(cmd.Cmd):
                         completions.append(f+'/')
         return completions
 
+    def do_cd(self,dir):
+        return change_directory(dir)
 
     ### edit
     def do_edit(self, article):
-        edit_article(article, datadir)
+        return edit_article(article, os.getcwd())
 
     def do_e(self, article):
         return edit_article(article, datadir)
 
     ### misc
     def do_status(self, line):
-        print repo.git.status()
+        return repo.git.status()
 
     def do_log(self, line):
-        print repo.git.log(oneline=True,n=5)
+        return repo.git.log(oneline=True,n=5)
 
     ### exit
     def do_exit(self, line):
