@@ -18,12 +18,12 @@ except:
     print("Successfully created and initialized empty repo")
 
 
-def list_articles(datadir):
-    for root, dirs, files in os.walk(datadir):
+def list_articles(cwd):
+    for root, dirs, files in os.walk(cwd):
         # exclude .git/
         dirs[:] = [d for d in dirs if d not in exclude]
         # build tree view
-        level = root.replace(datadir, '').count(os.sep)
+        level = root.replace(cwd, '').count(os.sep)
         indent = ' ' * 2 * (level)
         print('{}{}/'.format(indent, os.path.basename(root)))
         subindent = ' ' * 2 * (level + 1)
@@ -31,7 +31,6 @@ def list_articles(datadir):
             print('{}{}'.format(subindent, f))
 
 def edit_article(article, datadir):
-
     # set paths
     a = os.path.join(datadir,article)
     d = os.path.dirname(a)
@@ -64,8 +63,10 @@ class Prompt(cmd.Cmd):
     def do_list(self, line):
         return list_articles(datadir)
 
-    def do_l(self, line):
-        return list_articles(datadir)
+    def do_l(self, cwd):
+        if not cwd:
+            cwd = datadir
+        return list_articles(cwd)
 
     def complete_l(self, text, line, begidx, endidx):
         arg = line.split()[1:]
