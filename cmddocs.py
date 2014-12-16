@@ -26,10 +26,15 @@ def list_articles(dir):
 
 def change_directory(dir):
     """ switch directory within docs dir """
+
     d = os.path.join(os.getcwd(),dir)
 
     # dont cd out of datadir
     if not datadir in d:
+        d = datadir
+
+    # if empty, switch to datadir
+    if not dir:
         d = datadir
 
     # switch to dir
