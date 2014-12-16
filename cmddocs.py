@@ -37,7 +37,7 @@ def change_directory(dir):
     except:
         print("Directory %s not found", dir)
 
-def edit_article(article, dir):
+def edit_article(article,dir):
     # set paths
     a = os.path.join(dir,article)
     d = os.path.dirname(a)
@@ -59,6 +59,12 @@ def edit_article(article, dir):
             print "Nothing to commit"
     except:
         pass
+
+def search_article(keyword,dir):
+    for subdir, dirs, files in os.walk(dir):
+        dirs[:] = [d for d in dirs if d not in exclude]
+        for file in files:
+            print dir+file
 
 class Prompt(cmd.Cmd):
     """ Basic commandline interface class """
@@ -108,6 +114,10 @@ class Prompt(cmd.Cmd):
 
     def do_e(self, article):
         return edit_article(article, datadir)
+
+    ### search 
+    def do_search(self, keyword):
+        return search_article(keyword, os.getcwd())
 
     ### misc
     def do_status(self, line):
