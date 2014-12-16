@@ -4,6 +4,7 @@ import os
 import sys
 import cmd
 import git
+import re
 
 datadir = "/home/noqqe/Code/cmddocs/data/"
 exclude = ".git/"
@@ -68,10 +69,21 @@ def edit_article(article,dir):
         pass
 
 def search_article(keyword,dir):
-    for subdir, dirs, files in os.walk(dir):
+    r = re.compile(keyword)
+    for dirpath, dirs, files in os.walk(dir):
         dirs[:] = [d for d in dirs if d not in exclude]
-        for file in files:
-            print dir+file
+        for fname in files:
+            path = os.path.join(dirpath, fname)
+            try:
+                f = open(path, "rt")
+            except IOError:
+                return 
+            for i, line in enumerate(f):
+                if r.search(line):
+                    print "* %s: %s" % (os.path.relpath(path, datadir),
+                            line.rstrip('\n'))
+            f.close()
+
 
 def path_complete(self, text, line, begidx, endidx):
     arg = line.split()[1:]
@@ -142,11 +154,11 @@ class Prompt(cmd.Cmd):
 
     ### search 
     def do_search(self, keyword):
-        return search_article(keyword, os.getcwd())
+        print search_article(keyword, os.getcwd())
 
     ### misc
     def do_status(self, line):
-        return repo.git.status()
+        repo.git.status()
 
     def do_log(self, count):
         if not count:
