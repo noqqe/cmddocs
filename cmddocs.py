@@ -69,20 +69,19 @@ def edit_article(article,dir):
         pass
 
 def search_article(keyword,dir):
+    c = 0 
     r = re.compile(keyword)
     for dirpath, dirs, files in os.walk(dir):
         dirs[:] = [d for d in dirs if d not in exclude]
         for fname in files:
             path = os.path.join(dirpath, fname)
-            try:
-                f = open(path, "rt")
-            except IOError:
-                return 
+            f = open(path, "rt")
             for i, line in enumerate(f):
                 if r.search(line):
-                    print "* %s: %s" % (os.path.relpath(path, datadir),
+                    c = c + 1
+                    print "* \033[92m%s\033[39m: %s" % (os.path.relpath(path, datadir),
                             line.rstrip('\n'))
-            f.close()
+    return "Results: %s" % c
 
 
 def path_complete(self, text, line, begidx, endidx):
