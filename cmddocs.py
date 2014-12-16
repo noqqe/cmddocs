@@ -15,15 +15,15 @@ except:
     repo = git.Repo.init(datadir)
     repo.git.add(".")
     repo.git.commit("init")
-    print("Successfully created and initialized empty repo")
+    print("Successfully created and initialized empty repo at " % datadir)
 
 
-def list_articles(cwd):
-    for root, dirs, files in os.walk(cwd):
+def list_articles(dir):
+    for root, dirs, files in os.walk(dir):
         # exclude .git/
         dirs[:] = [d for d in dirs if d not in exclude]
         # build tree view
-        level = root.replace(cwd, '').count(os.sep)
+        level = root.replace(dir, '').count(os.sep)
         indent = ' ' * 2 * (level)
         print('{}{}/'.format(indent, os.path.basename(root)))
         subindent = ' ' * 2 * (level + 1)
