@@ -73,6 +73,28 @@ def search_article(keyword,dir):
         for file in files:
             print dir+file
 
+def path_complete(self, text, line, begidx, endidx):
+    arg = line.split()[1:]
+
+    if not arg:
+        completions = os.listdir('./')
+        completions[:] = [d for d in completions if d not in exclude]
+    else:
+        dir, part, base = arg[-1].rpartition('/')
+        if part == '':
+            dir = './'
+        elif dir == '':
+            dir = '/'
+
+        completions = []
+        for f in os.listdir(dir):
+            if f.startswith(base):
+                if os.path.isfile(os.path.join(dir,f)):
+                    completions.append(f)
+                else:
+                    completions.append(f+'/')
+    return completions
+
 class Prompt(cmd.Cmd):
     """ Basic commandline interface class """
 
@@ -85,35 +107,22 @@ class Prompt(cmd.Cmd):
             cwd = os.getcwd()
         return list_articles(cwd)
 
+    def complete_list(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
     def do_l(self, cwd):
         if not cwd:
             cwd = os.getcwd()
         return list_articles(cwd)
 
     def complete_l(self, text, line, begidx, endidx):
-        arg = line.split()[1:]
-
-        if not arg:
-            completions = os.listdir('./')
-            completions[:] = [d for d in completions if d not in exclude]
-        else:
-            dir, part, base = arg[-1].rpartition('/')
-            if part == '':
-                dir = './'
-            elif dir == '':
-                dir = '/'
-
-            completions = []
-            for f in os.listdir(dir):
-                if f.startswith(base):
-                    if os.path.isfile(os.path.join(dir,f)):
-                        completions.append(f)
-                    else:
-                        completions.append(f+'/')
-        return completions
+        return path_complete(self, text, line, begidx, endidx)
 
     def do_cd(self,dir):
         return change_directory(dir)
+
+    def complete_cd(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
 
     def do_pwd(self,line):
         print os.path.relpath(os.getcwd(),datadir)
@@ -122,8 +131,14 @@ class Prompt(cmd.Cmd):
     def do_edit(self, article):
         return edit_article(article, os.getcwd())
 
+    def complete_edit(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
     def do_e(self, article):
         return edit_article(article, os.getcwd())
+
+    def complete_e(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
 
     ### search 
     def do_search(self, keyword):
