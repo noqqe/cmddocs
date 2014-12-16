@@ -5,6 +5,7 @@ import sys
 import cmd
 import git
 import re
+from subprocess import call
 
 datadir = "/home/noqqe/Code/cmddocs/data/"
 exclude = ".git/"
@@ -20,16 +21,8 @@ except:
 
 
 def list_articles(dir):
-    for root, dirs, files in os.walk(dir):
-        # exclude .git/
-        dirs[:] = [d for d in dirs if d not in exclude]
-        # build tree view
-        level = root.replace(dir, '').count(os.sep)
-        indent = ' ' * 2 * (level)
-        print('{}{}/'.format(indent, os.path.basename(root)))
-        subindent = ' ' * 2 * (level + 1)
-        for f in files:
-            print('{}{}'.format(subindent, f))
+    d = os.path.relpath(os.getcwd(),dir)
+    call(["tree", d ])
 
 def change_directory(dir):
     """ switch directory within docs dir """
