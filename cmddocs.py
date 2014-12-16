@@ -42,7 +42,7 @@ def change_directory(dir):
     try:
         os.chdir(d)
     except:
-        print("Directory %s not found", dir)
+        print("Directory %s not found" % dir)
 
 def edit_article(article,dir):
     # set paths
@@ -114,6 +114,9 @@ class Prompt(cmd.Cmd):
 
     def do_cd(self,dir):
         return change_directory(dir)
+
+    def do_pwd(self,line):
+        print os.path.relpath(os.getcwd(),datadir)
 
     ### edit
     def do_edit(self, article):
