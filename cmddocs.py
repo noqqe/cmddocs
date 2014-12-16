@@ -5,7 +5,7 @@ import sys
 import cmd
 import git
 
-datadir = "/home/noqqe/Code/cmddocs/data"
+datadir = "/home/noqqe/Code/cmddocs/data/"
 exclude = ".git/"
 os.chdir(datadir)
 
@@ -31,7 +31,14 @@ def list_articles(cwd):
             print('{}{}'.format(subindent, f))
 
 def change_directory(dir):
+    """ switch directory within docs dir """
     d = os.path.join(os.getcwd(),dir)
+
+    # dont cd out of datadir
+    if not datadir in d:
+        d = datadir
+
+    # switch to dir
     try:
         os.chdir(d)
     except:
@@ -113,7 +120,7 @@ class Prompt(cmd.Cmd):
         return edit_article(article, os.getcwd())
 
     def do_e(self, article):
-        return edit_article(article, datadir)
+        return edit_article(article, os.getcwd())
 
     ### search 
     def do_search(self, keyword):
