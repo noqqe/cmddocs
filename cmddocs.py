@@ -20,7 +20,6 @@ except:
     repo.git.commit("init")
     print("Successfully created and initialized empty repo at " % datadir)
 
-
 def list_articles(dir):
     d = os.path.relpath(os.getcwd(),dir)
     call(["tree", d ])
@@ -29,10 +28,8 @@ def list_directories(dir):
     d = os.path.relpath(os.getcwd(),dir)
     call(["tree", "-d", d ])
 
-
 def change_directory(dir):
     """ switch directory within docs dir """
-
     d = os.path.join(os.getcwd(),dir)
 
     # dont cd out of datadir
@@ -89,13 +86,15 @@ def delete_article(article,dir):
 
 def move_article(article,dir,dest):
     a = os.path.join(dir,article)
-    d = os.path.dirname(dest)
+    e = os.path.join(dir,dest)
+    d = os.path.dirname(e)
 
     # create dir(s)
     if not os.path.isdir(d):
         os.makedirs(d)
 
-    repo.git.mv(a,dest)
+    # move file in git and commit
+    repo.git.mv(a,e)
     repo.git.commit(m="Moved %s to %s" % (article,dest))
     return "Moved %s to %s" % (article,dest)
 
@@ -261,7 +260,8 @@ class Prompt(cmd.Cmd):
         "Show git logs of your docs. Use log 10 to show 10 entries"
         if not count:
             count = 10
-        print repo.git.log(oneline=True,n=count)
+        #print repo.git.log(pretty="format:%h%x09%an%x09%ad%x09%s",date="short",n=count)
+        print repo.git.log(pretty="format:%C(blue)%h %Cgreen%C(bold)%ad %Creset%s", n=count, date="short") 
 
     ### exit
     def do_exit(self, line):
