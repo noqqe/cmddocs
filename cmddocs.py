@@ -8,6 +8,7 @@ import re
 from subprocess import call
 
 datadir = "/home/noqqe/Code/cmddocs/data/"
+datadir = "/home/noqqe/Docs"
 exclude = ".git/"
 os.chdir(datadir)
 
@@ -23,6 +24,11 @@ except:
 def list_articles(dir):
     d = os.path.relpath(os.getcwd(),dir)
     call(["tree", d ])
+
+def list_directories(dir):
+    d = os.path.relpath(os.getcwd(),dir)
+    call(["tree", "-d", d ])
+
 
 def change_directory(dir):
     """ switch directory within docs dir """
@@ -65,6 +71,33 @@ def edit_article(article,dir):
             print "Nothing to commit"
     except:
         pass
+
+def delete_article(article,dir):
+    a = os.path.join(dir,article)
+    try:
+        repo.git.rm(a)
+        repo.git.commit(m="%s deleted" % article)
+    except:
+        if os.path.isdir(a):
+            os.rmdir(a)
+            print("Removed directory %s which was not under version control" % a)
+        else:
+            os.remove(a)
+            print("Removed file %s which was not under version control" % a)
+
+    return "%s deleted" % article
+
+def move_article(article,dir,dest):
+    a = os.path.join(dir,article)
+    d = os.path.dirname(dest)
+
+    # create dir(s)
+    if not os.path.isdir(d):
+        os.makedirs(d)
+
+    repo.git.mv(a,dest)
+    repo.git.commit(m="Moved %s to %s" % (article,dest))
+    return "Moved %s to %s" % (article,dest)
 
 def search_article(keyword,dir):
     c = 0 
@@ -112,6 +145,7 @@ class Prompt(cmd.Cmd):
 
     ### list
     def do_list(self, cwd):
+        "Show files in current working dir"
         if not cwd:
             cwd = os.getcwd()
         return list_articles(cwd)
@@ -120,53 +154,122 @@ class Prompt(cmd.Cmd):
         return path_complete(self, text, line, begidx, endidx)
 
     def do_l(self, cwd):
+        "Show files in current working dir"
         if not cwd:
             cwd = os.getcwd()
         return list_articles(cwd)
 
+    def do_ls(self, cwd):
+        "Show files in current working dir"
+        if not cwd:
+            cwd = os.getcwd()
+        return list_articles(cwd)
+
+    def do_d(self, cwd):
+        "Show only directories in current working dir"
+        if not cwd:
+            cwd = os.getcwd()
+        return list_directories(cwd)
+
+    def do_dirs(self, cwd):
+        "Show only directories in current working dir"
+        if not cwd:
+            cwd = os.getcwd()
+        return list_directories(cwd)
+
     def complete_l(self, text, line, begidx, endidx):
         return path_complete(self, text, line, begidx, endidx)
 
+    def complete_ls(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
     def do_cd(self,dir):
+        "Change directory"
         return change_directory(dir)
 
     def complete_cd(self, text, line, begidx, endidx):
         return path_complete(self, text, line, begidx, endidx)
 
     def do_pwd(self,line):
+        "Show current directory"
         print os.path.relpath(os.getcwd(),datadir)
 
     ### edit
     def do_edit(self, article):
+        "Edit an article. edit path/to/article"
         return edit_article(article, os.getcwd())
 
     def complete_edit(self, text, line, begidx, endidx):
         return path_complete(self, text, line, begidx, endidx)
 
     def do_e(self, article):
+        "Edit an article. e path/to/article"
         return edit_article(article, os.getcwd())
 
     def complete_e(self, text, line, begidx, endidx):
         return path_complete(self, text, line, begidx, endidx)
 
+    ### delete
+    def do_delete(self, article):
+        "Delete an article"
+        delete_article(article, os.getcwd())
+
+    def complete_delete(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
+    def do_rm(self, article):
+        "Delete an article"
+        delete_article(article, os.getcwd())
+
+    def complete_rm(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
+    ### move
+    def do_move(self, line):
+        "Move an article"
+        args = line.split()
+        if len(args)!=2:
+            print "Invalid usage\nUse: move source dest"
+            return
+        move_article(args[0], os.getcwd(), args[1])
+
+    def complete_move(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
+    def do_mv(self, line):
+        "Move an article"
+        args = line.split()
+        if len(args)!=2:
+            print "Invalid usage\nUse: mv source dest"
+            return
+        move_article(args[0], os.getcwd(), args[1])
+
+    def complete_mv(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
     ### search 
     def do_search(self, keyword):
+        "Search for keyword in current directory. Example: search mongodb"
         print search_article(keyword, os.getcwd())
 
     ### misc
     def do_status(self, line):
+        "Show git repo status of your docs"
         repo.git.status()
 
     def do_log(self, count):
+        "Show git logs of your docs. Use log 10 to show 10 entries"
         if not count:
             count = 10
         print repo.git.log(oneline=True,n=count)
 
     ### exit
     def do_exit(self, line):
+        "Exit cmddocs"
         return True
 
     def do_EOF(self, line):
+        "Exit cmddocs"
         print "exit"
         return True
 
