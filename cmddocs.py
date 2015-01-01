@@ -69,6 +69,14 @@ def edit_article(article,dir):
     except:
         pass
 
+def view_article(article,dir):
+    # set paths
+    a = os.path.join(dir,article)
+    d = os.path.dirname(a)
+
+    # start editor
+    os.system('%s -r %s' % (os.getenv('PAGER'),a))
+
 def delete_article(article,dir):
     a = os.path.join(dir,article)
     try:
@@ -158,6 +166,14 @@ class Prompt(cmd.Cmd):
             cwd = os.getcwd()
         return list_articles(cwd)
 
+    def do_view(self, article):
+        "Show files in current working dir"
+        try:
+            cwd
+        except NameError:
+            cwd = os.getcwd()
+        return view_article(article, cwd)
+
     def do_ls(self, cwd):
         "Show files in current working dir"
         if not cwd:
@@ -177,6 +193,9 @@ class Prompt(cmd.Cmd):
         return list_directories(cwd)
 
     def complete_l(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
+    def complete_view(self, text, line, begidx, endidx):
         return path_complete(self, text, line, begidx, endidx)
 
     def complete_ls(self, text, line, begidx, endidx):
