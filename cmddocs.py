@@ -5,6 +5,7 @@ import sys
 import cmd
 import git
 import re
+import tempfile
 from subprocess import call
 
 datadir = "/home/noqqe/Code/cmddocs/data/"
@@ -74,8 +75,19 @@ def view_article(article,dir):
     a = os.path.join(dir,article)
     d = os.path.dirname(a)
 
+    article = open(a, "r")
+    content = article.read()
+    article.close()
+    with tempfile.NamedTemporaryFile(delete=False) as tmp:
+        h = re.compile('^#{1,5} *(.*)',re.MULTILINE)
+        content = h.sub('\033[4m\033[1m\033[37m\\1\033[0m', content)
+        h = re.compile('^    (.*)',re.MULTILINE)
+        content = h.sub('\033[32m\\1\033[0m', content)
+        tmp.write(content)
+
     # start editor
-    os.system('%s -r %s' % (os.getenv('PAGER'),a))
+    os.system('%s -r %s' % (os.getenv('PAGER'),tmp.name))
+    os.remove(tmp.name)
 
 def delete_article(article,dir):
     a = os.path.join(dir,article)
@@ -107,7 +119,7 @@ def move_article(article,dir,dest):
     return "Moved %s to %s" % (article,dest)
 
 def search_article(keyword,dir):
-    c = 0 
+    c = 0
     r = re.compile(keyword)
     for dirpath, dirs, files in os.walk(dir):
         dirs[:] = [d for d in dirs if d not in exclude]
@@ -265,7 +277,7 @@ class Prompt(cmd.Cmd):
     def complete_mv(self, text, line, begidx, endidx):
         return path_complete(self, text, line, begidx, endidx)
 
-    ### search 
+    ### search
     def do_search(self, keyword):
         "Search for keyword in current directory. Example: search mongodb"
         print search_article(keyword, os.getcwd())
@@ -280,7 +292,7 @@ class Prompt(cmd.Cmd):
         if not count:
             count = 10
         #print repo.git.log(pretty="format:%h%x09%an%x09%ad%x09%s",date="short",n=count)
-        print repo.git.log(pretty="format:%C(blue)%h %Cgreen%C(bold)%ad %Creset%s", n=count, date="short") 
+        print repo.git.log(pretty="format:%C(blue)%h %Cgreen%C(bold)%ad %Creset%s", n=count, date="short")
 
     ### exit
     def do_exit(self, line):
