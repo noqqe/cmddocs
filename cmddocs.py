@@ -71,18 +71,19 @@ def edit_article(article,dir):
         pass
 
 def view_article(article,dir):
-    # set paths
     a = os.path.join(dir,article)
-    d = os.path.dirname(a)
-
     article = open(a, "r")
     content = article.read()
     article.close()
     with tempfile.NamedTemporaryFile(delete=False) as tmp:
-        h = re.compile('^#{1,5} *(.*)',re.MULTILINE)
+        h = re.compile('^#{3,5}\s*(.*)\ *$',re.MULTILINE)
+        content = h.sub('\033[1m\033[37m\\1\033[0m', content)
+        h = re.compile('^#{1,2}\s*(.*)\ *$',re.MULTILINE)
         content = h.sub('\033[4m\033[1m\033[37m\\1\033[0m', content)
-        h = re.compile('^    (.*)',re.MULTILINE)
-        content = h.sub('\033[32m\\1\033[0m', content)
+        h = re.compile('^\ {4}(.*)',re.MULTILINE)
+        content = h.sub('\033[92m\\1\033[0m', content)
+        h = re.compile('~~~\s*([^~]*)~~~[^\n]*\n',re.DOTALL)
+        content = h.sub('\033[92m\\1\033[0m', content)
         tmp.write(content)
 
     # start editor
@@ -164,7 +165,10 @@ class Prompt(cmd.Cmd):
 
     ### list
     def do_list(self, cwd):
-        "Show files in current working dir"
+        """ 
+        Show files in current working dir
+
+        """
         if not cwd:
             cwd = os.getcwd()
         return list_articles(cwd)
@@ -291,7 +295,6 @@ class Prompt(cmd.Cmd):
         "Show git logs of your docs. Use log 10 to show 10 entries"
         if not count:
             count = 10
-        #print repo.git.log(pretty="format:%h%x09%an%x09%ad%x09%s",date="short",n=count)
         print repo.git.log(pretty="format:%C(blue)%h %Cgreen%C(bold)%ad %Creset%s", n=count, date="short")
 
     ### exit
