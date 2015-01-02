@@ -11,6 +11,7 @@ from subprocess import call
 datadir = "/home/noqqe/Code/cmddocs/data/"
 datadir = "/home/noqqe/Docs"
 exclude = ".git/"
+default_commit_msg = "small changes"
 os.chdir(datadir)
 
 try:
@@ -64,6 +65,8 @@ def edit_article(article,dir):
         repo.git.add(a)
         if repo.is_dirty():
             msg = raw_input("Commit message: ")
+            if not msg: 
+                msg = default_commit_msg
             repo.git.commit(m=msg)
         else:
             print "Nothing to commit"
