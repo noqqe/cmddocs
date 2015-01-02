@@ -6,13 +6,19 @@ import cmd
 import git
 import re
 import tempfile
+import ConfigParser
 from subprocess import call
 
-datadir = "/home/noqqe/Code/cmddocs/data/"
-datadir = "/home/noqqe/Docs"
-exclude = ".git/"
-default_commit_msg = "small changes"
-os.chdir(datadir)
+config = ConfigParser.ConfigParser()
+config.read("/home/noqqe/.cmddocsrc")
+datadir = config.get("General", "Datadir")
+exclude = config.get("General", "Excludedir")
+default_commit_msg = config.get("General", "Default_Commit_Message")
+
+try:
+    os.chdir(datadir)
+except OSError:
+    print "Error: Datadir %s does not exist" % datadir
 
 if os.environ.get('EDITOR') is None:
     print "Error: EDITOR not set in environment"
@@ -23,6 +29,12 @@ if os.environ.get('PAGER') is None:
     print "Error: PAGER not set in environment"
     print "Try running: export PAGER=$(which less)"
     exit(1)
+
+if not os.path.isdir(datadir):
+    print "Error: Your Datadir %s does not exist" % datadir
+    print "Create it or edit your config in ~/.cmddocsrc"
+    exit(1)
+
 
 try:
     repo = git.Repo(datadir)
