@@ -101,7 +101,10 @@ def view_article(article,dir):
 
     # start editor
     os.system('%s -r %s' % (os.getenv('PAGER'),tmp.name))
-    os.remove(tmp.name)
+    try:
+        os.remove(tmp.name)
+    except OSError:
+        print "Error: Could not remove %s" % tmp.name
 
 def delete_article(article,dir):
     a = os.path.join(dir,article)
@@ -118,9 +121,14 @@ def delete_article(article,dir):
 
     return "%s deleted" % article
 
-def move_article(article,dir,dest):
-    a = os.path.join(dir,article)
-    e = os.path.join(dir,dest)
+def move_article(dir,args):
+    args = args.split()
+    if len(args)!=2:
+        print "Invalid usage\nUse: mv source dest"
+        return
+
+    a = os.path.join(dir,args[0])
+    e = os.path.join(dir,args[1])
     d = os.path.dirname(e)
 
     # create dir(s)
@@ -212,7 +220,9 @@ class Prompt(cmd.Cmd):
         Show files in current working dir
 
         """
-        if not cwd:
+        try:
+            cwd
+        except NameError:
             cwd = os.getcwd()
         return list_articles(cwd)
 
@@ -221,7 +231,9 @@ class Prompt(cmd.Cmd):
 
     def do_l(self, cwd):
         "Show files in current working dir"
-        if not cwd:
+        try:
+            cwd
+        except NameError:
             cwd = os.getcwd()
         return list_articles(cwd)
 
@@ -235,19 +247,25 @@ class Prompt(cmd.Cmd):
 
     def do_ls(self, cwd):
         "Show files in current working dir"
-        if not cwd:
+        try:
+            cwd
+        except NameError:
             cwd = os.getcwd()
         return list_articles(cwd)
 
     def do_d(self, cwd):
         "Show only directories in current working dir"
-        if not cwd:
+        try:
+            cwd
+        except NameError:
             cwd = os.getcwd()
         return list_directories(cwd)
 
     def do_dirs(self, cwd):
         "Show only directories in current working dir"
-        if not cwd:
+        try:
+            cwd
+        except NameError:
             cwd = os.getcwd()
         return list_directories(cwd)
 
@@ -308,18 +326,14 @@ class Prompt(cmd.Cmd):
         if len(args)!=2:
             print "Invalid usage\nUse: move source dest"
             return
-        move_article(args[0], os.getcwd(), args[1])
+        move_article(os.getcwd(),args)
 
     def complete_move(self, text, line, begidx, endidx):
         return path_complete(self, text, line, begidx, endidx)
 
     def do_mv(self, line):
         "Move an article"
-        args = line.split()
-        if len(args)!=2:
-            print "Invalid usage\nUse: mv source dest"
-            return
-        move_article(args[0], os.getcwd(), args[1])
+        move_article(os.getcwd(),args)
 
     def complete_mv(self, text, line, begidx, endidx):
         return path_complete(self, text, line, begidx, endidx)
@@ -327,7 +341,7 @@ class Prompt(cmd.Cmd):
     ### search
     def do_search(self, keyword):
         "Search for keyword in current directory. Example: search mongodb"
-        print search_article(keyword, os.getcwd())
+        print search_article(keyword,os.getcwd())
 
     ### misc
     def do_status(self, line):
