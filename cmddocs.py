@@ -134,6 +134,30 @@ def search_article(keyword,dir):
                             line.rstrip('\n'))
     return "Results: %s" % c
 
+def show_log(args):
+    args = args.split()
+    format="format:%C(blue)%h %Cgreen%C(bold)%ad %Creset%s"
+    dateformat="short"
+
+    if len(args) >= 1:
+         if os.path.isfile(os.path.join(os.getcwd(), args[0])):
+             file = args[0]
+             try:
+                 count = args[1]
+                 print repo.git.log(file, pretty=format, n=count, date=dateformat)
+             except IndexError:
+                 count = 10
+                 print repo.git.log(file, pretty=format, n=count, date=dateformat)
+         else:
+             count = args[0]
+             try:
+                 file = args[1]
+                 print repo.git.log(file, pretty=format, n=count, date=dateformat)
+             except IndexError:
+                 print repo.git.log(pretty=format, n=count, date=dateformat)
+    elif len(args) == 0:
+        count = 10
+        print repo.git.log(pretty=format, n=count,date=dateformat)
 
 def path_complete(self, text, line, begidx, endidx):
     arg = line.split()[1:]
@@ -165,7 +189,7 @@ class Prompt(cmd.Cmd):
 
     ### list
     def do_list(self, cwd):
-        """ 
+        """
         Show files in current working dir
 
         """
@@ -291,11 +315,18 @@ class Prompt(cmd.Cmd):
         "Show git repo status of your docs"
         repo.git.status()
 
-    def do_log(self, count):
-        "Show git logs of your docs. Use log 10 to show 10 entries"
-        if not count:
-            count = 10
-        print repo.git.log(pretty="format:%C(blue)%h %Cgreen%C(bold)%ad %Creset%s", n=count, date="short")
+    def do_log(self, args):
+        """
+        Show git logs of your docs.
+
+        Usage: log              # default loglines: 10)
+               log 20           # show 20 loglines
+               log 20 article   # show log for specific article
+        """
+        show_log(args)
+
+    def complete_log(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
 
     ### exit
     def do_exit(self, line):
