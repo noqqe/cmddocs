@@ -140,23 +140,29 @@ def show_log(args):
     dateformat="short"
 
     if len(args) >= 1:
-         if os.path.isfile(os.path.join(os.getcwd(), args[0])):
-             file = args[0]
-             try:
-                 count = args[1]
-                 print repo.git.log(file, pretty=format, n=count, date=dateformat)
-             except IndexError:
-                 count = 10
-                 print repo.git.log(file, pretty=format, n=count, date=dateformat)
-         else:
-             count = args[0]
-             try:
-                 file = args[1]
-                 print repo.git.log(file, pretty=format, n=count, date=dateformat)
-             except IndexError:
-                 print repo.git.log(pretty=format, n=count, date=dateformat)
+        if os.path.isfile(os.path.join(os.getcwd(), args[0])):
+            file = args[0]
+            try:
+                count = args[1]
+                print "Last %s commits for %s" % (count, file)
+                print repo.git.log(file, pretty=format, n=count, date=dateformat)
+            except IndexError:
+                count = 10
+                print "Last %s commits for %s" % (count, file)
+                print repo.git.log(file, pretty=format, n=count, date=dateformat)
+        else:
+            count = args[0]
+            try:
+                file = args[1]
+                print "Last %s commits for %s" % (count, file)
+                print repo.git.log(file, pretty=format, n=count, date=dateformat)
+            except IndexError:
+                print "Last %s commits" % count
+                print repo.git.log(pretty=format, n=count, date=dateformat)
+
     elif len(args) == 0:
         count = 10
+        print "Last %s commits" % count
         print repo.git.log(pretty=format, n=count,date=dateformat)
 
 def path_complete(self, text, line, begidx, endidx):
