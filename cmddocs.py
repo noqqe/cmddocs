@@ -9,17 +9,18 @@ import tempfile
 import ConfigParser
 from subprocess import call
 
+# Initialize config
 config = ConfigParser.ConfigParser()
 config.read("/home/noqqe/.cmddocsrc")
-datadir = config.get("General", "Datadir")
-exclude = config.get("General", "Excludedir")
-default_commit_msg = config.get("General", "Default_Commit_Message")
-
 try:
-    os.chdir(datadir)
-except OSError:
-    print "Error: Datadir %s does not exist" % datadir
+    datadir = config.get("General", "Datadir")
+    exclude = config.get("General", "Excludedir")
+    default_commit_msg = config.get("General", "Default_Commit_Message")
+except ConfigParser.NoSectionError:
+    print "Error: Config wrong formatted"
+    exit(1)
 
+# Check environment
 if os.environ.get('EDITOR') is None:
     print "Error: EDITOR not set in environment"
     print "Try running: export EDITOR=$(which vim)"
@@ -35,7 +36,14 @@ if not os.path.isdir(datadir):
     print "Create it or edit your config in ~/.cmddocsrc"
     exit(1)
 
+# Change to datadir
+try:
+    os.chdir(datadir)
+except OSError:
+    print "Error: Switching to Datadir %s not possible" % datadir
 
+
+# Read or initialize git repository
 try:
     repo = git.Repo(datadir)
 except git.exc.InvalidGitRepositoryError:
@@ -44,6 +52,7 @@ except git.exc.InvalidGitRepositoryError:
     repo.git.commit("init")
     print("Successfully created and initialized empty repo at " % datadir)
 
+# Function definitions
 def list_articles(dir):
     d = os.path.relpath(os.getcwd(),dir)
     call(["tree", d ])
@@ -53,7 +62,6 @@ def list_directories(dir):
     call(["tree", "-d", d ])
 
 def change_directory(dir):
-    """ switch directory within docs dir """
     d = os.path.join(os.getcwd(),dir)
 
     # dont cd out of datadir
@@ -97,9 +105,12 @@ def edit_article(article,dir):
 
 def view_article(article,dir):
     a = os.path.join(dir,article)
+    # read original file
     article = open(a, "r")
     content = article.read()
     article.close()
+
+    # create tmp file and convert markdown to ansi
     with tempfile.NamedTemporaryFile(delete=False) as tmp:
         h = re.compile('^#{3,5}\s*(.*)\ *$',re.MULTILINE)
         content = h.sub('\033[1m\033[37m\\1\033[0m', content)
@@ -111,7 +122,7 @@ def view_article(article,dir):
         content = h.sub('\033[92m\\1\033[0m', content)
         tmp.write(content)
 
-    # start editor
+    # start pager and cleanup tmp file afterwards
     os.system('%s -r %s' % (os.getenv('PAGER'),tmp.name))
     try:
         os.remove(tmp.name)
@@ -120,6 +131,7 @@ def view_article(article,dir):
 
 def delete_article(article,dir):
     a = os.path.join(dir,article)
+
     try:
         repo.git.rm(a)
         repo.git.commit(m="%s deleted" % article)
@@ -228,18 +240,13 @@ class Prompt(cmd.Cmd):
 
     ### list
     def do_list(self, cwd):
-        """
-        Show files in current working dir
-
-        """
+        "Show files in current working dir"
         try:
             cwd
         except NameError:
             cwd = os.getcwd()
         return list_articles(cwd)
 
-    def complete_list(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
 
     def do_l(self, cwd):
         "Show files in current working dir"
@@ -248,14 +255,6 @@ class Prompt(cmd.Cmd):
         except NameError:
             cwd = os.getcwd()
         return list_articles(cwd)
-
-    def do_view(self, article):
-        "Show files in current working dir"
-        try:
-            cwd
-        except NameError:
-            cwd = os.getcwd()
-        return view_article(article, cwd)
 
     def do_ls(self, cwd):
         "Show files in current working dir"
@@ -281,21 +280,10 @@ class Prompt(cmd.Cmd):
             cwd = os.getcwd()
         return list_directories(cwd)
 
-    def complete_l(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
-
-    def complete_view(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
-
-    def complete_ls(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
-
+    ### directories
     def do_cd(self,dir):
         "Change directory"
         return change_directory(dir)
-
-    def complete_cd(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
 
     def do_pwd(self,line):
         "Show current directory"
@@ -306,56 +294,43 @@ class Prompt(cmd.Cmd):
         "Edit an article. edit path/to/article"
         return edit_article(article, os.getcwd())
 
-    def complete_edit(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
-
     def do_e(self, article):
         "Edit an article. e path/to/article"
         return edit_article(article, os.getcwd())
 
-    def complete_e(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
+    ### view
+    def do_view(self, article):
+        "Show files in current working dir"
+        try:
+            cwd
+        except NameError:
+            cwd = os.getcwd()
+        return view_article(article, cwd)
 
     ### delete
     def do_delete(self, article):
         "Delete an article"
         delete_article(article, os.getcwd())
 
-    def complete_delete(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
-
     def do_rm(self, article):
         "Delete an article"
         delete_article(article, os.getcwd())
 
-    def complete_rm(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
-
     ### move
-    def do_move(self, line):
-        "Move an article"
-        args = line.split()
-        if len(args)!=2:
-            print "Invalid usage\nUse: move source dest"
-            return
-        move_article(os.getcwd(),args)
-
-    def complete_move(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
-
-    def do_mv(self, line):
+    def do_move(self, args):
         "Move an article"
         move_article(os.getcwd(),args)
 
-    def complete_mv(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
+    def do_mv(self, args):
+        "Move an article"
+        move_article(os.getcwd(),args)
 
     ### search
     def do_search(self, keyword):
         "Search for keyword in current directory. Example: search mongodb"
         print search_article(keyword,os.getcwd())
 
-    ### misc
+    ### status
     def do_status(self, line):
         "Show git repo status of your docs"
         repo.git.status()
@@ -370,9 +345,6 @@ class Prompt(cmd.Cmd):
         """
         show_log(args)
 
-    def complete_log(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
-
     ### exit
     def do_exit(self, line):
         "Exit cmddocs"
@@ -383,6 +355,42 @@ class Prompt(cmd.Cmd):
         print "exit"
         return True
 
+    ### completions
+    def complete_l(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
+    def complete_view(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
+    def complete_ls(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
+    def complete_list(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
+    def complete_cd(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
+    def complete_e(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
+    def complete_edit(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
+    def complete_delete(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
+    def complete_rm(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
+    def complete_move(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
+    def complete_mv(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
+    def complete_log(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
 
 if __name__ == '__main__':
     Prompt().cmdloop()
