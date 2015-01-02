@@ -26,7 +26,7 @@ if os.environ.get('PAGER') is None:
 
 try:
     repo = git.Repo(datadir)
-except:
+except git.exc.InvalidGitRepositoryError:
     repo = git.Repo.init(datadir)
     repo.git.add(".")
     repo.git.commit("init")
@@ -55,7 +55,7 @@ def change_directory(dir):
     # switch to dir
     try:
         os.chdir(d)
-    except:
+    except OSError:
         print("Directory %s not found" % dir)
 
 def edit_article(article,dir):
