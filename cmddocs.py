@@ -14,6 +14,16 @@ exclude = ".git/"
 default_commit_msg = "small changes"
 os.chdir(datadir)
 
+if os.environ.get('EDITOR') is None:
+    print "Error: EDITOR not set in environment"
+    print "Try running: export EDITOR=$(which vim)"
+    exit(1)
+
+if os.environ.get('PAGER') is None:
+    print "Error: PAGER not set in environment"
+    print "Try running: export PAGER=$(which less)"
+    exit(1)
+
 try:
     repo = git.Repo(datadir)
 except:
