@@ -41,6 +41,7 @@ try:
     os.chdir(datadir)
 except OSError:
     print "Error: Switching to Datadir %s not possible" % datadir
+    exit(1)
 
 
 # Read or initialize git repository
@@ -54,11 +55,11 @@ except git.exc.InvalidGitRepositoryError:
 
 # Function definitions
 def list_articles(dir):
-    d = os.path.relpath(os.getcwd(),dir)
+    d = os.path.join(os.getcwd(),dir)
     call(["tree", d ])
 
 def list_directories(dir):
-    d = os.path.relpath(os.getcwd(),dir)
+    d = os.path.join(os.getcwd(),dir)
     call(["tree", "-d", d ])
 
 def change_directory(dir):
@@ -357,6 +358,12 @@ class Prompt(cmd.Cmd):
 
     ### completions
     def complete_l(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
+    def complete_d(self, text, line, begidx, endidx):
+        return path_complete(self, text, line, begidx, endidx)
+
+    def complete_dirs(self, text, line, begidx, endidx):
         return path_complete(self, text, line, begidx, endidx)
 
     def complete_view(self, text, line, begidx, endidx):
