@@ -34,7 +34,7 @@ plaintext files.
 To give you an idea what it looks/feels like I created a short terminal
 recording.
 
-<script type="text/javascript" src="https://asciinema.org/a/15168.js" id="asciicast-15168" async></script>
+[asciinema cmddocs demo](https://asciinema.org/a/15168)
 
 ### Installation and usage
 
