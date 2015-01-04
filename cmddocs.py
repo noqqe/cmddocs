@@ -107,7 +107,12 @@ def edit_article(article,dir):
 def view_article(article,dir):
     a = os.path.join(dir,article)
     # read original file
-    article = open(a, "r")
+    try:
+        article = open(a, "r")
+    except IOError:
+        print "Error: Could not find %s" % article
+        return
+
     content = article.read()
     article.close()
 
@@ -124,7 +129,9 @@ def view_article(article,dir):
         tmp.write(content)
 
     # start pager and cleanup tmp file afterwards
-    os.system('%s -r %s' % (os.getenv('PAGER'),tmp.name))
+    # -fr is needed for showing binary+ansi colored files to 
+    # be properly displayed
+    os.system('%s -fr %s' % (os.getenv('PAGER'),tmp.name))
     try:
         os.remove(tmp.name)
     except OSError:
@@ -248,9 +255,8 @@ class Prompt(cmd.Cmd):
             cwd = os.getcwd()
         return list_articles(cwd)
 
-
     def do_l(self, cwd):
-        "Show files in current working dir"
+        "Alias for list"
         try:
             cwd
         except NameError:
@@ -258,7 +264,7 @@ class Prompt(cmd.Cmd):
         return list_articles(cwd)
 
     def do_ls(self, cwd):
-        "Show files in current working dir"
+        "Alias for list"
         try:
             cwd
         except NameError:
@@ -266,7 +272,7 @@ class Prompt(cmd.Cmd):
         return list_articles(cwd)
 
     def do_d(self, cwd):
-        "Show only directories in current working dir"
+        "Alias for dirs"
         try:
             cwd
         except NameError:
@@ -274,7 +280,7 @@ class Prompt(cmd.Cmd):
         return list_directories(cwd)
 
     def do_dirs(self, cwd):
-        "Show only directories in current working dir"
+        "Show only directories in cwd"
         try:
             cwd
         except NameError:
@@ -292,16 +298,27 @@ class Prompt(cmd.Cmd):
 
     ### edit
     def do_edit(self, article):
-        "Edit an article. edit path/to/article"
+        """ 
+        Edit or create new article. 
+        
+        > edit databases/mongodb
+        > edit intro
+        """
         return edit_article(article, os.getcwd())
 
     def do_e(self, article):
-        "Edit an article. e path/to/article"
+        "Alias for edit"
         return edit_article(article, os.getcwd())
 
     ### view
     def do_view(self, article):
-        "Show files in current working dir"
+        """
+        View an article. Creates temporary file with converted markdown to
+        ansi colored output. Opens your PAGER. (Only less supported atm)
+
+        > view databases/mongodb
+        > view intro
+        """
         try:
             cwd
         except NameError:
@@ -314,7 +331,7 @@ class Prompt(cmd.Cmd):
         delete_article(article, os.getcwd())
 
     def do_rm(self, article):
-        "Delete an article"
+        "Alias for delete"
         delete_article(article, os.getcwd())
 
     ### move
@@ -323,7 +340,7 @@ class Prompt(cmd.Cmd):
         move_article(os.getcwd(),args)
 
     def do_mv(self, args):
-        "Move an article"
+        "Alias for move"
         move_article(os.getcwd(),args)
 
     ### search
@@ -334,15 +351,16 @@ class Prompt(cmd.Cmd):
     ### status
     def do_status(self, line):
         "Show git repo status of your docs"
-        repo.git.status()
+        print repo.git.status()
 
     def do_log(self, args):
         """
         Show git logs of your docs.
 
-        Usage: log              # default loglines: 10)
-               log 20           # show 20 loglines
-               log 20 article   # show log for specific article
+        Usage: log                      # default loglines: 10)
+               log 20                   # show 20 loglines
+               log 20 article           # show log for specific article
+               log databases/mongodb 3  # same
         """
         show_log(args)
 
