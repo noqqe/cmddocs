@@ -11,7 +11,7 @@ from subprocess import call
 
 # Initialize config
 config = ConfigParser.ConfigParser()
-config.read("/home/noqqe/.cmddocsrc")
+config.read(os.path.expanduser('~') + "/.cmddocsrc")
 try:
     datadir = config.get("General", "Datadir")
     exclude = config.get("General", "Excludedir")
