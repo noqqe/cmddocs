@@ -20,7 +20,7 @@ def list_directories(dir):
     d = os.path.join(os.getcwd(),dir)
     call(["tree", "-d", d ])
 
-def change_directory(dir):
+def change_directory(dir,datadir):
     "changes directory"
     d = os.path.join(os.getcwd(),dir)
 
@@ -38,7 +38,7 @@ def change_directory(dir):
     except OSError:
         print("Directory %s not found" % dir)
 
-def edit_article(article,dir):
+def edit_article(article,dir,editor):
     "edit an article within your docs"
     # set paths
     a = os.path.join(dir,article)
@@ -64,7 +64,7 @@ def edit_article(article,dir):
     except:
         pass
 
-def view_article(article,dir):
+def view_article(article,dir,pager):
     "view an article within your docs"
     a = os.path.join(dir,article)
     # read original file
@@ -135,7 +135,7 @@ def move_article(dir,args):
     repo.git.commit(m="Moved %s to %s" % (article,dest))
     return "Moved %s to %s" % (article,dest)
 
-def search_article(keyword,dir):
+def search_article(keyword,dir,datadir):
     """
     search for a keyword in every article within your current directory and
     below. Much like recursive grep.
@@ -221,24 +221,25 @@ class cmddocs(cmd.Cmd):
     def __init__(self):
         self.read_config(self)
         self.initialize_docs(self)
-        prompt = '\033[1m\033[37m{} \033[0m'.format(prompt)
-        intro = intro
+        cmd.Cmd.__init__(self)
+        prompt = '\033[1m\033[37m{}\ \033[0m'.format(self.prompt)
+        intro = self.intro
 
     @classmethod
-    def read_config(self,args):
+    def read_config(self,conf):
         config = ConfigParser.ConfigParser()
         if not config.read(os.path.expanduser('~') + "/.cmddocsrc"):
             print "Error: your ~/.cmddocsrc could not be read"
             exit(1)
         
         try:
-            datadir = config.get("General", "Datadir")
-            exclude = config.get("General", "Excludedir")
-            default_commit_msg = config.get("General", "Default_Commit_Message")
-            editor = config.get("General", "Editor")
-            pager = config.get("General", "Pager")
-            prompt = config.get("General", "Prompt")
-            intro = config.get("General", "Intro_Message")
+            self.datadir = config.get("General", "Datadir")
+            self.exclude = config.get("General", "Excludedir")
+            self.default_commit_msg = config.get("General", "Default_Commit_Message")
+            self.editor = config.get("General", "Editor")
+            self.pager = config.get("General", "Pager")
+            self.prompt = config.get("General", "Prompt")
+            self.intro = config.get("General", "Intro_Message")
         except ConfigParser.NoSectionError:
             print "Error: Config wrong formatted"
             exit(1)
@@ -246,21 +247,21 @@ class cmddocs(cmd.Cmd):
         return 
         
     @classmethod
-    def initialize_docs(self,args):
+    def initialize_docs(self,docs):
         # Read or initialize git repository
         try:
-            repo = git.Repo(datadir)
+            repo = git.Repo(self.datadir)
         except git.exc.InvalidGitRepositoryError:
-            repo = git.Repo.init(datadir)
+            repo = git.Repo.init(self.datadir)
             repo.git.add(".")
             repo.git.commit("init")
-            print("Successfully created and initialized empty repo at %s" % datadir)
+            print("Successfully created and initialized empty repo at %s" % self.datadir)
         
         # Change to datadir
         try:
-            os.chdir(datadir)
+            os.chdir(self.datadir)
         except OSError:
-            print "Error: Switching to Datadir %s not possible" % datadir
+            print "Error: Switching to Datadir %s not possible" % self.datadir
             exit(1)
 
 
@@ -293,11 +294,11 @@ class cmddocs(cmd.Cmd):
     ### directories
     def do_cd(self,dir):
         "Change directory"
-        return change_directory(dir)
+        return change_directory(dir,self.datadir)
 
     def do_pwd(self,line):
         "Show current directory"
-        print os.path.relpath(os.getcwd(),datadir)
+        print os.path.relpath(os.getcwd(),self.datadir)
 
     ### edit
     def do_edit(self, article):
@@ -307,11 +308,11 @@ class cmddocs(cmd.Cmd):
         > edit databases/mongodb
         > edit intro
         """
-        return edit_article(article, os.getcwd())
+        return edit_article(article, os.getcwd(), self.editor)
 
     def do_e(self, article):
         "Alias for edit"
-        return edit_article(article, os.getcwd())
+        return edit_article(article, os.getcwd(), self.editor)
 
     ### view
     def do_view(self, article):
@@ -323,7 +324,7 @@ class cmddocs(cmd.Cmd):
         > view intro
         """
         if not cwd: cwd = os.getcwd()
-        return view_article(article, cwd)
+        return view_article(article, cwd, self.pager)
 
     ### delete
     def do_delete(self, article):
@@ -346,7 +347,7 @@ class cmddocs(cmd.Cmd):
     ### search
     def do_search(self, keyword):
         "Search for keyword in current directory. Example: search mongodb"
-        print search_article(keyword,os.getcwd())
+        print search_article(keyword,os.getcwd(),self.datadir)
 
     ### status
     def do_status(self, line):
