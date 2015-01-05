@@ -54,6 +54,10 @@ to your needs):
 Datadir = /home/noqqe/Docs
 Default_Commit_Message = small changes
 Excludedir = .git/
+Editor = /usr/local/bin/vim
+Pager = /usr/bin/less
+Prompt = cmddocs>
+Intro_Message = cmddocs - press ? for help
 ```
 
 Once you start cmddocs.py the CLI will be shown. Use `help` for commands.

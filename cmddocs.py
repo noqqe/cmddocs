@@ -22,6 +22,7 @@ try:
     editor = config.get("General", "Editor")
     pager = config.get("General", "Pager")
     prompt = config.get("General", "Prompt")
+    intro = config.get("General", "Intro_Message")
 except ConfigParser.NoSectionError:
     print "Error: Config wrong formatted"
     exit(1)
@@ -234,7 +235,7 @@ class Prompt(cmd.Cmd):
     """ Basic commandline interface class """
 
     prompt = '\033[1m\033[37m{} \033[0m'.format(prompt)
-    intro = "Welcome to cmddocs"
+    intro = intro
 
     ### list
     def do_list(self, cwd):
