@@ -21,6 +21,7 @@ try:
     default_commit_msg = config.get("General", "Default_Commit_Message")
     editor = config.get("General", "Editor")
     pager = config.get("General", "Pager")
+    prompt = config.get("General", "Prompt")
 except ConfigParser.NoSectionError:
     print "Error: Config wrong formatted"
     exit(1)
@@ -232,7 +233,7 @@ def path_complete(self, text, line, begidx, endidx):
 class Prompt(cmd.Cmd):
     """ Basic commandline interface class """
 
-    prompt = "\033[1m\033[37mcmddocs> \033[0m"
+    prompt = '\033[1m\033[37m{} \033[0m'.format(prompt)
     intro = "Welcome to cmddocs"
 
     ### list
