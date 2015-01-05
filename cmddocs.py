@@ -250,7 +250,7 @@ def path_complete(self, text, line, begidx, endidx):
                     completions.append(f+'/')
     return completions
 
-class Prompt(cmd.Cmd):
+class cmddocs(cmd.Cmd):
     """ Basic commandline interface class """
 
     prompt = '\033[1m\033[37m{} \033[0m'.format(prompt)
@@ -428,4 +428,4 @@ class Prompt(cmd.Cmd):
         return path_complete(self, text, line, begidx, endidx)
 
 if __name__ == '__main__':
-    Prompt().cmdloop()
+    cmddocs().cmdloop()
