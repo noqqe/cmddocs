@@ -42,7 +42,7 @@ except git.exc.InvalidGitRepositoryError:
     repo = git.Repo.init(datadir)
     repo.git.add(".")
     repo.git.commit("init")
-    print("Successfully created and initialized empty repo at " % datadir)
+    print("Successfully created and initialized empty repo at %s" % datadir)
 
 # Function definitions
 def list_articles(dir):
