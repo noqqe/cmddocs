@@ -267,42 +267,27 @@ class cmddocs(cmd.Cmd):
     ### list
     def do_list(self, cwd):
         "Show files in current working dir"
-        try:
-            cwd
-        except NameError:
-            cwd = os.getcwd()
+        if not cwd: cwd = os.getcwd()
         return list_articles(cwd)
 
     def do_l(self, cwd):
         "Alias for list"
-        try:
-            cwd
-        except NameError:
-            cwd = os.getcwd()
+        if not cwd: cwd = os.getcwd()
         return list_articles(cwd)
 
     def do_ls(self, cwd):
         "Alias for list"
-        try:
-            cwd
-        except NameError:
-            cwd = os.getcwd()
+        if not cwd: cwd = os.getcwd()
         return list_articles(cwd)
 
     def do_d(self, cwd):
         "Alias for dirs"
-        try:
-            cwd
-        except NameError:
-            cwd = os.getcwd()
+        if not cwd: cwd = os.getcwd()
         return list_directories(cwd)
 
     def do_dirs(self, cwd):
         "Show only directories in cwd"
-        try:
-            cwd
-        except NameError:
-            cwd = os.getcwd()
+        if not cwd: cwd = os.getcwd()
         return list_directories(cwd)
 
     ### directories
@@ -337,10 +322,7 @@ class cmddocs(cmd.Cmd):
         > view databases/mongodb
         > view intro
         """
-        try:
-            cwd
-        except NameError:
-            cwd = os.getcwd()
+        if not cwd: cwd = os.getcwd()
         return view_article(article, cwd)
 
     ### delete
