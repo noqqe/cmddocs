@@ -46,14 +46,17 @@ except git.exc.InvalidGitRepositoryError:
 
 # Function definitions
 def list_articles(dir):
+    "lists all articles in current dir and below"
     d = os.path.join(os.getcwd(),dir)
     call(["tree", d ])
 
 def list_directories(dir):
+    "lists all directories in current dir and below"
     d = os.path.join(os.getcwd(),dir)
     call(["tree", "-d", d ])
 
 def change_directory(dir):
+    "changes directory"
     d = os.path.join(os.getcwd(),dir)
 
     # dont cd out of datadir
@@ -71,6 +74,7 @@ def change_directory(dir):
         print("Directory %s not found" % dir)
 
 def edit_article(article,dir):
+    "edit an article within your docs"
     # set paths
     a = os.path.join(dir,article)
     d = os.path.dirname(a)
@@ -96,6 +100,7 @@ def edit_article(article,dir):
         pass
 
 def view_article(article,dir):
+    "view an article within your docs"
     a = os.path.join(dir,article)
     # read original file
     try:
@@ -129,6 +134,7 @@ def view_article(article,dir):
         print "Error: Could not remove %s" % tmp.name
 
 def delete_article(article,dir):
+    "delete an article"
     a = os.path.join(dir,article)
 
     try:
@@ -145,6 +151,7 @@ def delete_article(article,dir):
     return "%s deleted" % article
 
 def move_article(dir,args):
+    "move an article from source to destination"
     args = args.split()
     if len(args)!=2:
         print "Invalid usage\nUse: mv source dest"
@@ -164,6 +171,10 @@ def move_article(dir,args):
     return "Moved %s to %s" % (article,dest)
 
 def search_article(keyword,dir):
+    """
+    search for a keyword in every article within your current directory and
+    below. Much like recursive grep.
+    """
     c = 0
     r = re.compile(keyword)
     for dirpath, dirs, files in os.walk(dir):
@@ -179,6 +190,10 @@ def search_article(keyword,dir):
     return "Results: %s" % c
 
 def show_log(args):
+    """
+    Show latest git logs with specified number of entries and maybe for a
+    specific file.
+    """
     args = args.split()
     format="format:%C(blue)%h %Cgreen%C(bold)%ad %Creset%s"
     dateformat="short"
@@ -210,6 +225,10 @@ def show_log(args):
         print repo.git.log(pretty=format, n=count,date=dateformat)
 
 def path_complete(self, text, line, begidx, endidx):
+    """ 
+    Path completition function used in various places for tab completion
+    when using cmd
+    """
     arg = line.split()[1:]
 
     if not arg:
