@@ -9,41 +9,6 @@ import tempfile
 import ConfigParser
 from subprocess import call
 
-# Initialize config
-config = ConfigParser.ConfigParser()
-if not config.read(os.path.expanduser('~') + "/.cmddocsrc"):
-    print "Error: your ~/.cmddocsrc could not be read"
-    exit(1)
-
-try:
-    datadir = config.get("General", "Datadir")
-    exclude = config.get("General", "Excludedir")
-    default_commit_msg = config.get("General", "Default_Commit_Message")
-    editor = config.get("General", "Editor")
-    pager = config.get("General", "Pager")
-    prompt = config.get("General", "Prompt")
-    intro = config.get("General", "Intro_Message")
-except ConfigParser.NoSectionError:
-    print "Error: Config wrong formatted"
-    exit(1)
-
-# Change to datadir
-try:
-    os.chdir(datadir)
-except OSError:
-    print "Error: Switching to Datadir %s not possible" % datadir
-    exit(1)
-
-
-# Read or initialize git repository
-try:
-    repo = git.Repo(datadir)
-except git.exc.InvalidGitRepositoryError:
-    repo = git.Repo.init(datadir)
-    repo.git.add(".")
-    repo.git.commit("init")
-    print("Successfully created and initialized empty repo at %s" % datadir)
-
 # Function definitions
 def list_articles(dir):
     "lists all articles in current dir and below"
@@ -253,8 +218,51 @@ def path_complete(self, text, line, begidx, endidx):
 class cmddocs(cmd.Cmd):
     """ Basic commandline interface class """
 
-    prompt = '\033[1m\033[37m{} \033[0m'.format(prompt)
-    intro = intro
+    def __init__(self):
+        self.read_config(self)
+        self.initialize_docs(self)
+        prompt = '\033[1m\033[37m{} \033[0m'.format(prompt)
+        intro = intro
+
+    @classmethod
+    def read_config(self,args):
+        config = ConfigParser.ConfigParser()
+        if not config.read(os.path.expanduser('~') + "/.cmddocsrc"):
+            print "Error: your ~/.cmddocsrc could not be read"
+            exit(1)
+        
+        try:
+            datadir = config.get("General", "Datadir")
+            exclude = config.get("General", "Excludedir")
+            default_commit_msg = config.get("General", "Default_Commit_Message")
+            editor = config.get("General", "Editor")
+            pager = config.get("General", "Pager")
+            prompt = config.get("General", "Prompt")
+            intro = config.get("General", "Intro_Message")
+        except ConfigParser.NoSectionError:
+            print "Error: Config wrong formatted"
+            exit(1)
+    
+        return 
+        
+    @classmethod
+    def initialize_docs(self,args):
+        # Read or initialize git repository
+        try:
+            repo = git.Repo(datadir)
+        except git.exc.InvalidGitRepositoryError:
+            repo = git.Repo.init(datadir)
+            repo.git.add(".")
+            repo.git.commit("init")
+            print("Successfully created and initialized empty repo at %s" % datadir)
+        
+        # Change to datadir
+        try:
+            os.chdir(datadir)
+        except OSError:
+            print "Error: Switching to Datadir %s not possible" % datadir
+            exit(1)
+
 
     ### list
     def do_list(self, cwd):
