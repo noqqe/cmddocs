@@ -11,24 +11,18 @@ from subprocess import call
 
 # Initialize config
 config = ConfigParser.ConfigParser()
-config.read(os.path.expanduser('~') + "/.cmddocsrc")
+if not config.read(os.path.expanduser('~') + "/.cmddocsrc"):
+    print "Error: your ~/.cmddocsrc could not be read"
+    exit(1)
+
 try:
     datadir = config.get("General", "Datadir")
     exclude = config.get("General", "Excludedir")
     default_commit_msg = config.get("General", "Default_Commit_Message")
+    editor = config.get("General", "Editor")
+    pager = config.get("General", "Pager")
 except ConfigParser.NoSectionError:
     print "Error: Config wrong formatted"
-    exit(1)
-
-# Check environment
-if os.environ.get('EDITOR') is None:
-    print "Error: EDITOR not set in environment"
-    print "Try running: export EDITOR=$(which vim)"
-    exit(1)
-
-if os.environ.get('PAGER') is None:
-    print "Error: PAGER not set in environment"
-    print "Try running: export PAGER=$(which less)"
     exit(1)
 
 if not os.path.isdir(datadir):
@@ -89,7 +83,7 @@ def edit_article(article,dir):
         os.makedirs(d)
 
     # start editor
-    os.system('%s %s' % (os.getenv('EDITOR'),a))
+    os.system('%s %s' % (editor,a))
 
     # commit into git
     try:
@@ -131,7 +125,7 @@ def view_article(article,dir):
     # start pager and cleanup tmp file afterwards
     # -fr is needed for showing binary+ansi colored files to 
     # be properly displayed
-    os.system('%s -fr %s' % (os.getenv('PAGER'),tmp.name))
+    os.system('%s -fr %s' % (pager,tmp.name))
     try:
         os.remove(tmp.name)
     except OSError:
