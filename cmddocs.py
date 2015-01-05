@@ -25,11 +25,6 @@ except ConfigParser.NoSectionError:
     print "Error: Config wrong formatted"
     exit(1)
 
-if not os.path.isdir(datadir):
-    print "Error: Your Datadir %s does not exist" % datadir
-    print "Create it or edit your config in ~/.cmddocsrc"
-    exit(1)
-
 # Change to datadir
 try:
     os.chdir(datadir)
