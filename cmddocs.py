@@ -102,19 +102,24 @@ def view_article(article,dir,pager):
 def delete_article(article,dir,repo):
     "delete an article"
     a = os.path.join(dir,article)
-
     try:
         repo.git.rm(a)
         repo.git.commit(m="%s deleted" % article)
+        print("%s deleted" % article)
     except:
         if os.path.isdir(a):
-            os.rmdir(a)
-            print("Removed directory %s which was not under version control" % a)
+            try:
+                os.rmdir(a)
+                print("Removed directory %s which was not under version control" % a)
+            except OSError:
+                print("Could not remove %s - its maybe not empty" % a)
         else:
-            os.remove(a)
-            print("Removed file %s which was not under version control" % a)
-
-    return "%s deleted" % article
+            try:
+                os.remove(a)
+                print("Removed file %s which was not under version control" % a)
+            except OSError:
+                print("File %s could not be removed" % a)
+    return
 
 def move_article(dir,args,repo):
     "move an article from source to destination"
@@ -133,8 +138,8 @@ def move_article(dir,args,repo):
 
     # move file in git and commit
     repo.git.mv(a,e)
-    repo.git.commit(m="Moved %s to %s" % (article,dest))
-    return "Moved %s to %s" % (article,dest)
+    repo.git.commit(m="Moved %s to %s" % (a,e))
+    print("Moved %s to %s" % (a,e))
 
 def search_article(keyword,dir,datadir):
     """
@@ -220,9 +225,9 @@ class cmddocs(cmd.Cmd):
     """ Basic commandline interface class """
 
     def __init__(self):
+        cmd.Cmd.__init__(self)
         self.read_config(self)
         self.initialize_docs(self)
-        cmd.Cmd.__init__(self)
         self.prompt = '\033[1m\033[37m{} \033[0m'.format(self.prompt)
 
     @classmethod
