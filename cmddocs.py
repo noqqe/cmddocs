@@ -39,10 +39,10 @@ def change_directory(dir,datadir):
     except OSError:
         print("Directory %s not found" % dir)
 
-def edit_article(article,dir,editor,repo):
-    "edit an article within your docs"
+def edit_article(article, directory, editor, repo, default_commit_msg):
+    """edit an article within your docs"""
     # set paths
-    a = os.path.join(dir,article)
+    a = os.path.join(directory, article)
     d = os.path.dirname(a)
 
     # create dir(s)
@@ -141,14 +141,14 @@ def move_article(dir,args,repo):
     repo.git.commit(m="Moved %s to %s" % (a,e))
     print("Moved %s to %s" % (a,e))
 
-def search_article(keyword,dir,datadir):
+def search_article(keyword, directory, datadir, exclude):
     """
     search for a keyword in every article within your current directory and
     below. Much like recursive grep.
     """
     c = 0
     r = re.compile(keyword)
-    for dirpath, dirs, files in os.walk(dir):
+    for dirpath, dirs, files in os.walk(directory):
         dirs[:] = [d for d in dirs if d not in exclude]
         for fname in files:
             path = os.path.join(dirpath, fname)
@@ -230,8 +230,7 @@ class cmddocs(cmd.Cmd):
         self.initialize_docs(self)
         self.prompt = '\033[1m\033[37m{} \033[0m'.format(self.prompt)
 
-    @classmethod
-    def read_config(self,conf):
+    def read_config(self, conf):
         config = ConfigParser.ConfigParser()
         if not config.read(os.path.expanduser('~') + "/.cmddocsrc"):
             print "Error: your ~/.cmddocsrc could not be read"
@@ -249,8 +248,7 @@ class cmddocs(cmd.Cmd):
             exit(1)
         return 
         
-    @classmethod
-    def initialize_docs(self,docs):
+    def initialize_docs(self, docs):
         # Read or initialize git repository
         try:
             self.repo = git.Repo(self.datadir)
@@ -310,11 +308,11 @@ class cmddocs(cmd.Cmd):
         > edit databases/mongodb
         > edit intro
         """
-        return edit_article(article, os.getcwd(), self.editor, self.repo)
+        return edit_article(article, os.getcwd(), self.editor, self.repo, self.default_commit_msg)
 
     def do_e(self, article):
         "Alias for edit"
-        return edit_article(article, os.getcwd(), self.editor, self.repo)
+        return edit_article(article, os.getcwd(), self.editor, self.repo, self.default_commit_msg)
 
     ### view
     def do_view(self, article):
@@ -348,7 +346,7 @@ class cmddocs(cmd.Cmd):
     ### search
     def do_search(self, keyword):
         "Search for keyword in current directory. Example: search mongodb"
-        print search_article(keyword,os.getcwd(),self.datadir)
+        print search_article(keyword,os.getcwd(), self.datadir, self.exclude)
 
     ### status
     def do_status(self, line):
