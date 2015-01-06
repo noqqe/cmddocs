@@ -35,6 +35,7 @@ def change_directory(dir,datadir):
     # switch to dir
     try:
         os.chdir(d)
+        return d
     except OSError:
         print("Directory %s not found" % dir)
 
@@ -260,41 +261,41 @@ class cmddocs(cmd.Cmd):
         # Change to datadir
         try:
             os.chdir(self.datadir)
+            self.cwd = os.getcwd()
         except OSError:
             print "Error: Switching to Datadir %s not possible" % self.datadir
             exit(1)
 
-
     ### list
-    def do_list(self, cwd):
+    def do_list(self, dir):
         "Show files in current working dir"
-        if not cwd: cwd = os.getcwd()
-        return list_articles(cwd)
+        if not dir: dir= os.getcwd()
+        return list_articles(dir)
 
-    def do_l(self, cwd):
+    def do_l(self, dir):
         "Alias for list"
-        if not cwd: cwd = os.getcwd()
-        return list_articles(cwd)
+        if not dir: dir= os.getcwd()
+        return list_articles(dir)
 
-    def do_ls(self, cwd):
+    def do_ls(self, dir):
         "Alias for list"
-        if not cwd: cwd = os.getcwd()
-        return list_articles(cwd)
+        if not dir: dir= os.getcwd()
+        return list_articles(dir)
 
-    def do_d(self, cwd):
+    def do_d(self, dir):
         "Alias for dirs"
-        if not cwd: cwd = os.getcwd()
-        return list_directories(cwd)
+        if not dir: dir= os.getcwd()
+        return list_directories(dir)
 
-    def do_dirs(self, cwd):
+    def do_dirs(self, dir):
         "Show only directories in cwd"
-        if not cwd: cwd = os.getcwd()
-        return list_directories(cwd)
+        if not dir: dir= os.getcwd()
+        return list_directories(dir)
 
     ### directories
     def do_cd(self,dir):
         "Change directory"
-        return change_directory(dir,self.datadir)
+        cwd = change_directory(dir,self.datadir)
 
     def do_pwd(self,line):
         "Show current directory"
@@ -323,8 +324,7 @@ class cmddocs(cmd.Cmd):
         > view databases/mongodb
         > view intro
         """
-        if not cwd: cwd = os.getcwd()
-        return view_article(article, cwd, self.pager)
+        return view_article(article, os.getcwd(), self.pager)
 
     ### delete
     def do_delete(self, article):
