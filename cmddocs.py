@@ -6,19 +6,19 @@ import cmd
 import git
 import re
 import tempfile
+import subprocess
 import ConfigParser
-from subprocess import call
 
 # Function definitions
 def list_articles(dir):
     "lists all articles in current dir and below"
     d = os.path.join(os.getcwd(),dir)
-    call(["tree", d ])
+    subprocess.call(["tree", d])
 
 def list_directories(dir):
     "lists all directories in current dir and below"
     d = os.path.join(os.getcwd(),dir)
-    call(["tree", "-d", d ])
+    subprocess.call(["tree", "-d", d])
 
 def change_directory(dir,datadir):
     "changes directory"
@@ -50,7 +50,10 @@ def edit_article(article,dir,editor,repo):
         os.makedirs(d)
 
     # start editor
-    os.system('%s %s' % (editor,a))
+    try:
+        subprocess.call([editor, a])
+    except OSError:
+        print "'%s' No such file or directory" % editor
 
     # commit into git
     try:
@@ -93,7 +96,11 @@ def view_article(article,dir,pager):
     # start pager and cleanup tmp file afterwards
     # -fr is needed for showing binary+ansi colored files to 
     # be properly displayed
-    os.system('%s -fr %s' % (pager,tmp.name))
+    try:
+        subprocess.call([pager, "-fr", tmp.name])
+    except OSError:
+        print "'%s' No such file or directory" % pager
+
     try:
         os.remove(tmp.name)
     except OSError:
