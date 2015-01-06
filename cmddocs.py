@@ -223,8 +223,7 @@ class cmddocs(cmd.Cmd):
         self.read_config(self)
         self.initialize_docs(self)
         cmd.Cmd.__init__(self)
-        prompt = '\033[1m\033[37m{}\ \033[0m'.format(self.prompt)
-        intro = self.intro
+        self.prompt = '\033[1m\033[37m{} \033[0m'.format(self.prompt)
 
     @classmethod
     def read_config(self,conf):
@@ -232,7 +231,6 @@ class cmddocs(cmd.Cmd):
         if not config.read(os.path.expanduser('~') + "/.cmddocsrc"):
             print "Error: your ~/.cmddocsrc could not be read"
             exit(1)
-        
         try:
             self.datadir = config.get("General", "Datadir")
             self.exclude = config.get("General", "Excludedir")
@@ -244,7 +242,6 @@ class cmddocs(cmd.Cmd):
         except ConfigParser.NoSectionError:
             print "Error: Config wrong formatted"
             exit(1)
-    
         return 
         
     @classmethod
@@ -257,7 +254,6 @@ class cmddocs(cmd.Cmd):
             self.repo.git.add(".")
             self.repo.git.commit("init")
             print("Successfully created and initialized empty repo at %s" % self.datadir)
-        
         # Change to datadir
         try:
             os.chdir(self.datadir)
