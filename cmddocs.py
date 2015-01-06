@@ -260,30 +260,30 @@ class cmddocs(cmd.Cmd):
     cwd = datadir
 
     ### list
-    def do_list(self, cwd):
+    def do_list(self, dir):
         "Show files in current working dir"
-        if not cwd: cwd = os.getcwd()
-        return list_articles(cwd)
+        if not dir: dir= os.getcwd()
+        return list_articles(dir)
 
-    def do_l(self, cwd):
+    def do_l(self, dir):
         "Alias for list"
-        if not cwd: cwd = os.getcwd()
-        return list_articles(cwd)
+        if not dir: dir= os.getcwd()
+        return list_articles(dir)
 
-    def do_ls(self, cwd):
+    def do_ls(self, dir):
         "Alias for list"
-        if not cwd: cwd = os.getcwd()
-        return list_articles(cwd)
+        if not dir: dir= os.getcwd()
+        return list_articles(dir)
 
-    def do_d(self, cwd):
+    def do_d(self, dir):
         "Alias for dirs"
-        if not cwd: cwd = os.getcwd()
-        return list_directories(cwd)
+        if not dir: dir= os.getcwd()
+        return list_directories(dir)
 
-    def do_dirs(self, cwd):
+    def do_dirs(self, dir):
         "Show only directories in cwd"
-        if not cwd: cwd = os.getcwd()
-        return list_directories(cwd)
+        if not dir: dir= os.getcwd()
+        return list_directories(dir)
 
     ### directories
     def do_cd(self,dir):
@@ -317,8 +317,7 @@ class cmddocs(cmd.Cmd):
         > view databases/mongodb
         > view intro
         """
-        if not cwd: cwd = os.getcwd()
-        return view_article(article, cwd)
+        return view_article(article, os.getcwd())
 
     ### delete
     def do_delete(self, article):
