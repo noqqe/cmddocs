@@ -332,7 +332,7 @@ class cmddocs(cmd.Cmd):
         "Move an article"
         move_article(os.getcwd(),args,self.repo)
 
-    do_mv = do_delete
+    do_mv = do_move
 
     ### search
     def do_search(self, keyword):
