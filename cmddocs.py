@@ -70,8 +70,10 @@ def change_directory(dir):
     # switch to dir
     try:
         os.chdir(d)
+        return d
     except OSError:
         print("Directory %s not found" % dir)
+
 
 def edit_article(article,dir):
     "edit an article within your docs"
@@ -255,6 +257,7 @@ class cmddocs(cmd.Cmd):
 
     prompt = '\033[1m\033[37m{} \033[0m'.format(prompt)
     intro = intro
+    cwd = datadir
 
     ### list
     def do_list(self, cwd):
@@ -285,7 +288,7 @@ class cmddocs(cmd.Cmd):
     ### directories
     def do_cd(self,dir):
         "Change directory"
-        return change_directory(dir)
+        cwd = change_directory(dir)
 
     def do_pwd(self,line):
         "Show current directory"
