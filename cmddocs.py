@@ -39,7 +39,7 @@ def change_directory(dir,datadir):
     except OSError:
         print("Directory %s not found" % dir)
 
-def edit_article(article,dir,editor):
+def edit_article(article,dir,editor,repo):
     "edit an article within your docs"
     # set paths
     a = os.path.join(dir,article)
@@ -99,7 +99,7 @@ def view_article(article,dir,pager):
     except OSError:
         print "Error: Could not remove %s" % tmp.name
 
-def delete_article(article,dir):
+def delete_article(article,dir,repo):
     "delete an article"
     a = os.path.join(dir,article)
 
@@ -116,7 +116,7 @@ def delete_article(article,dir):
 
     return "%s deleted" % article
 
-def move_article(dir,args):
+def move_article(dir,args,repo):
     "move an article from source to destination"
     args = args.split()
     if len(args)!=2:
@@ -155,7 +155,7 @@ def search_article(keyword,dir,datadir):
                             line.rstrip('\n'))
     return "Results: %s" % c
 
-def show_log(args):
+def show_log(args,repo):
     """
     Show latest git logs with specified number of entries and maybe for a
     specific file.
@@ -251,11 +251,11 @@ class cmddocs(cmd.Cmd):
     def initialize_docs(self,docs):
         # Read or initialize git repository
         try:
-            repo = git.Repo(self.datadir)
+            self.repo = git.Repo(self.datadir)
         except git.exc.InvalidGitRepositoryError:
-            repo = git.Repo.init(self.datadir)
-            repo.git.add(".")
-            repo.git.commit("init")
+            self.repo = git.Repo.init(self.datadir)
+            self.repo.git.add(".")
+            self.repo.git.commit("init")
             print("Successfully created and initialized empty repo at %s" % self.datadir)
         
         # Change to datadir
@@ -309,11 +309,11 @@ class cmddocs(cmd.Cmd):
         > edit databases/mongodb
         > edit intro
         """
-        return edit_article(article, os.getcwd(), self.editor)
+        return edit_article(article, os.getcwd(), self.editor, self.repo)
 
     def do_e(self, article):
         "Alias for edit"
-        return edit_article(article, os.getcwd(), self.editor)
+        return edit_article(article, os.getcwd(), self.editor, self.repo)
 
     ### view
     def do_view(self, article):
@@ -329,20 +329,20 @@ class cmddocs(cmd.Cmd):
     ### delete
     def do_delete(self, article):
         "Delete an article"
-        delete_article(article, os.getcwd())
+        delete_article(article, os.getcwd(),self.repo)
 
     def do_rm(self, article):
         "Alias for delete"
-        delete_article(article, os.getcwd())
+        delete_article(article, os.getcwd(),self.repo)
 
     ### move
     def do_move(self, args):
         "Move an article"
-        move_article(os.getcwd(),args)
+        move_article(os.getcwd(),args,self.repo)
 
     def do_mv(self, args):
         "Alias for move"
-        move_article(os.getcwd(),args)
+        move_article(os.getcwd(),args,self.repo)
 
     ### search
     def do_search(self, keyword):
@@ -352,7 +352,7 @@ class cmddocs(cmd.Cmd):
     ### status
     def do_status(self, line):
         "Show git repo status of your docs"
-        print repo.git.status()
+        print self.repo.git.status()
 
     def do_log(self, args):
         """
@@ -363,7 +363,7 @@ class cmddocs(cmd.Cmd):
                log 20 article           # show log for specific article
                log databases/mongodb 3  # same
         """
-        show_log(args)
+        show_log(args,self.repo)
 
     ### exit
     def do_exit(self, line):
