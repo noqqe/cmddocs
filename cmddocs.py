@@ -7,7 +7,9 @@ import git
 import re
 import tempfile
 import ConfigParser
+
 from subprocess import call
+from os.path import expanduser
 
 # Function definitions
 def list_articles(dir):
@@ -233,12 +235,12 @@ class cmddocs(cmd.Cmd):
     @classmethod
     def read_config(self,conf):
         config = ConfigParser.ConfigParser()
-        if not config.read(os.path.expanduser('~') + "/.cmddocsrc"):
+        if not config.read(expanduser("~/.cmddocsrc")):
             print "Error: your ~/.cmddocsrc could not be read"
             exit(1)
         try:
-            self.datadir = config.get("General", "Datadir")
-            self.exclude = config.get("General", "Excludedir")
+            self.datadir = expanduser(config.get("General", "Datadir"))
+            self.exclude = expanduser(config.get("General", "Excludedir"))
             self.default_commit_msg = config.get("General", "Default_Commit_Message")
             self.editor = config.get("General", "Editor")
             self.pager = config.get("General", "Pager")
