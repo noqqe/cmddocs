@@ -272,28 +272,21 @@ class cmddocs(cmd.Cmd):
     ### list
     def do_list(self, dir):
         "Show files in current working dir"
-        if not dir: dir= os.getcwd()
+        if not dir:
+            dir= os.getcwd()
         return list_articles(dir)
 
-    def do_l(self, dir):
-        "Alias for list"
-        if not dir: dir= os.getcwd()
-        return list_articles(dir)
-
-    def do_ls(self, dir):
-        "Alias for list"
-        if not dir: dir= os.getcwd()
-        return list_articles(dir)
-
-    def do_d(self, dir):
-        "Alias for dirs"
-        if not dir: dir= os.getcwd()
-        return list_directories(dir)
+    # Aliases
+    do_l = do_list
+    do_ls = do_list
 
     def do_dirs(self, dir):
         "Show only directories in cwd"
-        if not dir: dir= os.getcwd()
+        if not dir:
+            dir= os.getcwd()
         return list_directories(dir)
+
+    do_d = do_dirs
 
     ### directories
     def do_cd(self,dir):
@@ -314,9 +307,7 @@ class cmddocs(cmd.Cmd):
         """
         return edit_article(article, os.getcwd(), self.editor, self.repo)
 
-    def do_e(self, article):
-        "Alias for edit"
-        return edit_article(article, os.getcwd(), self.editor, self.repo)
+    do_e = do_edit
 
     ### view
     def do_view(self, article):
@@ -334,18 +325,14 @@ class cmddocs(cmd.Cmd):
         "Delete an article"
         delete_article(article, os.getcwd(),self.repo)
 
-    def do_rm(self, article):
-        "Alias for delete"
-        delete_article(article, os.getcwd(),self.repo)
+    do_rm = do_delete
 
     ### move
     def do_move(self, args):
         "Move an article"
         move_article(os.getcwd(),args,self.repo)
 
-    def do_mv(self, args):
-        "Alias for move"
-        move_article(os.getcwd(),args,self.repo)
+    do_mv = do_delete
 
     ### search
     def do_search(self, keyword):
@@ -379,47 +366,26 @@ class cmddocs(cmd.Cmd):
         return True
 
     ### completions
-    def complete_l(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
+    complete_l = path_complete
+    complete_ls = path_complete
+    complete_list = path_complete
 
-    def complete_d(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
+    complete_d = path_complete
+    complete_dirs = path_complete
 
-    def complete_dirs(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
+    complete_view = path_complete
+    complete_cd = path_complete
 
-    def complete_view(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
+    complete_e = path_complete
+    complete_edit = path_complete
 
-    def complete_ls(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
+    complete_rm = path_complete
+    complete_delete = path_complete
 
-    def complete_list(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
+    complete_mv = path_complete
+    complete_move = path_complete
 
-    def complete_cd(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
-
-    def complete_e(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
-
-    def complete_edit(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
-
-    def complete_delete(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
-
-    def complete_rm(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
-
-    def complete_move(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
-
-    def complete_mv(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
-
-    def complete_log(self, text, line, begidx, endidx):
-        return path_complete(self, text, line, begidx, endidx)
+    complete_log = path_complete
 
 if __name__ == '__main__':
     cmddocs().cmdloop()
