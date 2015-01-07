@@ -9,7 +9,7 @@ def path_complete(self, text, line, begidx, endidx):
 
     if not arg:
         completions = os.listdir('./')
-        completions[:] = [d for d in completions if d not in exclude]
+        completions[:] = [d for d in completions if d not in self.exclude]
     else:
         dir, part, base = arg[-1].rpartition('/')
         if part == '':

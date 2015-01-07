@@ -1,12 +1,7 @@
 import os
-import sys
-import cmd
-import git
 import re
 import tempfile
 import subprocess
-import ConfigParser
-from os.path import expanduser
 
 # Function definitions
 def list_articles(dir):

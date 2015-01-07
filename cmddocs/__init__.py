@@ -1,15 +1,12 @@
 #!/usr/bin/env python
 
 import os
-import sys
 import cmd
 import git
-import re
-import tempfile
-import subprocess
 import ConfigParser
 from os.path import expanduser
 from articles import *
+from utils import *
 
 class Cmddocs(cmd.Cmd):
     """ Basic commandline interface class """
