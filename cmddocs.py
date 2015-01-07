@@ -13,13 +13,11 @@ from os.path import expanduser
 # Function definitions
 def list_articles(dir):
     "lists all articles in current dir and below"
-    d = os.path.join(os.getcwd(),dir)
-    subprocess.call(["tree", d])
+    subprocess.call(["tree", dir])
 
 def list_directories(dir):
     "lists all directories in current dir and below"
-    d = os.path.join(os.getcwd(),dir)
-    subprocess.call(["tree", "-d", d])
+    subprocess.call(["tree", "-d", dir])
 
 def change_directory(dir,datadir):
     "changes directory"
@@ -277,7 +275,7 @@ class cmddocs(cmd.Cmd):
     def do_list(self, dir):
         "Show files in current working dir"
         if not dir:
-            dir= os.getcwd()
+            dir = "."
         return list_articles(dir)
 
     # Aliases
@@ -287,7 +285,7 @@ class cmddocs(cmd.Cmd):
     def do_dirs(self, dir):
         "Show only directories in cwd"
         if not dir:
-            dir= os.getcwd()
+            dir = "."
         return list_directories(dir)
 
     do_d = do_dirs
