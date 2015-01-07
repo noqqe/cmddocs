@@ -9,7 +9,7 @@ import tempfile
 import subprocess
 import ConfigParser
 from os.path import expanduser
-from cmdfunctions import *
+from articles import *
 
 class Cmddocs(cmd.Cmd):
     """ Basic commandline interface class """
