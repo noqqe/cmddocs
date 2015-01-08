@@ -6,7 +6,7 @@ import git
 import ConfigParser
 from os.path import expanduser
 from articles import *
-from utils import *
+from completions import *
 
 class Cmddocs(cmd.Cmd):
     """ Basic commandline interface class """
