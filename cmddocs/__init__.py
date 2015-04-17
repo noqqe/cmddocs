@@ -33,8 +33,8 @@ class Cmddocs(cmd.Cmd):
         except ConfigParser.NoSectionError:
             print "Error: Config wrong formatted"
             exit(1)
-        return 
-        
+        return
+
     def initialize_docs(self, docs):
         # Read or initialize git repository
         try:
@@ -82,9 +82,9 @@ class Cmddocs(cmd.Cmd):
 
     ### edit
     def do_edit(self, article):
-        """ 
-        Edit or create new article. 
-        
+        """
+        Edit or create new article.
+
         > edit databases/mongodb
         > edit intro
         """
@@ -137,6 +137,14 @@ class Cmddocs(cmd.Cmd):
                log databases/mongodb 3  # same
         """
         show_log(args,self.repo)
+
+    def do_diff(self, args):
+        """
+        Show git diffs (Gruesse von deiner Suessen!)
+
+        Usage: log                      # default diff to last
+        """
+        show_diff(args,self.repo)
 
     ### exit
     def do_exit(self, line):

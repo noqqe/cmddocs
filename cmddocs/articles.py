@@ -1,5 +1,6 @@
 import os
 import re
+import git
 import tempfile
 import subprocess
 
@@ -142,7 +143,7 @@ def move_article(dir,args,repo):
 
 def search_article(keyword, directory, datadir, exclude):
     """
-    search for a keyword in every article within your current directory and
+    Search for a keyword in every article within your current directory and
     below. Much like recursive grep.
     """
     c = 0
@@ -158,6 +159,32 @@ def search_article(keyword, directory, datadir, exclude):
                     print "* \033[92m%s\033[39m: %s" % (os.path.relpath(path, datadir),
                             line.rstrip('\n'))
     return "Results: %s" % c
+
+def show_diff(args,repo):
+    """
+    Shows diffs for files or whole article directory
+    """
+    colorization = "always"
+    unifiedopt = "0"
+
+    args = args.split()
+    if len(args) > 1:
+        if os.path.isfile(os.path.join(os.getcwd(), args[1])):
+            try:
+                print repo.git.diff('HEAD~'+args[0],args[1],
+                        unified=unifiedopt, color=colorization)
+            except git.exc.GitCommandError:
+                print "ERROR: Not a valid git commit reference"
+        else:
+            print "ERROR: Wrong Usage. See help diff"
+    elif len(args) == 1:
+        try:
+            print repo.git.diff('HEAD~'+args[0],
+                        unified=unifiedopt, color=colorization)
+        except git.exc.GitCommandError:
+            print "ERROR: Not a valid git commit reference"
+    else:
+        print repo.git.diff('HEAD~5', unified="0", color="always")
 
 def show_log(args,repo):
     """
