@@ -4,6 +4,7 @@ import os
 import cmd
 import git
 import ConfigParser
+import pkg_resources
 from os.path import expanduser
 from articles import *
 from completions import *
@@ -178,3 +179,9 @@ class Cmddocs(cmd.Cmd):
 
     complete_log = path_complete
 
+def main():
+    Cmddocs().cmdloop()
+
+
+if __name__ == '__main__':
+    main()
