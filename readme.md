@@ -12,10 +12,10 @@ you easily maintain your wiki/docs/cheetsheets using:
 ### Why ?
 
 I kind of started `cmddocs` because I couldn't find something like this on
-the internet. Here's my usecase. Im working as a DevOps guy being in touch 
+the internet. Here's my usecase. Im working as a DevOps guy being in touch
 with various types of software, languages, tools, operating systems and
 databases. To remember all those things I need a place to store commands,
-workflows and short howtos. 
+workflows and short howtos.
 
 Most of the software I use (and love) runs on a OpenBSD Box on the internet
 and are commandline-based. These are [mutt](http://www.mutt.org),
@@ -41,9 +41,7 @@ recording.
 Installation
 
 ```
-git clone https://github.com/noqqe/cmddocs
-cd cmddocs
-pip install -r requirements.txt
+pip install cmddocs
 ```
 
 Create `.cmddocsrc` file in your $HOME with the following content (adjust
