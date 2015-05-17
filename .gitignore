@@ -1,2 +1,5 @@
 .DS_Store
 *.pyc
+/cmddocs.egg-info/
+/dist/
+/build/
