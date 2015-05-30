@@ -14,9 +14,10 @@ class Cmddocs(cmd.Cmd):
 
     def __init__(self):
         cmd.Cmd.__init__(self)
+        self.reset = '\033[0m'
         self.read_config(self)
         self.initialize_docs(self)
-        self.prompt = '\033[1m\033[37m{} \033[0m'.format(self.prompt)
+        self.prompt = '\033[1m\033[' + self.promptcol + 'm' + self.prompt + " " + self.reset
 
     def read_config(self, conf):
         config = ConfigParser.ConfigParser()
@@ -30,6 +31,7 @@ class Cmddocs(cmd.Cmd):
             self.editor = config.get("General", "Editor")
             self.pager = config.get("General", "Pager")
             self.prompt = config.get("General", "Prompt")
+            self.promptcol = config.get("General", "Promptcolor")
             self.intro = config.get("General", "Intro_Message")
         except ConfigParser.NoSectionError:
             print "Error: Config wrong formatted.  See readme.md for an example."

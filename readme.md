@@ -55,6 +55,7 @@ Excludedir = .git/
 Editor = /usr/local/bin/vim
 Pager = /usr/bin/less
 Prompt = cmddocs>
+Promptcolor = 37
 Intro_Message = cmddocs - press ? for help
 ```
 
