@@ -148,6 +148,15 @@ def search_article(keyword, directory, datadir, exclude):
     """
     c = 0
     r = re.compile(keyword)
+    print("Articles:")
+    for dirpath, dirs, files in os.walk(directory):
+        dirs[:] = [d for d in dirs if d not in exclude]
+        for fname in files:
+            path = os.path.join(dirpath, fname)
+            if r.search(path) is not None:
+                print "* \033[92m%s\033[39m" % os.path.relpath(path,datadir)
+                c = c + 1
+    print("Content:")
     for dirpath, dirs, files in os.walk(directory):
         dirs[:] = [d for d in dirs if d not in exclude]
         for fname in files:
