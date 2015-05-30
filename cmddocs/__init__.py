@@ -26,19 +26,47 @@ class Cmddocs(cmd.Cmd):
             exit(1)
         try:
             self.datadir = expanduser(config.get("General", "Datadir"))
-            self.exclude = expanduser(config.get("General", "Excludedir"))
-            self.default_commit_msg = config.get("General", "Default_Commit_Message")
-            self.editor = config.get("General", "Editor")
-            self.pager = config.get("General", "Pager")
-            self.prompt = config.get("General", "Prompt")
-            self.promptcol = config.get("General", "Promptcolor")
-            self.intro = config.get("General", "Intro_Message")
-        except ConfigParser.NoSectionError:
-            print "Error: Config wrong formatted.  See readme.md for an example."
-            exit(1)
         except ConfigParser.NoOptionError:
-            print "Error: Config Option missing. See readme.md for an example."
+            print "Error: Please set a Datadir in ~/.cmddocsrc"
             exit(1)
+        try:
+            self.exclude = expanduser(config.get("General", "Excludedir"))
+        except ConfigParser.NoOptionError:
+            self.exclude = expanduser('.git/')
+        try:
+            self.default_commit_msg = config.get("General", "Default_Commit_Message")
+        except ConfigParser.NoOptionError:
+            self.default_commit_msg = "small changes"
+        try:
+            self.editor = config.get("General", "Editor")
+        except ConfigParser.NoOptionError:
+            if os.environ.get('EDITOR') is not None:
+                self.editor = os.environ.get('EDITOR')
+            else:
+                print "Error: Could not find usable editor."
+                print "Please specify one in config or set EDITOR in your OS Environment"
+                exit(1)
+        try:
+            self.pager = config.get("General", "Pager")
+        except ConfigParser.NoOptionError:
+            if os.environ.get('PAGER') is not None:
+                self.editor = os.environ.get('PAGER')
+            else:
+                print "Error: Could not find usable Pager."
+                print "Please specify one in config or set PAGER in your OS Environment"
+                exit(1)
+        try:
+            self.prompt = config.get("General", "Prompt")
+        except ConfigParser.NoOptionError:
+            self.prompt = "cmddocs>"
+        try:
+            self.promptcol = config.get("General", "Promptcolor")
+        except ConfigParser.NoOptionError:
+            self.promptcol = "37"
+        try:
+            self.intro = config.get("General", "Intro_Message")
+        except ConfigParser.NoOptionError:
+            self.intro = "cmddocs - press ? for help"
         return
 
     def initialize_docs(self, docs):
