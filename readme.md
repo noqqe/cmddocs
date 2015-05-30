@@ -58,7 +58,8 @@ Prompt = cmddocs>
 Promptcolor = 37
 Intro_Message = cmddocs - press ? for help
 ```
-
+The only required option is "Datadir", everything else will be guessed or
+defaults to a sane default value.
 Once you start cmddocs.py the CLI will be shown. Use `help` for commands.
 
 ```
