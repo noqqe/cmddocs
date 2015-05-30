@@ -32,7 +32,10 @@ class Cmddocs(cmd.Cmd):
             self.prompt = config.get("General", "Prompt")
             self.intro = config.get("General", "Intro_Message")
         except ConfigParser.NoSectionError:
-            print "Error: Config wrong formatted"
+            print "Error: Config wrong formatted.  See readme.md for an example."
+            exit(1)
+        except ConfigParser.NoOptionError:
+            print "Error: Config Option missing. See readme.md for an example."
             exit(1)
         return
 
