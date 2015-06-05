@@ -3,6 +3,8 @@ import re
 import git
 import tempfile
 import subprocess
+import mistune
+from rendering import md_to_ascii
 
 # Function definitions
 def list_articles(dir):
@@ -74,17 +76,20 @@ def view_article(article,dir,pager):
     content = article.read()
     article.close()
 
-    # create tmp file and convert markdown to ansi
     with tempfile.NamedTemporaryFile(delete=False) as tmp:
-        h = re.compile('^#{3,5}\s*(.*)\ *$',re.MULTILINE)
-        content = h.sub('\033[1m\033[37m\\1\033[0m', content)
-        h = re.compile('^#{1,2}\s*(.*)\ *$',re.MULTILINE)
-        content = h.sub('\033[4m\033[1m\033[37m\\1\033[0m', content)
-        h = re.compile('^\ {4}(.*)',re.MULTILINE)
-        content = h.sub('\033[92m\\1\033[0m', content)
-        h = re.compile('~~~\s*([^~]*)~~~[^\n]*\n',re.DOTALL)
-        content = h.sub('\033[92m\\1\033[0m', content)
-        tmp.write(content)
+        md = mistune.Markdown(renderer=md_to_ascii())
+        tmp.write(md.render(content))
+
+    # create tmp file and convert markdown to ansi
+#        h = re.compile('^#{3,5}\s*(.*)\ *$',re.MULTILINE)
+#        content = h.sub('\033[1m\033[37m\\1\033[0m', content)
+#        h = re.compile('^#{1,2}\s*(.*)\ *$',re.MULTILINE)
+#        content = h.sub('\033[4m\033[1m\033[37m\\1\033[0m', content)
+#        h = re.compile('^\ {4}(.*)',re.MULTILINE)
+#        content = h.sub('\033[92m\\1\033[0m', content)
+#        h = re.compile('~~~\s*([^~]*)~~~[^\n]*\n',re.DOTALL)
+#        content = h.sub('\033[92m\\1\033[0m', content)
+#        tmp.write(content)
 
     # start pager and cleanup tmp file afterwards
     # -fr is needed for showing binary+ansi colored files to
