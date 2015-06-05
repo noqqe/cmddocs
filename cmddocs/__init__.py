@@ -180,6 +180,22 @@ class Cmddocs(cmd.Cmd):
         """
         show_diff(args,self.repo)
 
+
+    ### undo / revert
+    def do_undo(self, args):
+        """
+        You can revert your changes (use revert from git)
+
+        Usage:
+        > undo HEAD
+        > undo 355f375
+
+        Will ask for confirmation.
+        """
+        undo_change(args, self.repo)
+
+    do_revert = do_undo
+
     ### exit
     def do_exit(self, line):
         "Exit cmddocs"

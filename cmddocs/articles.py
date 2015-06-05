@@ -230,3 +230,25 @@ def show_log(args,repo):
         print "Last %s commits" % count
         print repo.git.log(pretty=format, n=count,date=dateformat)
 
+def undo_change(args,repo):
+    """
+    You can revert your changes (use revert from git)
+
+    Usage:
+    > undo HEAD
+    > undo 355f375
+
+    Will ask for confirmation.
+    """
+    args = args.split()
+    if len(args) == 1:
+        try:
+            print repo.git.show(args[0], '--oneline', '--patience')
+            msg = raw_input("\nDo you really want to undo this? (y/n): ")
+            if msg == "y":
+                repo.git.revert(args[0], '--no-edit')
+
+        except git.exc.GitCommandError:
+            print "Error: Could not find given commit reference"
+
+
