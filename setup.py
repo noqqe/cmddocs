@@ -2,7 +2,7 @@
 from setuptools import setup, find_packages
 # To use a consistent encoding
 from codecs import open
-from os import path
+import os
 
 def read_from_file(path):
     if os.path.exists(path):
@@ -15,7 +15,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.9.1',
+    version='0.10.0',
 
     description='An interactive commandline interface for your personal docs using python, Cmd, git and markdown',
     long_description=read_from_file('README.rst'),
