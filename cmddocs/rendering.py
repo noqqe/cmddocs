@@ -15,12 +15,12 @@ class md_to_ascii(mistune.Renderer):
         return '\n%s\n' % text.strip()
     def block_html(self, html):
         return '\n%s\n' % html.strip()
-    def hrule(self, text):
-        return '\n%s\n' % text.strip()
+    def hrule(self):
+        return '---'
     def list(self, body, ordered=True):
-        return '\n%s\n' % body.strip()
+        return '\n%s' % body
     def list_item(self, text):
-        return '* %s\n' % text.strip()
+        return '* %s \n'  %  text.strip()
     def paragraph(self, text):
         return '\n%s\n' % text.strip()
     def table(self, header, body):
@@ -32,7 +32,7 @@ class md_to_ascii(mistune.Renderer):
 
     # Inline Tags
     def double_emphasis(self, text):
-        return '\n%s\n' % text.strip()
+        return '%s' % text.strip()
     def emphasis(self, text):
         return '%s' % text.strip()
     def codespan(self, text):
@@ -56,6 +56,6 @@ class md_to_ascii(mistune.Renderer):
     def footnote_ref(self, key, index):
         return '%s, [%s]' % (key.strip(), index.strip())
     def footnote_item(self, key, text):
-        return 'hier koennte ihre footnote stehen'
+        return '%s, [%s]' % (text.strip(), key.strip())
     def footnotes(self, text):
-        return 'hier koennte ihre footnote stehen'
+        return '%s' % text.strip()
