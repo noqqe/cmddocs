@@ -1,17 +1,13 @@
-"""A setuptools based setup module.
-
-See:
-https://packaging.python.org/en/latest/distributing.html
-https://github.com/pypa/sampleproject
-"""
-
 # Always prefer setuptools over distutils
 from setuptools import setup, find_packages
 # To use a consistent encoding
 from codecs import open
 from os import path
 
-here = path.abspath(path.dirname(__file__))
+def read_from_file(path):
+    if os.path.exists(path):
+        with open(path) as input:
+            return input.read()
 
 setup(
     name='cmddocs',
@@ -22,6 +18,7 @@ setup(
     version='0.9.1',
 
     description='An interactive commandline interface for your personal docs using python, Cmd, git and markdown',
+    long_description=read_from_file('README.rst'),
 
     # The project's main homepage.
     url='https://github.com/noqqe/cmddocs',
