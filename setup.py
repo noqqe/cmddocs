@@ -42,7 +42,7 @@ setup(
     keywords='markdown wiki commandline git',
     packages=find_packages(),
     zip_safe=True,
-    install_requires=['gitpython', 'configparser'],
+    install_requires=['gitpython', 'configparser', 'mistune'],
 
     entry_points={
         'console_scripts': [
