@@ -3,6 +3,8 @@
 import os
 import cmd
 import git
+import sys
+import signal
 import ConfigParser
 import pkg_resources
 from os.path import expanduser
@@ -234,9 +236,14 @@ class Cmddocs(cmd.Cmd):
 
     complete_log = path_complete
 
+def ctrlc(sig, frame):
+    print("\n")
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, ctrlc)
+
 def main():
     Cmddocs().cmdloop()
-
 
 if __name__ == '__main__':
     main()
