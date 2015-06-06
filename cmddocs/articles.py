@@ -32,7 +32,7 @@ def change_directory(dir,datadir):
         os.chdir(d)
         return d
     except OSError:
-        print("Directory %s not found" % dir)
+        print("Error: Directory %s not found" % dir)
 
 def edit_article(article, directory, editor, repo, default_commit_msg):
     """edit an article within your docs"""
@@ -42,13 +42,18 @@ def edit_article(article, directory, editor, repo, default_commit_msg):
 
     # create dir(s)
     if not os.path.isdir(d):
-        os.makedirs(d)
+        try:
+            os.makedirs(d)
+        except OSError:
+            print("Error: Creation of path %s is not possible" % d)
+            return False
 
     # start editor
     try:
         subprocess.call([editor, a])
     except OSError:
-        print "'%s' No such file or directory" % editor
+        print "Error: '%s' No such file or directory" % editor
+        return False
 
     # commit into git
     try:
@@ -71,25 +76,15 @@ def view_article(article,dir,pager):
         article = open(a, "r")
     except IOError:
         print "Error: Could not find %s" % article
-        return
+        return False
 
     content = article.read()
     article.close()
 
+    # hand everything over to mistune lexer
     with tempfile.NamedTemporaryFile(delete=False) as tmp:
         md = mistune.Markdown(renderer=md_to_ascii())
         tmp.write(md.render(content))
-
-    # create tmp file and convert markdown to ansi
-#        h = re.compile('^#{3,5}\s*(.*)\ *$',re.MULTILINE)
-#        content = h.sub('\033[1m\033[37m\\1\033[0m', content)
-#        h = re.compile('^#{1,2}\s*(.*)\ *$',re.MULTILINE)
-#        content = h.sub('\033[4m\033[1m\033[37m\\1\033[0m', content)
-#        h = re.compile('^\ {4}(.*)',re.MULTILINE)
-#        content = h.sub('\033[92m\\1\033[0m', content)
-#        h = re.compile('~~~\s*([^~]*)~~~[^\n]*\n',re.DOTALL)
-#        content = h.sub('\033[92m\\1\033[0m', content)
-#        tmp.write(content)
 
     # start pager and cleanup tmp file afterwards
     # -fr is needed for showing binary+ansi colored files to
@@ -97,7 +92,7 @@ def view_article(article,dir,pager):
     try:
         subprocess.call([pager, "-fr", tmp.name])
     except OSError:
-        print "'%s' No such file or directory" % pager
+        print("Error: '%s' No such file or directory" % pager)
 
     try:
         os.remove(tmp.name)
@@ -131,7 +126,7 @@ def move_article(dir,args,repo):
     args = args.split()
     if len(args)!=2:
         print "Invalid usage\nUse: mv source dest"
-        return
+        return False
 
     a = os.path.join(dir,args[0])
     e = os.path.join(dir,args[1])
@@ -188,15 +183,15 @@ def show_diff(args,repo):
                 print repo.git.diff('HEAD~'+args[0],args[1],
                         unified=unifiedopt, color=colorization)
             except git.exc.GitCommandError:
-                print "ERROR: Not a valid git commit reference"
+                print("Error: Not a valid git commit reference")
         else:
-            print "ERROR: Wrong Usage. See help diff"
+            print("Error: Wrong Usage. See help diff")
     elif len(args) == 1:
         try:
             print repo.git.diff('HEAD~'+args[0],
                         unified=unifiedopt, color=colorization)
         except git.exc.GitCommandError:
-            print "ERROR: Not a valid git commit reference"
+            print("Error: Not a valid git commit reference")
     else:
         print repo.git.diff('HEAD~5', unified="0", color="always")
 
@@ -254,6 +249,6 @@ def undo_change(args,repo):
                 repo.git.revert(args[0], '--no-edit')
 
         except git.exc.GitCommandError:
-            print "Error: Could not find given commit reference"
+            print("Error: Could not find given commit reference")
 
 
