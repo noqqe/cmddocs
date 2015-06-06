@@ -73,6 +73,9 @@ class Cmddocs(cmd.Cmd):
         # Read or initialize git repository
         try:
             self.repo = git.Repo(self.datadir)
+        except git.exc.NoSuchPathError:
+            print("Error: Specified datadir %s does not exist" % self.datadir)
+            exit(1)
         except git.exc.InvalidGitRepositoryError:
             self.repo = git.Repo.init(self.datadir)
             self.repo.git.add(".")
@@ -83,7 +86,7 @@ class Cmddocs(cmd.Cmd):
             os.chdir(self.datadir)
             self.cwd = os.getcwd()
         except OSError:
-            print "Error: Switching to Datadir %s not possible" % self.datadir
+            print("Error: Switching to Datadir %s not possible" % self.datadir)
             exit(1)
 
     ### list
