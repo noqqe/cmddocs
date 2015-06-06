@@ -76,7 +76,7 @@ class Cmddocs(cmd.Cmd):
         except git.exc.InvalidGitRepositoryError:
             self.repo = git.Repo.init(self.datadir)
             self.repo.git.add(".")
-            self.repo.git.commit("init")
+            self.repo.git.commit(m="init")
             print("Successfully created and initialized empty repo at %s" % self.datadir)
         # Change to datadir
         try:
