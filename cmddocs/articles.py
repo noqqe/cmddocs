@@ -9,11 +9,19 @@ from rendering import md_to_ascii
 # Function definitions
 def list_articles(dir):
     "lists all articles in current dir and below"
-    subprocess.call(["tree", dir])
+    try:
+        subprocess.call(["tree", dir])
+    except OSError:
+        print("Error: tree not installed")
+        return False
 
 def list_directories(dir):
     "lists all directories in current dir and below"
-    subprocess.call(["tree", "-d", dir])
+    try:
+        subprocess.call(["tree", "-d", dir])
+    except OSError:
+        print("Error: tree not installed")
+        return False
 
 def change_directory(dir,datadir):
     "changes directory"
@@ -52,7 +60,7 @@ def edit_article(article, directory, editor, repo, default_commit_msg):
     try:
         subprocess.call([editor, a])
     except OSError:
-        print "Error: '%s' No such file or directory" % editor
+        print("Error: '%s' No such file or directory" % editor)
         return False
 
     # commit into git
@@ -64,7 +72,7 @@ def edit_article(article, directory, editor, repo, default_commit_msg):
                 msg = default_commit_msg
             repo.git.commit(m=msg)
         else:
-            print "Nothing to commit"
+            print("Nothing to commit")
     except:
         pass
 
@@ -75,7 +83,7 @@ def view_article(article,dir,pager):
     try:
         article = open(a, "r")
     except IOError:
-        print "Error: Could not find %s" % article
+        print("Error: Could not find %s" % article)
         return False
 
     content = article.read()
@@ -97,7 +105,7 @@ def view_article(article,dir,pager):
     try:
         os.remove(tmp.name)
     except OSError:
-        print "Error: Could not remove %s" % tmp.name
+        print("Error: Could not remove %s" % tmp.name)
 
 def delete_article(article,dir,repo):
     "delete an article"
@@ -125,7 +133,7 @@ def move_article(dir,args,repo):
     "move an article from source to destination"
     args = args.split()
     if len(args)!=2:
-        print "Invalid usage\nUse: mv source dest"
+        print("Invalid usage\nUse: mv source dest")
         return False
 
     a = os.path.join(dir,args[0])
@@ -154,7 +162,8 @@ def search_article(keyword, directory, datadir, exclude):
         for fname in files:
             path = os.path.join(dirpath, fname)
             if r.search(path) is not None:
-                print "* \033[92m%s\033[39m" % os.path.relpath(path,datadir)
+                print("* \033[92m%s\033[39m" %
+                        os.path.relpath(path,datadir))
                 c = c + 1
     print("Content:")
     for dirpath, dirs, files in os.walk(directory):
@@ -165,8 +174,8 @@ def search_article(keyword, directory, datadir, exclude):
             for i, line in enumerate(f):
                 if r.search(line):
                     c = c + 1
-                    print "* \033[92m%s\033[39m: %s" % (os.path.relpath(path, datadir),
-                            line.rstrip('\n'))
+                    print("* \033[92m%s\033[39m: %s" % (os.path.relpath(path, datadir),
+                            line.rstrip('\n')))
     return "Results: %s" % c
 
 def show_diff(args,repo):
@@ -180,20 +189,20 @@ def show_diff(args,repo):
     if len(args) > 1:
         if os.path.isfile(os.path.join(os.getcwd(), args[1])):
             try:
-                print repo.git.diff('HEAD~'+args[0],args[1],
-                        unified=unifiedopt, color=colorization)
+                print(repo.git.diff('HEAD~'+args[0],args[1],
+                        unified=unifiedopt, color=colorization))
             except git.exc.GitCommandError:
                 print("Error: Not a valid git commit reference")
         else:
             print("Error: Wrong Usage. See help diff")
     elif len(args) == 1:
         try:
-            print repo.git.diff('HEAD~'+args[0],
-                        unified=unifiedopt, color=colorization)
+            print(repo.git.diff('HEAD~'+args[0],
+                        unified=unifiedopt, color=colorization))
         except git.exc.GitCommandError:
             print("Error: Not a valid git commit reference")
     else:
-        print repo.git.diff('HEAD~5', unified="0", color="always")
+        print(repo.git.diff('HEAD~5', unified="0", color="always"))
 
 def show_log(args,repo):
     """
@@ -209,26 +218,30 @@ def show_log(args,repo):
             file = args[0]
             try:
                 count = args[1]
-                print "Last %s commits for %s" % (count, file)
-                print repo.git.log(file, pretty=format, n=count, date=dateformat)
+                print("Last %s commits for %s" % (count, file))
+                print(repo.git.log(file, pretty=format, n=count,
+                    date=dateformat))
             except IndexError:
                 count = 10
-                print "Last %s commits for %s" % (count, file)
-                print repo.git.log(file, pretty=format, n=count, date=dateformat)
+                print("Last %s commits for %s" % (count, file))
+                print(repo.git.log(file, pretty=format, n=count,
+                        date=dateformat))
         else:
             count = args[0]
             try:
                 file = args[1]
-                print "Last %s commits for %s" % (count, file)
-                print repo.git.log(file, pretty=format, n=count, date=dateformat)
+                print("Last %s commits for %s" % (count, file))
+                print(repo.git.log(file, pretty=format, n=count,
+                        date=dateformat))
             except IndexError:
-                print "Last %s commits" % count
-                print repo.git.log(pretty=format, n=count, date=dateformat)
+                print("Last %s commits" % count)
+                print(repo.git.log(pretty=format, n=count,
+                    date=dateformat))
 
     elif len(args) == 0:
         count = 10
-        print "Last %s commits" % count
-        print repo.git.log(pretty=format, n=count,date=dateformat)
+        print("Last %s commits" % count)
+        print(repo.git.log(pretty=format, n=count,date=dateformat))
 
 def undo_change(args,repo):
     """
@@ -243,7 +256,7 @@ def undo_change(args,repo):
     args = args.split()
     if len(args) == 1:
         try:
-            print repo.git.show(args[0], '--oneline', '--patience')
+            print(repo.git.show(args[0], '--oneline', '--patience'))
             msg = raw_input("\nDo you really want to undo this? (y/n): ")
             if msg == "y":
                 repo.git.revert(args[0], '--no-edit')

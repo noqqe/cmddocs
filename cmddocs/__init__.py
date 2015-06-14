@@ -24,12 +24,12 @@ class Cmddocs(cmd.Cmd):
     def read_config(self, conf):
         config = ConfigParser.ConfigParser()
         if not config.read(expanduser("~/.cmddocsrc")):
-            print "Error: your ~/.cmddocsrc could not be read"
+            print("Error: your ~/.cmddocsrc could not be read")
             exit(1)
         try:
             self.datadir = expanduser(config.get("General", "Datadir"))
         except ConfigParser.NoOptionError:
-            print "Error: Please set a Datadir in ~/.cmddocsrc"
+            print("Error: Please set a Datadir in ~/.cmddocsrc")
             exit(1)
         try:
             self.exclude = expanduser(config.get("General", "Excludedir"))
@@ -45,8 +45,9 @@ class Cmddocs(cmd.Cmd):
             if os.environ.get('EDITOR') is not None:
                 self.editor = os.environ.get('EDITOR')
             else:
-                print "Error: Could not find usable editor."
-                print "Please specify one in config or set EDITOR in your OS Environment"
+                print("Error: Could not find usable editor.")
+                print("Please specify one in config or set EDITOR in your \
+                OS Environment")
                 exit(1)
         try:
             self.pager = config.get("General", "Pager")
@@ -54,8 +55,9 @@ class Cmddocs(cmd.Cmd):
             if os.environ.get('PAGER') is not None:
                 self.editor = os.environ.get('PAGER')
             else:
-                print "Error: Could not find usable Pager."
-                print "Please specify one in config or set PAGER in your OS Environment"
+                print("Error: Could not find usable Pager.")
+                print("Please specify one in config or set PAGER in your\
+                OS Environment")
                 exit(1)
         try:
             self.prompt = config.get("General", "Prompt")
@@ -120,7 +122,7 @@ class Cmddocs(cmd.Cmd):
 
     def do_pwd(self,line):
         "Show current directory"
-        print os.path.relpath(os.getcwd(),self.datadir)
+        print(os.path.relpath(os.getcwd(),self.datadir))
 
     ### edit
     def do_edit(self, article):
@@ -162,12 +164,13 @@ class Cmddocs(cmd.Cmd):
     ### search
     def do_search(self, keyword):
         "Search for keyword in current directory. Example: search mongodb"
-        print search_article(keyword,os.getcwd(), self.datadir, self.exclude)
+        print(search_article(keyword,os.getcwd(), self.datadir,
+            self.exclude))
 
     ### status
     def do_status(self, line):
         "Show git repo status of your docs"
-        print self.repo.git.status()
+        print(self.repo.git.status())
 
     def do_log(self, args):
         """
@@ -211,7 +214,7 @@ class Cmddocs(cmd.Cmd):
 
     def do_EOF(self, line):
         "Exit cmddocs"
-        print "exit"
+        print("exit")
         return True
 
     ### completions
