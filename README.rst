@@ -50,6 +50,8 @@ Installation
 
     pip install cmddocs
 
+Also make sure you have `tree` installed.
+
 Create ``.cmddocsrc`` file in your $HOME with the following content
 (adjust to your needs):
 
