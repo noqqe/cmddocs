@@ -241,7 +241,10 @@ def show_log(args,repo):
     elif len(args) == 0:
         count = 10
         print("Last %s commits" % count)
-        print(repo.git.log(pretty=format, n=count,date=dateformat))
+        try:
+            print(repo.git.log(pretty=format, n=count,date=dateformat))
+        except git.exc.GitCommandError:
+            print("Error: git may not be configured on your system.")
 
 def undo_change(args,repo):
     """
