@@ -66,6 +66,7 @@ Create ``.cmddocsrc`` file in your $HOME with the following content
     Prompt = cmddocs>
     Promptcolor = 37
     Intro_Message = cmddocs - press ? for help
+    Mail = mail@example.org
 
 The only required option is "Datadir", everything else will be guessed
 or defaults to a sane default value. Once you start cmddocs.py the CLI
@@ -98,9 +99,5 @@ weaknesses.
 
 -  ``tree`` view for ``ls`` command is still produced by calling the
    external tool tree.
--  markdown to ANSI Colors for ``view`` command is produced by RegEx
-   matching on markdown format. Longterm goal is to replace it with
-   pythons markdown module using ``etree`` function.
--  At some point there will may be a ``pip`` package for it
 
 If you like, please help me improving.
