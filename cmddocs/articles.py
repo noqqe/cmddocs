@@ -1,10 +1,13 @@
 import os
 import re
 import git
+import socket
+import smtplib
+import mistune
 import tempfile
 import subprocess
-import mistune
 from rendering import md_to_ascii
+from email.mime.text import MIMEText
 
 # Function definitions
 def list_articles(dir):
@@ -75,6 +78,37 @@ def edit_article(article, directory, editor, repo, default_commit_msg):
             print("Nothing to commit")
     except:
         pass
+
+def mail_article(article,dir,mailfrom):
+    "mail an article to a friend"
+    a = os.path.join(dir,article)
+
+    # Create a text/plain message
+    fp = open(a, 'r')
+    msg = MIMEText(fp.read())
+    fp.close()
+
+    mailto = raw_input("Recipient: ")
+    msg['Subject'] = article
+    msg['From'] = mailfrom
+    msg['To'] = mailto
+
+    # Send the message via our own SMTP server, but don't include the
+    # envelope header.
+    s = smtplib.SMTP()
+    try:
+        s.connect()
+        s.sendmail(mailfrom, [mailto], msg.as_string())
+        s.quit()
+    except socket.error:
+        print("Error: Apparently no mailer running on your system.")
+        print("Error: Could not connect to localhost:25")
+        return False
+    except smtplib.SMTPRecipientsRefused:
+        print("Error: Invalid recipient or sender")
+        return False
+
+
 
 def view_article(article,dir,pager):
     "view an article within your docs"

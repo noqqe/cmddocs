@@ -71,6 +71,10 @@ class Cmddocs(cmd.Cmd):
             self.intro = config.get("General", "Intro_Message")
         except ConfigParser.NoOptionError:
             self.intro = "cmddocs - press ? for help"
+        try:
+            self.mailfrom = config.get("General", "Mail")
+        except ConfigParser.NoOptionError:
+            self.mailfrom = "nobody"
         return
 
     def initialize_docs(self, docs):
@@ -146,6 +150,16 @@ class Cmddocs(cmd.Cmd):
         > view intro
         """
         return view_article(article, os.getcwd(), self.pager)
+
+    ### view
+    def do_mail(self, article):
+        """
+        Mail an article to a friend
+
+        > mail databases/mongodb
+        > mail programming/r/loops
+        """
+        return mail_article(article, os.getcwd(), self.mailfrom)
 
     ### delete
     def do_delete(self, article):
@@ -234,6 +248,7 @@ class Cmddocs(cmd.Cmd):
     complete_rm = path_complete
     complete_delete = path_complete
 
+    complete_mail = path_complete
     complete_mv = path_complete
     complete_move = path_complete
 
