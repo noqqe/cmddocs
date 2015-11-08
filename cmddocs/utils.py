@@ -12,7 +12,16 @@ def add_fileextension(article,extension):
 def remove_fileextension(article,extension):
     "remove file extension"
 
-    extension = r'\.' + extension + '$'
-    article = re.sub(extension, "", article, flags=re.M)
+    extension = '\.' + extension + '$'
+
+    # python3 compatibility
+    try:
+        extension = bytes(extension,"UTF-8")
+    except TypeError:
+        pass
+
+    # in python3, re is expecting byte arrays
+    article = re.sub(extension, b"", article, flags=re.M)
+    article = article.decode("UTF-8")
 
     return article

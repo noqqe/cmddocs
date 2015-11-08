@@ -1,7 +1,10 @@
 import os
-import ConfigParser
+try:
+    import ConfigParser
+except ImportError:
+    import configparser as Configparser
 from os.path import expanduser
-from utils import *
+from .utils import *
 
 def path_complete(self, text, line, begidx, endidx):
     """

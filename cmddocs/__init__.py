@@ -5,11 +5,16 @@ import cmd
 import git
 import sys
 import signal
-import ConfigParser
 import pkg_resources
+
+try:
+    import configparser
+except ImportError:
+    import configparser as configparser
+
 from os.path import expanduser
-from articles import *
-from completions import *
+from .articles import *
+from .completions import *
 
 class Cmddocs(cmd.Cmd):
     """ Basic commandline interface class """
@@ -22,7 +27,7 @@ class Cmddocs(cmd.Cmd):
         self.prompt = '\033[1m\033[' + self.promptcol + 'm' + self.prompt + " " + self.reset
 
     def read_config(self, conf):
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
 
         if not config.read(expanduser("~/.cmddocsrc")):
             print("Error: your ~/.cmddocsrc could not be read")
@@ -30,23 +35,23 @@ class Cmddocs(cmd.Cmd):
 
         try:
             self.datadir = expanduser(config.get("General", "Datadir"))
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             print("Error: Please set a Datadir in ~/.cmddocsrc")
             exit(1)
 
         try:
             self.exclude = expanduser(config.get("General", "Excludedir"))
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.exclude = expanduser('.git/')
 
         try:
             self.default_commit_msg = config.get("General", "Default_Commit_Message")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.default_commit_msg = "small changes"
 
         try:
             self.editor = config.get("General", "Editor")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             if os.environ.get('EDITOR') is not None:
                 self.editor = os.environ.get('EDITOR')
             else:
@@ -57,7 +62,7 @@ class Cmddocs(cmd.Cmd):
 
         try:
             self.pager = config.get("General", "Pager")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             if os.environ.get('PAGER') is not None:
                 self.editor = os.environ.get('PAGER')
             else:
@@ -68,27 +73,27 @@ class Cmddocs(cmd.Cmd):
 
         try:
             self.prompt = config.get("General", "Prompt")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.prompt = "cmddocs>"
 
         try:
             self.promptcol = config.get("General", "Promptcolor")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.promptcol = "37"
 
         try:
             self.intro = config.get("General", "Intro_Message")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.intro = "cmddocs - press ? for help"
 
         try:
             self.mailfrom = config.get("General", "Mail")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.mailfrom = "nobody"
 
         try:
             self.extension = config.get("General", "Default_Extension")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.extension = "md"
 
         return
@@ -180,7 +185,7 @@ class Cmddocs(cmd.Cmd):
     ### delete
     def do_delete(self, article):
         "Delete an article"
-        delete_article(article, os.getcwd(),self.repo)
+        delete_article(article, os.getcwd(),self.repo, self.extension)
 
     do_rm = do_delete
 

@@ -15,7 +15,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.11.0',
+    version='0.12.0',
 
     description='An interactive commandline interface for your personal docs using python, Cmd, git and markdown',
     long_description=read_from_file('README.rst'),
@@ -37,6 +37,9 @@ setup(
         'Topic :: Terminals',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.1',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
     ],
 
     keywords='markdown wiki commandline git',

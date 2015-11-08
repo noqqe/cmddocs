@@ -6,9 +6,15 @@ import smtplib
 import mistune
 import tempfile
 import subprocess
-from rendering import md_to_ascii
 from email.mime.text import MIMEText
-from utils import *
+from .rendering import md_to_ascii
+from .utils import *
+
+# Python 3 compatibility
+try:
+    raw_input = input
+except NameError:
+    pass
 
 # Function definitions
 def list_articles(dir,extension):
@@ -89,9 +95,14 @@ def mail_article(article,dir,mailfrom,extension):
     a = os.path.join(dir,a)
 
     # Create a text/plain message
-    fp = open(a, 'r')
-    msg = MIMEText(fp.read())
-    fp.close()
+    try:
+        fp = open(a, 'r')
+        msg = MIMEText(fp.read())
+        fp.close()
+    except IsADirectoryError:
+        print("Error: You cannot send a directory with mail")
+    except OSError:
+        print("Error: File could not be opened")
 
     mailto = raw_input("Recipient: ")
     msg['Subject'] = article
@@ -132,7 +143,17 @@ def view_article(article,dir,pager,extension):
     # hand everything over to mistune lexer
     with tempfile.NamedTemporaryFile(delete=False) as tmp:
         md = mistune.Markdown(renderer=md_to_ascii())
-        tmp.write(md.render(content))
+        md = md.render(content)
+
+        # python 3 compatibility
+        # v3 needs to have a byte array
+        # v2 not. If conversion fails, its 2.
+        try:
+            md = bytes(md,'UTF-8')
+        except TypeError:
+            pass
+
+        tmp.write(md)
 
     # start pager and cleanup tmp file afterwards
     # -fr is needed for showing binary+ansi colored files to
@@ -147,7 +168,7 @@ def view_article(article,dir,pager,extension):
     except OSError:
         print("Error: Could not remove %s" % tmp.name)
 
-def delete_article(article,dir,repo):
+def delete_article(article,dir,repo,extension):
     "delete an article"
     a = add_fileextension(article,extension)
     a = os.path.join(dir,a)
@@ -188,9 +209,12 @@ def move_article(dir,args,repo,extension):
         os.makedirs(d)
 
     # move file in git and commit
-    repo.git.mv(a,e)
-    repo.git.commit(m="Moved %s to %s" % (a,e))
-    print("Moved %s to %s" % (a,e))
+    try:
+        repo.git.mv(a,e)
+        repo.git.commit(m="Moved %s to %s" % (a,e))
+        print("Moved %s to %s" % (a,e))
+    except git.exc.GitCommandError:
+        print("Error: File could not be moved")
 
 def search_article(keyword, directory, datadir, exclude):
     """
@@ -303,11 +327,13 @@ def undo_change(args,repo):
     if len(args) == 1:
         try:
             print(repo.git.show(args[0], '--oneline', '--patience'))
-            msg = raw_input("\nDo you really want to undo this? (y/n): ")
+            msg = input("\nDo you really want to undo this? (y/n): ")
             if msg == "y":
                 repo.git.revert(args[0], '--no-edit')
 
         except git.exc.GitCommandError:
             print("Error: Could not find given commit reference")
+    else:
+        print("Error: Usage - undo HEAD or undo 355f375")
 
 
