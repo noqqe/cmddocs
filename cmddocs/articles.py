@@ -8,12 +8,15 @@ import tempfile
 import subprocess
 from rendering import md_to_ascii
 from email.mime.text import MIMEText
+from utils import *
 
 # Function definitions
-def list_articles(dir):
+def list_articles(dir,extension):
     "lists all articles in current dir and below"
     try:
-        subprocess.call(["tree", dir])
+        listing = subprocess.check_output(["tree", dir])
+        listing = remove_fileextension(listing,extension)
+        print(listing)
     except OSError:
         print("Error: tree not installed")
         return False
@@ -45,10 +48,11 @@ def change_directory(dir,datadir):
     except OSError:
         print("Error: Directory %s not found" % dir)
 
-def edit_article(article, directory, editor, repo, default_commit_msg):
+def edit_article(article, directory, editor, repo, default_commit_msg, extension):
     """edit an article within your docs"""
     # set paths
-    a = os.path.join(directory, article)
+    a = add_fileextension(article,extension)
+    a = os.path.join(directory, a)
     d = os.path.dirname(a)
 
     # create dir(s)
@@ -79,9 +83,10 @@ def edit_article(article, directory, editor, repo, default_commit_msg):
     except:
         pass
 
-def mail_article(article,dir,mailfrom):
+def mail_article(article,dir,mailfrom,extension):
     "mail an article to a friend"
-    a = os.path.join(dir,article)
+    a = add_fileextension(article,extension)
+    a = os.path.join(dir,a)
 
     # Create a text/plain message
     fp = open(a, 'r')
@@ -110,9 +115,10 @@ def mail_article(article,dir,mailfrom):
 
 
 
-def view_article(article,dir,pager):
+def view_article(article,dir,pager,extension):
     "view an article within your docs"
-    a = os.path.join(dir,article)
+    a = add_fileextension(article,extension)
+    a = os.path.join(dir,a)
     # read original file
     try:
         article = open(a, "r")
@@ -143,7 +149,8 @@ def view_article(article,dir,pager):
 
 def delete_article(article,dir,repo):
     "delete an article"
-    a = os.path.join(dir,article)
+    a = add_fileextension(article,extension)
+    a = os.path.join(dir,a)
     try:
         repo.git.rm(a)
         repo.git.commit(m="%s deleted" % article)
@@ -163,7 +170,7 @@ def delete_article(article,dir,repo):
                 print("File %s could not be removed" % a)
     return
 
-def move_article(dir,args,repo):
+def move_article(dir,args,repo,extension):
     "move an article from source to destination"
     args = args.split()
     if len(args)!=2:
@@ -171,7 +178,9 @@ def move_article(dir,args,repo):
         return False
 
     a = os.path.join(dir,args[0])
+    a = add_fileextension(a,extension)
     e = os.path.join(dir,args[1])
+    e = add_fileextension(e,extension)
     d = os.path.dirname(e)
 
     # create dir(s)

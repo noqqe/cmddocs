@@ -23,22 +23,27 @@ class Cmddocs(cmd.Cmd):
 
     def read_config(self, conf):
         config = ConfigParser.ConfigParser()
+
         if not config.read(expanduser("~/.cmddocsrc")):
             print("Error: your ~/.cmddocsrc could not be read")
             exit(1)
+
         try:
             self.datadir = expanduser(config.get("General", "Datadir"))
         except ConfigParser.NoOptionError:
             print("Error: Please set a Datadir in ~/.cmddocsrc")
             exit(1)
+
         try:
             self.exclude = expanduser(config.get("General", "Excludedir"))
         except ConfigParser.NoOptionError:
             self.exclude = expanduser('.git/')
+
         try:
             self.default_commit_msg = config.get("General", "Default_Commit_Message")
         except ConfigParser.NoOptionError:
             self.default_commit_msg = "small changes"
+
         try:
             self.editor = config.get("General", "Editor")
         except ConfigParser.NoOptionError:
@@ -49,6 +54,7 @@ class Cmddocs(cmd.Cmd):
                 print("Please specify one in config or set EDITOR in your \
                 OS Environment")
                 exit(1)
+
         try:
             self.pager = config.get("General", "Pager")
         except ConfigParser.NoOptionError:
@@ -59,22 +65,32 @@ class Cmddocs(cmd.Cmd):
                 print("Please specify one in config or set PAGER in your\
                 OS Environment")
                 exit(1)
+
         try:
             self.prompt = config.get("General", "Prompt")
         except ConfigParser.NoOptionError:
             self.prompt = "cmddocs>"
+
         try:
             self.promptcol = config.get("General", "Promptcolor")
         except ConfigParser.NoOptionError:
             self.promptcol = "37"
+
         try:
             self.intro = config.get("General", "Intro_Message")
         except ConfigParser.NoOptionError:
             self.intro = "cmddocs - press ? for help"
+
         try:
             self.mailfrom = config.get("General", "Mail")
         except ConfigParser.NoOptionError:
             self.mailfrom = "nobody"
+
+        try:
+            self.extension = config.get("General", "Default_Extension")
+        except ConfigParser.NoOptionError:
+            self.extension = "md"
+
         return
 
     def initialize_docs(self, docs):
@@ -105,7 +121,7 @@ class Cmddocs(cmd.Cmd):
         "Show files in current working dir"
         if not dir:
             dir = "."
-        return list_articles(dir)
+        return list_articles(dir,self.extension)
 
     # Aliases
     do_l = do_list
@@ -136,7 +152,7 @@ class Cmddocs(cmd.Cmd):
         > edit databases/mongodb
         > edit intro
         """
-        return edit_article(article, os.getcwd(), self.editor, self.repo, self.default_commit_msg)
+        return edit_article(article, os.getcwd(), self.editor, self.repo, self.default_commit_msg, self.extension)
 
     do_e = do_edit
 
@@ -149,7 +165,7 @@ class Cmddocs(cmd.Cmd):
         > view databases/mongodb
         > view intro
         """
-        return view_article(article, os.getcwd(), self.pager)
+        return view_article(article, os.getcwd(), self.pager, self.extension)
 
     ### view
     def do_mail(self, article):
@@ -159,7 +175,7 @@ class Cmddocs(cmd.Cmd):
         > mail databases/mongodb
         > mail programming/r/loops
         """
-        return mail_article(article, os.getcwd(), self.mailfrom)
+        return mail_article(article, os.getcwd(), self.mailfrom, self.extension)
 
     ### delete
     def do_delete(self, article):
@@ -171,7 +187,7 @@ class Cmddocs(cmd.Cmd):
     ### move
     def do_move(self, args):
         "Move an article"
-        move_article(os.getcwd(),args,self.repo)
+        move_article(os.getcwd(),args,self.repo,self.extension)
 
     do_mv = do_move
 

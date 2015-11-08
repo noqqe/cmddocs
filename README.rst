@@ -67,6 +67,7 @@ Create ``.cmddocsrc`` file in your $HOME with the following content
     Promptcolor = 37
     Intro_Message = cmddocs - press ? for help
     Mail = mail@example.org
+    Default_Extension = md
 
 The only required option is "Datadir", everything else will be guessed
 or defaults to a sane default value. Once you start cmddocs.py the CLI
@@ -101,3 +102,17 @@ weaknesses.
    external tool tree.
 
 If you like, please help me improving.
+
+Changelog
+---------
+
+* 0.11.0 - Introduced default filetype extension. Defaults to .md
+           Those will be hidden by default in ls/tree view and automatically
+           added to new files
+
+* 0.10.6 - Mail Feature was introduced. You can mail an article to a friend
+           Its required to have a local smtpd running.
+
+* 0.10.5 - Colorization of prompt is now custumizable in config
+
+* 0.10.4 - Bugfix release
