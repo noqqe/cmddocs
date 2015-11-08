@@ -3,6 +3,14 @@ from setuptools import setup, find_packages
 # To use a consistent encoding
 from codecs import open
 import os
+import sys
+
+if sys.version_info < (3,):
+    modules=['gitpython', 'configparser', 'mistune']
+else:
+    modules=['gitpython', 'mistune']
+
+
 
 def read_from_file(path):
     if os.path.exists(path):
@@ -15,7 +23,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.12.0',
+    version='0.12.1',
 
     description='An interactive commandline interface for your personal docs using python, Cmd, git and markdown',
     long_description=read_from_file('README.rst'),
@@ -45,7 +53,7 @@ setup(
     keywords='markdown wiki commandline git',
     packages=find_packages(),
     zip_safe=True,
-    install_requires=['gitpython', 'configparser', 'mistune'],
+    install_requires=modules,
 
     entry_points={
         'console_scripts': [
