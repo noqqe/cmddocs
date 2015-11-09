@@ -3,4 +3,4 @@
 from cmddocs import Cmddocs
 
 if __name__ == '__main__':
-    Cmddocs().cmdloop()
+    Cmddocs(conf="~/.cmddocsrc").cmdloop()

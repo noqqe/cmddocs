@@ -19,24 +19,24 @@ from .completions import *
 class Cmddocs(cmd.Cmd):
     """ Basic commandline interface class """
 
-    def __init__(self):
+    def __init__(self, conf = "~/.cmddocsrc"):
         cmd.Cmd.__init__(self)
         self.reset = '\033[0m'
-        self.read_config(self)
+        self.read_config(self,conf)
         self.initialize_docs(self)
         self.prompt = '\033[1m\033[' + self.promptcol + 'm' + self.prompt + " " + self.reset
 
-    def read_config(self, conf):
+    def read_config(self,sconf,conf):
         config = configparser.ConfigParser()
 
-        if not config.read(expanduser("~/.cmddocsrc")):
-            print("Error: your ~/.cmddocsrc could not be read")
+        if not config.read(expanduser(conf)):
+            print("Error: your config %s could not be read" % conf)
             exit(1)
 
         try:
             self.datadir = expanduser(config.get("General", "Datadir"))
         except configparser.NoOptionError:
-            print("Error: Please set a Datadir in ~/.cmddocsrc")
+            print("Error: Please set a Datadir in %s" % conf)
             exit(1)
 
         try:
