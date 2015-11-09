@@ -10,11 +10,9 @@ if sys.version_info < (3,):
 else:
     modules=['gitpython', 'mistune']
 
-
-
 def read_from_file(path):
     if os.path.exists(path):
-        with open(path) as input:
+        with open(path,"rb","utf-8") as input:
             return input.read()
 
 setup(
