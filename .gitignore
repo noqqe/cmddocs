@@ -3,3 +3,4 @@
 /cmddocs.egg-info/
 /dist/
 /build/
+.cache/*
