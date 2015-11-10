@@ -32,8 +32,8 @@ def path_complete(self, text, line, begidx, endidx):
         completions = []
         for f in os.listdir(dir):
             if f.startswith(base):
-                if os.path.isfile(os.path.join(dir,f)):
-                    f = remove_fileextension(f,extension)
+                if os.path.isfile(os.path.join(dir, f)):
+                    f = remove_fileextension(f, extension)
                     completions.append(f)
                 else:
                     completions.append(f+'/')

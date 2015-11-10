@@ -9,9 +9,9 @@ import os
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_environment(tmpdir_factory):
-    tmpdir_factory.mktemp("AAAAAARGH")
+    d = tmpdir_factory.mktemp("demodocs")
 
-def test_do_exit():
+def test_do_exit(setup_environment):
     assert Cmddocs().do_exit('exit') == True
 
 def test_do_help(capsys):
@@ -19,8 +19,7 @@ def test_do_help(capsys):
     out, err = capsys.readouterr()
     assert out == "Exit cmddocs\n"
 
-def test_do_list(capsys):
-    Cmddocs().do_list('SSL')
-    out, err = capsys.readouterr()
-    assert out.startswith("SSL")
-
+#def test_do_list(capsys):
+#    Cmddocs().do_list('SSL')
+#    out, err = capsys.readouterr()
+#    assert out.startswith("SSL")

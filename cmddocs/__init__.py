@@ -22,11 +22,11 @@ class Cmddocs(cmd.Cmd):
     def __init__(self, conf = "~/.cmddocsrc"):
         cmd.Cmd.__init__(self)
         self.reset = '\033[0m'
-        self.read_config(self,conf)
+        self.read_config(self, conf)
         self.initialize_docs(self)
         self.prompt = '\033[1m\033[' + self.promptcol + 'm' + self.prompt + " " + self.reset
 
-    def read_config(self,sconf,conf):
+    def read_config(self, sconf, conf):
         config = configparser.ConfigParser()
 
         if not config.read(expanduser(conf)):
@@ -141,11 +141,11 @@ class Cmddocs(cmd.Cmd):
     do_d = do_dirs
 
     ### directories
-    def do_cd(self,dir):
+    def do_cd(self, dir):
         "Change directory"
         cwd = change_directory(dir,self.datadir)
 
-    def do_pwd(self,line):
+    def do_pwd(self, line):
         "Show current directory"
         print(os.path.relpath(os.getcwd(),self.datadir))
 

@@ -1,7 +1,7 @@
 import re
 import os
 
-def add_fileextension(article,extension):
+def add_fileextension(article, extension):
     "add file extension to article"
 
     if os.path.isfile(article + '.' + extension):
@@ -9,7 +9,7 @@ def add_fileextension(article,extension):
 
     return article
 
-def remove_fileextension(article,extension):
+def remove_fileextension(article, extension):
     "remove file extension"
 
     extension = '\.' + extension + '$'

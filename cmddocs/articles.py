@@ -17,11 +17,11 @@ except NameError:
     pass
 
 # Function definitions
-def list_articles(dir,extension):
+def list_articles(dir, extension):
     "lists all articles in current dir and below"
     try:
         listing = subprocess.check_output(["tree", dir])
-        listing = remove_fileextension(listing,extension)
+        listing = remove_fileextension(listing, extension)
         print(listing)
     except OSError:
         print("Error: tree not installed")
@@ -35,9 +35,9 @@ def list_directories(dir):
         print("Error: tree not installed")
         return False
 
-def change_directory(dir,datadir):
+def change_directory(dir, datadir):
     "changes directory"
-    d = os.path.join(os.getcwd(),dir)
+    d = os.path.join(os.getcwd(), dir)
 
     # dont cd out of datadir
     if not datadir in d:
@@ -57,7 +57,7 @@ def change_directory(dir,datadir):
 def edit_article(article, directory, editor, repo, default_commit_msg, extension):
     """edit an article within your docs"""
     # set paths
-    a = add_fileextension(article,extension)
+    a = add_fileextension(article, extension)
     a = os.path.join(directory, a)
     d = os.path.dirname(a)
 
@@ -89,10 +89,10 @@ def edit_article(article, directory, editor, repo, default_commit_msg, extension
     except:
         pass
 
-def mail_article(article,dir,mailfrom,extension):
+def mail_article(article, dir, mailfrom, extension):
     "mail an article to a friend"
-    a = add_fileextension(article,extension)
-    a = os.path.join(dir,a)
+    a = add_fileextension(article, extension)
+    a = os.path.join(dir, a)
 
     # Create a text/plain message
     try:
@@ -126,10 +126,10 @@ def mail_article(article,dir,mailfrom,extension):
 
 
 
-def view_article(article,dir,pager,extension):
+def view_article(article, dir, pager, extension):
     "view an article within your docs"
-    a = add_fileextension(article,extension)
-    a = os.path.join(dir,a)
+    a = add_fileextension(article, extension)
+    a = os.path.join(dir, a)
     # read original file
     try:
         article = open(a, "r")
@@ -149,7 +149,7 @@ def view_article(article,dir,pager,extension):
         # v3 needs to have a byte array
         # v2 not. If conversion fails, its 2.
         try:
-            md = bytes(md,'UTF-8')
+            md = bytes(md, 'UTF-8')
         except TypeError:
             pass
 
@@ -168,10 +168,10 @@ def view_article(article,dir,pager,extension):
     except OSError:
         print("Error: Could not remove %s" % tmp.name)
 
-def delete_article(article,dir,repo,extension):
+def delete_article(article, dir, repo, extension):
     "delete an article"
-    a = add_fileextension(article,extension)
-    a = os.path.join(dir,a)
+    a = add_fileextension(article, extension)
+    a = os.path.join(dir, a)
     try:
         repo.git.rm(a)
         repo.git.commit(m="%s deleted" % article)
@@ -191,17 +191,17 @@ def delete_article(article,dir,repo,extension):
                 print("File %s could not be removed" % a)
     return
 
-def move_article(dir,args,repo,extension):
+def move_article(dir, args, repo, extension):
     "move an article from source to destination"
     args = args.split()
     if len(args)!=2:
         print("Invalid usage\nUse: mv source dest")
         return False
 
-    a = os.path.join(dir,args[0])
-    a = add_fileextension(a,extension)
-    e = os.path.join(dir,args[1])
-    e = add_fileextension(e,extension)
+    a = os.path.join(dir, args[0])
+    a = add_fileextension(a, extension)
+    e = os.path.join(dir, args[1])
+    e = add_fileextension(e, extension)
     d = os.path.dirname(e)
 
     # create dir(s)
@@ -210,9 +210,9 @@ def move_article(dir,args,repo,extension):
 
     # move file in git and commit
     try:
-        repo.git.mv(a,e)
-        repo.git.commit(m="Moved %s to %s" % (a,e))
-        print("Moved %s to %s" % (a,e))
+        repo.git.mv(a, e)
+        repo.git.commit(m="Moved %s to %s" % (a, e))
+        print("Moved %s to %s" % (a, e))
     except git.exc.GitCommandError:
         print("Error: File could not be moved")
 
@@ -230,7 +230,7 @@ def search_article(keyword, directory, datadir, exclude):
             path = os.path.join(dirpath, fname)
             if r.search(path) is not None:
                 print("* \033[92m%s\033[39m" %
-                        os.path.relpath(path,datadir))
+                        os.path.relpath(path, datadir))
                 c = c + 1
     print("Content:")
     for dirpath, dirs, files in os.walk(directory):
@@ -245,7 +245,7 @@ def search_article(keyword, directory, datadir, exclude):
                             line.rstrip('\n')))
     return "Results: %s" % c
 
-def show_diff(args,repo):
+def show_diff(args, repo):
     """
     Shows diffs for files or whole article directory
     """
@@ -271,7 +271,7 @@ def show_diff(args,repo):
     else:
         print(repo.git.diff('HEAD~5', unified="0", color="always"))
 
-def show_log(args,repo):
+def show_log(args, repo):
     """
     Show latest git logs with specified number of entries and maybe for a
     specific file.
@@ -309,11 +309,11 @@ def show_log(args,repo):
         count = 10
         print("Last %s commits" % count)
         try:
-            print(repo.git.log(pretty=format, n=count,date=dateformat))
+            print(repo.git.log(pretty=format, n=count, date=dateformat))
         except git.exc.GitCommandError:
             print("Error: git may not be configured on your system.")
 
-def undo_change(args,repo):
+def undo_change(args, repo):
     """
     You can revert your changes (use revert from git)
 
