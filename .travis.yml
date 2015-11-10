@@ -7,6 +7,8 @@ python:
   - "3.5"
   - "pypy"
 # command to install dependencies
+before_install:
+  - sudo apt-get install -y tree
 install:
   - pip install .
 # command to run tests
