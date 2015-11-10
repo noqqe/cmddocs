@@ -16,7 +16,7 @@ def demoenv():
     # create test files
     for x in range(1,5):
        x = str(x)
-       f = open(d + "/testfile" + x, "ab+")
+       f = open(d + "/testfile" + x + ".md", "ab+")
        f.write("Test " + x)
        f.close()
 
@@ -39,7 +39,7 @@ def demoenv():
     Prompt = cmddocs>
     Promptcolor = 37
     Intro_Message = cmddocs - press ? for help
-    Mail = flo@noqqe.de
+    Mail = mail@example.com
     Default_Extension = md
     """ % d
 
@@ -77,10 +77,10 @@ def test_do_pwd(demoenv, capsys):
     out, err = capsys.readouterr()
     assert out == '.\n'
 
-def test_do_cd(demoenv, capsys):
-    c, d = demoenv
-    Cmddocs(c).do_cd("dir2",True)
-    out, err = capsys.readouterr()
-    assert out == "Changed to %s" % d + "dir2"
+#def test_do_cd(demoenv, capsys):
+#    c, d = demoenv
+#    Cmddocs(c).do_cd("dir2")
+#    out, err = capsys.readouterr()
+#    assert out == "Changed to %s" % d + "dir2"
 
 # Test default-extension when called on a new file
