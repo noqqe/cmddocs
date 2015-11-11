@@ -22,14 +22,14 @@ class Cmddocs(cmd.Cmd):
         self.prompt = '\033[1m\033[' + self.promptcol + 'm' + self.prompt + " " + self.reset
 
     def read_config(self, sconf, conf):
-        config = configparser.ConfigParser()
+        config = ConfigParser.ConfigParser()
         if not config.read(expanduser(conf)):
             print("Error: your config %s could not be read" % conf)
             exit(1)
 
         try:
             self.datadir = expanduser(config.get("General", "Datadir"))
-        except configparser.NoOptionError:
+        except ConfigParser.NoOptionError:
             print("Error: Please set a Datadir in %s" % conf)
             exit(1)
 

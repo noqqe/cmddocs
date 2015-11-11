@@ -5,11 +5,6 @@ from codecs import open
 import os
 import sys
 
-if sys.version_info < (3,):
-    modules=['gitpython', 'configparser', 'mistune']
-else:
-    modules=['gitpython', 'mistune']
-
 def read_from_file(path):
     if os.path.exists(path):
         with open(path,"rb","utf-8") as input:
@@ -48,7 +43,7 @@ setup(
     keywords='markdown wiki commandline git',
     packages=find_packages(),
     zip_safe=True,
-    install_requires=modules,
+    install_requires=['gitpython', 'configparser', 'mistune'],
 
     entry_points={
         'console_scripts': [
