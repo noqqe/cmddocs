@@ -5,16 +5,11 @@ import cmd
 import git
 import sys
 import signal
+import ConfigParser
 import pkg_resources
-
-try:
-    import configparser
-except ImportError:
-    import configparser as configparser
-
 from os.path import expanduser
-from .articles import *
-from .completions import *
+from articles import *
+from completions import *
 
 class Cmddocs(cmd.Cmd):
     """ Basic commandline interface class """
@@ -28,7 +23,6 @@ class Cmddocs(cmd.Cmd):
 
     def read_config(self, sconf, conf):
         config = configparser.ConfigParser()
-
         if not config.read(expanduser(conf)):
             print("Error: your config %s could not be read" % conf)
             exit(1)
@@ -41,17 +35,17 @@ class Cmddocs(cmd.Cmd):
 
         try:
             self.exclude = expanduser(config.get("General", "Excludedir"))
-        except configparser.NoOptionError:
+        except ConfigParser.NoOptionError:
             self.exclude = expanduser('.git/')
 
         try:
             self.default_commit_msg = config.get("General", "Default_Commit_Message")
-        except configparser.NoOptionError:
+        except ConfigParser.NoOptionError:
             self.default_commit_msg = "small changes"
 
         try:
             self.editor = config.get("General", "Editor")
-        except configparser.NoOptionError:
+        except ConfigParser.NoOptionError:
             if os.environ.get('EDITOR') is not None:
                 self.editor = os.environ.get('EDITOR')
             else:
@@ -62,7 +56,7 @@ class Cmddocs(cmd.Cmd):
 
         try:
             self.pager = config.get("General", "Pager")
-        except configparser.NoOptionError:
+        except ConfigParser.NoOptionError:
             if os.environ.get('PAGER') is not None:
                 self.editor = os.environ.get('PAGER')
             else:
@@ -73,27 +67,27 @@ class Cmddocs(cmd.Cmd):
 
         try:
             self.prompt = config.get("General", "Prompt")
-        except configparser.NoOptionError:
+        except ConfigParser.NoOptionError:
             self.prompt = "cmddocs>"
 
         try:
             self.promptcol = config.get("General", "Promptcolor")
-        except configparser.NoOptionError:
+        except ConfigParser.NoOptionError:
             self.promptcol = "37"
 
         try:
             self.intro = config.get("General", "Intro_Message")
-        except configparser.NoOptionError:
+        except ConfigParser.NoOptionError:
             self.intro = "cmddocs - press ? for help"
 
         try:
             self.mailfrom = config.get("General", "Mail")
-        except configparser.NoOptionError:
+        except ConfigParser.NoOptionError:
             self.mailfrom = "nobody"
 
         try:
             self.extension = config.get("General", "Default_Extension")
-        except configparser.NoOptionError:
+        except ConfigParser.NoOptionError:
             self.extension = "md"
 
         return
@@ -185,7 +179,7 @@ class Cmddocs(cmd.Cmd):
     ### delete
     def do_delete(self, article):
         "Delete an article"
-        delete_article(article, os.getcwd(),self.repo, self.extension)
+        delete_article(article, os.getcwd(),self.repo)
 
     do_rm = do_delete
 

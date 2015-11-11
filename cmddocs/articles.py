@@ -6,15 +6,9 @@ import smtplib
 import mistune
 import tempfile
 import subprocess
+from rendering import md_to_ascii
 from email.mime.text import MIMEText
-from .rendering import md_to_ascii
-from .utils import *
-
-# Python 3 compatibility
-try:
-    raw_input = input
-except NameError:
-    pass
+from utils import *
 
 # Function definitions
 def list_articles(dir, extension):
@@ -95,14 +89,9 @@ def mail_article(article, dir, mailfrom, extension):
     a = os.path.join(dir, a)
 
     # Create a text/plain message
-    try:
-        fp = open(a, 'r')
-        msg = MIMEText(fp.read())
-        fp.close()
-    except IsADirectoryError:
-        print("Error: You cannot send a directory with mail")
-    except OSError:
-        print("Error: File could not be opened")
+    fp = open(a, 'r')
+    msg = MIMEText(fp.read())
+    fp.close()
 
     mailto = raw_input("Recipient: ")
     msg['Subject'] = article
@@ -143,17 +132,7 @@ def view_article(article, dir, pager, extension):
     # hand everything over to mistune lexer
     with tempfile.NamedTemporaryFile(delete=False) as tmp:
         md = mistune.Markdown(renderer=md_to_ascii())
-        md = md.render(content)
-
-        # python 3 compatibility
-        # v3 needs to have a byte array
-        # v2 not. If conversion fails, its 2.
-        try:
-            md = bytes(md, 'UTF-8')
-        except TypeError:
-            pass
-
-        tmp.write(md)
+        tmp.write(md.render(content))
 
     # start pager and cleanup tmp file afterwards
     # -fr is needed for showing binary+ansi colored files to
@@ -327,13 +306,11 @@ def undo_change(args, repo):
     if len(args) == 1:
         try:
             print(repo.git.show(args[0], '--oneline', '--patience'))
-            msg = input("\nDo you really want to undo this? (y/n): ")
+            msg = raw_input("\nDo you really want to undo this? (y/n): ")
             if msg == "y":
                 repo.git.revert(args[0], '--no-edit')
 
         except git.exc.GitCommandError:
             print("Error: Could not find given commit reference")
-    else:
-        print("Error: Usage - undo HEAD or undo 355f375")
 
 
