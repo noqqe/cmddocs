@@ -70,23 +70,39 @@ Create ``.cmddocsrc`` file in your $HOME with the following content
     Mail = mail@example.org
     Default_Extension = md
 
+    [Colors]
+    Header12 = 37
+    Header345 = 37
+    Codeblock = 92
+
 The only required option is "Datadir", everything else will be guessed
 or defaults to a sane default value. Once you start cmddocs.py the CLI
 will be shown. Use ``help`` for commands.
 
 ::
 
-    $ ./cmddocs.py
-    Welcome to cmddocs
+    $ cmddocs
+    cmddocs - press ? for help
     cmddocs> help
 
     Documented commands (type help <topic>):
     ========================================
-    EOF  d       dirs  edit  help  list  ls    mv   rm      status
-    cd   delete  e     exit  l     log   move  pwd  search  view
+    EOF  delete  e     help  list  mail  pwd     search  undo
+    cd   diff    edit  info  log   move  revert  stats   version
+    d    dirs    exit  l     ls    mv    rm      status  view
 
     cmddocs> help l
-    Show files in current working dir
+
+        Show files in current working dir
+
+    cmddocs> help log
+
+        Show git logs of your docs.
+
+        Usage: log                      # default loglines: 10)
+               log 20                   # show 20 loglines
+               log 20 article           # show log for specific article
+               log databases/mongodb 3  # same
 
 Exit cmddocs.py
 
