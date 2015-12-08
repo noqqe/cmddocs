@@ -277,7 +277,8 @@ def show_diff(args, repo, extension):
 
     args = args.split()
     if len(args) > 1:
-        if os.path.isfile(os.path.join(os.getcwd(), args[1])):
+        if os.path.isfile(os.path.join(os.getcwd(), add_fileextension(args[1], extension))):
+            # diff 7 article
             try:
                 print(repo.git.diff('HEAD~'+args[0], add_fileextension(args[1], extension),
                         unified=unifiedopt, color=colorization))
@@ -286,6 +287,7 @@ def show_diff(args, repo, extension):
         else:
             print("Error: Wrong Usage. See help diff")
     elif len(args) == 1:
+        # diff 7
         try:
             print(repo.git.diff('HEAD~'+args[0],
                         unified=unifiedopt, color=colorization))

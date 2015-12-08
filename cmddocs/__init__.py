@@ -228,9 +228,11 @@ class Cmddocs(cmd.Cmd):
 
     def do_diff(self, args):
         """
-        Show git diffs (Gruesse von deiner Suessen!)
+        Show git diffs between files and commits
 
-        Usage: log                      # default diff to last
+        Usage: diff 7                   # show diff for last 7 changes
+               diff 1 article           # show diff for last change to article
+               diff                     # show last 5 diffs
         """
         show_diff(args, self.repo, self.extension)
 
