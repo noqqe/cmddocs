@@ -250,6 +250,16 @@ class Cmddocs(cmd.Cmd):
         """
         undo_change(args, self.repo)
 
+    def do_stats(self, args):
+        """
+        Calculate some statistics on your docs
+
+        Usage:
+        > stats
+
+        """
+        show_stats(args, self.repo, self.datadir)
+
     do_revert = do_undo
 
     ### exit

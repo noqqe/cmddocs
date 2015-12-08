@@ -5,6 +5,7 @@ import socket
 import smtplib
 import mistune
 import tempfile
+import datetime
 import subprocess
 from rendering import md_to_ascii
 from email.mime.text import MIMEText
@@ -351,12 +352,6 @@ def show_log(args, repo, extension):
 def undo_change(args, repo):
     """
     You can revert your changes (use revert from git)
-
-    Usage:
-    > undo HEAD
-    > undo 355f375
-
-    Will ask for confirmation.
     """
     args = args.split()
     if len(args) == 1:
@@ -369,4 +364,49 @@ def undo_change(args, repo):
         except git.exc.GitCommandError:
             print("Error: Could not find given commit reference")
 
+def show_stats(args, repo, datadir):
+    """
+    Show some statistics and other informations
+    on your repos
+    """
+    # get time series of commits
+    commits = repo.git.log(format="%ci")
+    commits = commits.split('\n')
+    n = len(commits)
 
+    print("Newest Commit: %s" % commits[0])
+    print("Oldest Commit: %s" % commits[n-1])
+    print("Number of Commits: %s" % n)
+
+    # Calculate Repo age
+    f = commits[n-1].split()
+    today = datetime.datetime.today()
+    first = datetime.datetime.strptime(f[0],"%Y-%m-%d")
+    days = today - first
+    print("Repository Age: %s" % days.days)
+
+    # Calculate commits per day
+    cpd = float(days.days) / n
+    print("Average Commits per Day: %s" % cpd)
+
+    # Calculate size of docs
+    folder_size = 0
+    num_lines = 0
+    num_words = 0
+    num_chars = 0
+
+    for (path, dirs, files) in os.walk(datadir):
+        for file in files:
+         filename = os.path.join(path, file)
+         folder_size += os.path.getsize(filename)
+         with open(filename, 'r') as f:
+            for line in f:
+                words = line.split()
+                num_lines += 1
+                num_words += len(words)
+                num_chars += len(line)
+
+    print("Size of your Docs: %0.1f MB" % (folder_size/(1024*1024.0)))
+    print("Total Lines: %s" % num_lines)
+    print("Total Words: %s" % num_words)
+    print("Total Characters: %s" % num_chars)
