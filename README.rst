@@ -63,6 +63,7 @@ Create ``.cmddocsrc`` file in your $HOME with the following content
     Excludedir = .git/
     Editor = /usr/local/bin/vim
     Pager = /usr/bin/less
+    PagerFlags = -fr
     Prompt = cmddocs>
     Promptcolor = 37
     Intro_Message = cmddocs - press ? for help
