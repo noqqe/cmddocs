@@ -1,6 +1,21 @@
 Changelog
 =========
 
+0.14.0 (2015-12-08)
+-------------------
+
+- Feature: Configurable colors for md to ascii #22. [Florian Baumann]
+
+- More robust config in completions. [Florian Baumann]
+
+- Documentation: updated Readme for Pagerflags. [Florian Baumann]
+
+- Feature: Configure pager flags - #20. [Florian Baumann]
+
+- Referenced Changelog in README.rst. [Florian Baumann]
+
+- Now using gitchangelog for python to provide proper changelog. [Florian Baumann]
+
 0.13.0 (2015-12-08)
 -------------------
 
