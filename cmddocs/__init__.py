@@ -120,7 +120,7 @@ class Cmddocs(cmd.Cmd):
         "Show files in current working dir"
         if not dir:
             dir = "."
-        return list_articles(dir,self.extension)
+        return list_articles(dir, self.extension)
 
     # Aliases
     do_l = do_list
@@ -137,7 +137,7 @@ class Cmddocs(cmd.Cmd):
     ### directories
     def do_cd(self, dir):
         "Change directory"
-        cwd = change_directory(dir,self.datadir)
+        cwd = change_directory(dir, self.datadir)
 
     def do_pwd(self, line):
         "Show current directory"
@@ -179,7 +179,7 @@ class Cmddocs(cmd.Cmd):
     ### delete
     def do_delete(self, article):
         "Delete an article"
-        delete_article(article, os.getcwd(),self.repo)
+        delete_article(article, os.getcwd(), self.repo)
 
     do_rm = do_delete
 

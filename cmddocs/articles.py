@@ -235,7 +235,7 @@ def show_diff(args, repo, extension):
     if len(args) > 1:
         if os.path.isfile(os.path.join(os.getcwd(), args[1])):
             try:
-                print(repo.git.diff('HEAD~'+args[0],add_fileextension(args[1], extension),
+                print(repo.git.diff('HEAD~'+args[0], add_fileextension(args[1], extension),
                         unified=unifiedopt, color=colorization))
             except git.exc.GitCommandError:
                 print("Error: Not a valid git commit reference")
