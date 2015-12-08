@@ -394,19 +394,23 @@ def show_stats(args, repo, datadir):
     num_lines = 0
     num_words = 0
     num_chars = 0
-
+    num_files = 0
+    ignore_re = re.compile(r'.*/.git/.*')
     for (path, dirs, files) in os.walk(datadir):
         for file in files:
-         filename = os.path.join(path, file)
-         folder_size += os.path.getsize(filename)
-         with open(filename, 'r') as f:
-            for line in f:
-                words = line.split()
-                num_lines += 1
-                num_words += len(words)
-                num_chars += len(line)
+         if ignore_re.search(path) is None:
+            num_files += 1
+            filename = os.path.join(path, file)
+            folder_size += os.path.getsize(filename)
+            with open(filename, 'r') as f:
+               for line in f:
+                   words = line.split()
+                   num_lines += 1
+                   num_words += len(words)
+                   num_chars += len(line)
 
     print("Size of your Docs: %0.1f MB" % (folder_size/(1024*1024.0)))
+    print("Total Articles: %s" % num_files)
     print("Total Lines: %s" % num_lines)
     print("Total Words: %s" % num_words)
     print("Total Characters: %s" % num_chars)
