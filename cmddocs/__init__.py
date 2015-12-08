@@ -141,7 +141,7 @@ class Cmddocs(cmd.Cmd):
 
     def do_pwd(self, line):
         "Show current directory"
-        print(os.path.relpath(os.getcwd(),self.datadir))
+        print(os.path.relpath(os.getcwd(), self.datadir))
 
     ### edit
     def do_edit(self, article):
@@ -186,14 +186,14 @@ class Cmddocs(cmd.Cmd):
     ### move
     def do_move(self, args):
         "Move an article"
-        move_article(os.getcwd(),args,self.repo,self.extension)
+        move_article(os.getcwd(), args, self.repo, self.extension)
 
     do_mv = do_move
 
     ### search
     def do_search(self, keyword):
         "Search for keyword in current directory. Example: search mongodb"
-        print(search_article(keyword,os.getcwd(), self.datadir,
+        print(search_article(keyword, os.getcwd(), self.datadir,
             self.exclude))
 
     ### status
@@ -210,7 +210,7 @@ class Cmddocs(cmd.Cmd):
                log 20 article           # show log for specific article
                log databases/mongodb 3  # same
         """
-        show_log(args,self.repo)
+        show_log(args, self.repo, self.extension)
 
     def do_diff(self, args):
         """
@@ -218,7 +218,7 @@ class Cmddocs(cmd.Cmd):
 
         Usage: log                      # default diff to last
         """
-        show_diff(args,self.repo)
+        show_diff(args, self.repo, self.extension)
 
 
     ### undo / revert

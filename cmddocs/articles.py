@@ -224,7 +224,7 @@ def search_article(keyword, directory, datadir, exclude):
                             line.rstrip('\n')))
     return "Results: %s" % c
 
-def show_diff(args, repo):
+def show_diff(args, repo, extension):
     """
     Shows diffs for files or whole article directory
     """
@@ -235,7 +235,7 @@ def show_diff(args, repo):
     if len(args) > 1:
         if os.path.isfile(os.path.join(os.getcwd(), args[1])):
             try:
-                print(repo.git.diff('HEAD~'+args[0],args[1],
+                print(repo.git.diff('HEAD~'+args[0],add_fileextension(args[1], extension),
                         unified=unifiedopt, color=colorization))
             except git.exc.GitCommandError:
                 print("Error: Not a valid git commit reference")
@@ -250,7 +250,7 @@ def show_diff(args, repo):
     else:
         print(repo.git.diff('HEAD~5', unified="0", color="always"))
 
-def show_log(args, repo):
+def show_log(args, repo, extension):
     """
     Show latest git logs with specified number of entries and maybe for a
     specific file.
@@ -260,30 +260,40 @@ def show_log(args, repo):
     dateformat="short"
 
     if len(args) >= 1:
-        if os.path.isfile(os.path.join(os.getcwd(), args[0])):
-            file = args[0]
+        if os.path.isfile(os.path.join(os.getcwd(), add_fileextension(args[0], extension))):
+            file = add_fileextension(args[0], extension)
+
+            # Command: log Article 12
             try:
                 count = args[1]
                 print("Last %s commits for %s" % (count, file))
                 print(repo.git.log(file, pretty=format, n=count,
-                    date=dateformat))
+                    date=dateformat, follow=True))
+            # Command: log Article
             except IndexError:
                 count = 10
                 print("Last %s commits for %s" % (count, file))
                 print(repo.git.log(file, pretty=format, n=count,
-                        date=dateformat))
+                        date=dateformat, follow=True))
+            except git.exc.GitCommandError:
+                print("Error: git command resulted in an error")
         else:
             count = args[0]
+            # Command: log 12 Article
             try:
-                file = args[1]
+                file = add_fileextension(args[1], extension)
                 print("Last %s commits for %s" % (count, file))
                 print(repo.git.log(file, pretty=format, n=count,
-                        date=dateformat))
+                        date=dateformat, follow=True))
+            # Command: log 12
             except IndexError:
                 print("Last %s commits" % count)
                 print(repo.git.log(pretty=format, n=count,
                     date=dateformat))
+            except git.exc.GitCommandError:
+                print("Error: git command resulted in an error")
 
+    # Command: log
     elif len(args) == 0:
         count = 10
         print("Last %s commits" % count)
