@@ -160,7 +160,7 @@ def mail_article(article, dir, mailfrom, extension):
 
 
 
-def view_article(article, dir, pager, extension):
+def view_article(article, dir, pager, extension, pagerflags):
     "view an article within your docs"
     a = add_fileextension(article, extension)
     a = os.path.join(dir, a)
@@ -180,10 +180,12 @@ def view_article(article, dir, pager, extension):
         tmp.write(md.render(content))
 
     # start pager and cleanup tmp file afterwards
-    # -fr is needed for showing binary+ansi colored files to
-    # be properly displayed
+    # also parse flags for local pager
     try:
-        subprocess.call([pager, "-fr", tmp.name])
+        if pagerflags == False:
+            subprocess.call([pager, tmp.name])
+        else:
+            subprocess.call([pager, pagerflags, tmp.name])
     except OSError:
         print("Error: '%s' No such file or directory" % pager)
 

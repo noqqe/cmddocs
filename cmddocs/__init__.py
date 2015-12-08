@@ -2,10 +2,10 @@
 
 import os
 import cmd
-import git
 import sys
 import signal
 import ConfigParser
+import git
 import pkg_resources
 from os.path import expanduser
 from .articles import *
@@ -65,6 +65,10 @@ class Cmddocs(cmd.Cmd):
                 print("Please specify one in config or set PAGER in your\
                 OS Environment")
                 exit(1)
+        try:
+            self.pagerflags = config.get("General", "PagerFlags")
+        except ConfigParser.NoOptionError:
+            self.pagerflags = False
 
         try:
             self.prompt = config.get("General", "Prompt")
@@ -165,7 +169,7 @@ class Cmddocs(cmd.Cmd):
         > view databases/mongodb
         > view intro
         """
-        return view_article(article, os.getcwd(), self.pager, self.extension)
+        return view_article(article, os.getcwd(), self.pager, self.extension, self.pagerflags)
 
     ### view
     def do_mail(self, article):
