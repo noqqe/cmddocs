@@ -8,8 +8,9 @@ import signal
 import ConfigParser
 import pkg_resources
 from os.path import expanduser
-from articles import *
-from completions import *
+from .articles import *
+from .completions import *
+from .version import __version__
 
 class Cmddocs(cmd.Cmd):
     """ Basic commandline interface class """
@@ -259,6 +260,17 @@ class Cmddocs(cmd.Cmd):
 
         """
         show_stats(args, self.repo, self.datadir)
+
+    def do_version(self, args):
+        """
+        Show version of cmddocs
+
+        Usage:
+        > version
+
+        """
+        print("cmddocs %s" % __version__)
+
 
     do_revert = do_undo
 

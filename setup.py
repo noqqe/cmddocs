@@ -5,10 +5,14 @@ from codecs import open
 import os
 import sys
 
+# file read helper
 def read_from_file(path):
     if os.path.exists(path):
         with open(path,"rb","utf-8") as input:
             return input.read()
+
+# get version string
+exec(open('cmddocs/version.py').read())
 
 setup(
     name='cmddocs',
@@ -16,7 +20,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.12.3',
+    version=__version__,
 
     description='An interactive commandline interface for your personal docs using python, Cmd, git and markdown',
     long_description=read_from_file('README.rst'),
