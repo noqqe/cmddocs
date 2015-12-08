@@ -83,6 +83,50 @@ def edit_article(article, directory, editor, repo, default_commit_msg, extension
     except:
         pass
 
+
+def info_article(article, dir, repo, extension):
+    "get info for an article within your docs"
+    a = add_fileextension(article, extension)
+    a = os.path.join(dir, a)
+
+    # Create commit list
+    try:
+        commits = repo.git.log(a,follow=True,format="%H")
+        commits = commits.split()
+        n = len(commits)
+    except git.exc.GitCommandError:
+        print("Error: File not found")
+        return False
+
+    # Article create date
+    created = repo.git.show(commits[n-1], quiet=True, pretty="format:%ci")
+    print("Created: %s" % created)
+
+    # Article last updated
+    updated = repo.git.show(commits[0], quiet=True, pretty="format:%ci")
+    print("Updated: %s" % updated)
+
+    # Number of commits
+    print("Commits: %s" % n)
+
+    # Collect textual informations
+    num_lines = 0
+    num_words = 0
+    num_chars = 0
+
+    with open(a, 'r') as f:
+        for line in f:
+            words = line.split()
+
+            num_lines += 1
+            num_words += len(words)
+            num_chars += len(line)
+
+    # Print textual informations
+    print("Lines: %s" % num_lines)
+    print("Words: %s" % num_words)
+    print("Characters: %s" % num_chars)
+
 def mail_article(article, dir, mailfrom, extension):
     "mail an article to a friend"
     a = add_fileextension(article, extension)

@@ -212,6 +212,20 @@ class Cmddocs(cmd.Cmd):
         """
         show_log(args, self.repo, self.extension)
 
+    def do_info(self, article):
+        """
+        Show infos for an article
+
+        Usage: info article
+            Created: 2014-01-18 11:18:03 +0100
+            Updated: 2015-10-23 14:14:44 +0200
+            Commits: 26
+            Lines: 116
+            Words: 356
+            Characters: 2438
+        """
+        info_article(article, os.getcwd(), self.repo, self.extension)
+
     def do_diff(self, args):
         """
         Show git diffs (Gruesse von deiner Suessen!)
@@ -268,6 +282,7 @@ class Cmddocs(cmd.Cmd):
     complete_move = path_complete
 
     complete_log = path_complete
+    complete_info = path_complete
 
 def ctrlc(sig, frame):
     print("\n")
