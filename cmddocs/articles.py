@@ -160,7 +160,7 @@ def mail_article(article, dir, mailfrom, extension):
 
 
 
-def view_article(article, dir, pager, extension, pagerflags):
+def view_article(article, dir, pager, extension, pagerflags, colors):
     "view an article within your docs"
     a = add_fileextension(article, extension)
     a = os.path.join(dir, a)
@@ -176,7 +176,7 @@ def view_article(article, dir, pager, extension, pagerflags):
 
     # hand everything over to mistune lexer
     with tempfile.NamedTemporaryFile(delete=False) as tmp:
-        md = mistune.Markdown(renderer=md_to_ascii())
+        md = mistune.Markdown(renderer=md_to_ascii(colors))
         tmp.write(md.render(content))
 
     # start pager and cleanup tmp file afterwards

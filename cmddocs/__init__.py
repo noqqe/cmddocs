@@ -23,6 +23,7 @@ class Cmddocs(cmd.Cmd):
         self.prompt = '\033[1m\033[' + self.promptcol + 'm' + self.prompt + " " + self.reset
 
     def read_config(self, sconf, conf):
+        self.colors = {}
         config = ConfigParser.ConfigParser()
         if not config.read(expanduser(conf)):
             print("Error: your config %s could not be read" % conf)
@@ -95,7 +96,23 @@ class Cmddocs(cmd.Cmd):
         except ConfigParser.NoOptionError:
             self.extension = "md"
 
+        try:
+            self.colors['h1'] = config.get("Colors", "Header12")
+        except ConfigParser.NoOptionError:
+            self.colors['h1'] = "37"
+
+        try:
+            self.colors['h2'] = config.get("Colors", "Header345")
+        except ConfigParser.NoOptionError:
+            self.colors['h2'] = "92"
+
+        try:
+            self.colors['code'] = config.get("Colors", "Codeblock")
+        except ConfigParser.NoOptionError:
+            self.colors['code'] = "92"
+
         return
+
 
     def initialize_docs(self, docs):
         # Read or initialize git repository
@@ -169,7 +186,7 @@ class Cmddocs(cmd.Cmd):
         > view databases/mongodb
         > view intro
         """
-        return view_article(article, os.getcwd(), self.pager, self.extension, self.pagerflags)
+        return view_article(article, os.getcwd(), self.pager, self.extension, self.pagerflags, self.colors)
 
     ### view
     def do_mail(self, article):

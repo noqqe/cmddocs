@@ -2,14 +2,18 @@ import mistune
 
 class md_to_ascii(mistune.Renderer):
 
+    def __init__(self,colors):
+        mistune.Renderer.__init__(self)
+        self.colors = colors
+
     # Pagelayout
     def block_code(self, code, lang):
-        return '\n\033[92m%s\033[0m\n' % code.strip()
+        return '\n\033[' + self.colors['code'] + 'm%s\033[0m\n' % code.strip()
     def header(self, text, level, raw=None):
         if level == 2 or level == 1:
-            head = '\n\033[4m\033[1m\033[37m%s\033[0m\n' % text.strip()
+            head = '\n\033[4m\033[1m\033[' + self.colors['h1'] + 'm%s\033[0m\n' % text.strip()
         else:
-            head = '\n\033[1m\033[37m%s\033[0m\n' % text.strip()
+            head = '\n\033[1m\033[' + self.colors['h2'] + 'm%s\033[0m\n' % text.strip()
         return head
     def block_quote(self, text):
         return '\n%s\n' % text.strip()
