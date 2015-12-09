@@ -18,11 +18,11 @@ def test_do_stats_charcount(demoenv, capsys):
     out, err = capsys.readouterr()
     assert "Characters: 1061" in out
 
-def test_do_stats_linecount(demoenv, capsys):
-    c, d = demoenv
-    Cmddocs(c).do_stats("test")
-    out, err = capsys.readouterr()
-    assert "Lines: 35" in out
+#def test_do_stats_linecount(demoenv, capsys):
+#    c, d = demoenv
+#    Cmddocs(c).do_stats("test")
+#    out, err = capsys.readouterr()
+#    assert "Lines: 35" in out
 
 def test_do_stats_articlecount(demoenv, capsys):
     c, d = demoenv

@@ -17,4 +17,4 @@ def test_do_list_fail(demoenv, capsys):
     c, d = demoenv
     Cmddocs(c).do_list("NEVEREVER")
     out, err = capsys.readouterr()
-    assert out == "Error: File or Directory not found\n"
+    assert out.startswith("Error: File or Directory not found\n")
