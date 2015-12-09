@@ -125,15 +125,17 @@ Command Documentation
 ``cd``
 
 ::
-  Change directory
 
-  Usage:
-      cd Programming/
-      cd
+        Change directory
+
+        Usage:
+            cd Programming/
+            cd
 
 ``delete``, ``rm``
 
 ::
+
         Delete an article
 
         Usage:
@@ -144,6 +146,7 @@ Command Documentation
 ``dirs``, ``d``
 
 ::
+
         Show directories in current working dir
 
         Usage:
@@ -155,6 +158,7 @@ Command Documentation
 ``e``, ``edit``
 
 ::
+
         Edit or create new article.
 
         Usage:
@@ -166,6 +170,7 @@ Command Documentation
 ``list``, ``l``, ``ls``
 
 ::
+
         Show files in current working dir
 
         Usage:
@@ -177,6 +182,7 @@ Command Documentation
 ``move``, ``mv``
 
 ::
+
         Move an article to a new location
 
         Usage:
@@ -187,6 +193,7 @@ Command Documentation
 ``view``
 
 ::
+
         View an article. Creates temporary file with converted markdown to
         ansi colored output. Opens your PAGER. (Only less supported atm)
 
@@ -197,6 +204,7 @@ Command Documentation
 ``mail``
 
 ::
+
         Mail an article to a friend
 
         Usage:
@@ -209,6 +217,7 @@ Command Documentation
 ``pwd``
 
 ::
+
         Show current directory
 
         Usage:
@@ -217,6 +226,7 @@ Command Documentation
 ``search``
 
 ::
+
         Search for keyword in current directory
 
         Usage:
@@ -226,6 +236,7 @@ Command Documentation
 ``undo``, ``revert``
 
 ::
+
         You can revert your changes (use revert from git)
 
         Usage:
@@ -237,6 +248,7 @@ Command Documentation
 ``diff``
 
 ::
+
         Show git diffs between files and commits
 
         Usage:
@@ -247,6 +259,7 @@ Command Documentation
 ``info``
 
 ::
+
         Show infos for an article
 
         Usage:
@@ -262,6 +275,7 @@ Command Documentation
 ``log``
 
 ::
+
         Show git logs of your docs.
 
         Usage:
@@ -273,6 +287,7 @@ Command Documentation
 ``status``
 
 ::
+
         Show git repo status of your docs
 
         Usage:
@@ -281,6 +296,7 @@ Command Documentation
 ``stats``
 
 ::
+
         Calculate some statistics on your docs
 
         Usage:
@@ -289,6 +305,7 @@ Command Documentation
 ``exit``, ``EOF``
 
 ::
+
         Exit cmddocs
 
         Usage:
@@ -298,11 +315,13 @@ Command Documentation
 ``help``
 
 ::
-	List available commands with "help" or detailed help with "help cmd".
+
+	      List available commands with "help" or detailed help with "help cmd".
 
 ``version``
 
 ::
+
         Show version of cmddocs
 
         Usage:
