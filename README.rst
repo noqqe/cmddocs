@@ -1,14 +1,15 @@
 cmddocs
 =======
 
-``cmddocs`` is an interactive commandline wiki-like python script. It
-lets you easily maintain your wiki/docs/cheetsheets using:
+``cmddocs`` is an interactive commandline wiki. It
+lets you easily maintain your docs/cheetsheets/notes using:
 
--  Python
--  ``cmd`` module (for CLI)
--  ``git`` for version control
--  ``markdown`` for writing and viewing
--  oldschool files and directories in your $HOME
+- Plain Text Files
+- Write ``markdown`` in your local Editor
+- View in your local Pager
+- Versioning with ``git``
+
+cmddocs is like a framework around your plaintext files.
 
 Why ?
 -----
@@ -27,10 +28,8 @@ internet and are commandline-based. These are
 `weechat <http://weechat.org>`__ and so on...But i was missing a tool
 for documentation.
 
-I was using `gitit <http://gitit.net>`__ also for a long time, but I
-found that its way too bloated for my needs. Compiling ``ghc`` and
-``gitit`` was awful, too. After switching to just plaintext files using
-my ``vim`` and ``git`` it was also a bit annoying. So I wrote
+After switching to just plaintext files using
+``vim`` and ``git`` it was also a bit annoying. So I wrote
 ``cmddocs`` to make it easier for me to handle my plaintext files.
 
 Demo
@@ -41,16 +40,18 @@ recording.
 
 `asciinema cmddocs demo <https://asciinema.org/a/15168>`__
 
-Installation and usage
-----------------------
-
 Installation
+------------
 
 ::
 
     pip install cmddocs
 
 Also make sure you have `tree` installed.
+
+
+Configuration
+-------------
 
 Create ``.cmddocsrc`` file in your $HOME with the following content
 (adjust to your needs):
@@ -79,6 +80,20 @@ The only required option is "Datadir", everything else will be guessed
 or defaults to a sane default value. Once you start cmddocs.py the CLI
 will be shown. Use ``help`` for commands.
 
+Quick Start
+-----------
+
+At first, create a very minimal config, like
+
+::
+
+    [General]
+    Datadir = /home/noqqe/Docs
+    Editor = /usr/local/bin/vim
+    Pager = /usr/bin/less
+
+Then you can start using cmddocs.
+
 ::
 
     $ cmddocs
@@ -104,21 +119,195 @@ will be shown. Use ``help`` for commands.
                log 20 article           # show log for specific article
                log databases/mongodb 3  # same
 
-Exit cmddocs.py
+Command Documentation
+---------------------
 
--  ``CTRL+D``
--  ``exit``
+`cd`
 
-Correctness, feature-completeness and other weaknesses
-------------------------------------------------------
+::
+        Change directory
 
-Since I'm not a programmer and new to python there are serveral
-weaknesses.
+        Usage:
+            cd Programming/
+            cd
 
--  ``tree`` view for ``ls`` command is still produced by calling the
-   external tool tree.
+`delete`, `rm`
 
-If you like, please help me improving.
+::
+        Delete an article
+
+        Usage:
+            delete databases/mongodb
+            rm databases/mssql
+
+
+`dirs`, `d`
+
+::
+        Show directories in current working dir
+
+        Usage:
+            dirs
+            d
+            dirs Databases/
+
+
+`e`, `edit`
+
+::
+        Edit or create new article.
+
+        Usage:
+            edit databases/mongodb
+            edit intro
+
+
+
+`list`, `l`, `ls`
+
+::
+        Show files in current working dir
+
+        Usage:
+            list
+            l
+            list Databases/
+
+
+`move`, `mv`
+
+::
+        Move an article to a new location
+
+        Usage:
+            move databases/mongodb databases/MongoDB
+            move life/foo notes/foo
+            mv life/foo notes/foo
+
+`view`
+
+::
+        View an article. Creates temporary file with converted markdown to
+        ansi colored output. Opens your PAGER. (Only less supported atm)
+
+        Usage:
+            view databases/mongodb
+            view intro
+
+`mail`
+
+::
+        Mail an article to a friend
+
+        Usage:
+            mail databases/mongodb
+            Recipient: mail@example.net
+
+            mail programming/r/loops
+            mail intro
+
+`pwd`
+
+::
+        Show current directory
+
+        Usage:
+            pwd
+
+`search`
+
+::
+        Search for keyword in current directory
+
+        Usage:
+            search mongodb
+            search foo
+
+`undo`, `revert`
+
+::
+        You can revert your changes (use revert from git)
+
+        Usage:
+            undo HEAD
+            undo 355f375
+
+        Will ask for confirmation.
+
+`diff`
+
+::
+        Show git diffs between files and commits
+
+        Usage:
+            diff 7                   # show diff for last 7 changes
+            diff 1 article           # show diff for last change to article
+            diff                     # show last 5 diffs
+
+`info`
+
+::
+        Show infos for an article
+
+        Usage:
+            info article
+            info Databases/mongodb
+            Created: 2014-01-18 11:18:03 +0100
+            Updated: 2015-10-23 14:14:44 +0200
+            Commits: 26
+            Lines: 116
+            Words: 356
+            Characters: 2438
+
+`log`
+
+::
+        Show git logs of your docs.
+
+        Usage:
+            log                      # default loglines: 10)
+            log 20                   # show 20 loglines
+            log 20 article           # show log for specific article
+            log databases/mongodb 3  # same
+
+`status`
+
+::
+        Show git repo status of your docs
+
+        Usage:
+            status
+
+`stats`
+
+::
+        Calculate some statistics on your docs
+
+        Usage:
+            stats
+
+`exit`, `EOF`
+
+::
+        Exit cmddocs
+
+        Usage:
+            exit
+
+
+`help`
+
+::
+	List available commands with "help" or detailed help with "help cmd".
+
+`version`
+
+::
+        Show version of cmddocs
+
+        Usage:
+            version
+
 
 Changelog
 ---------
@@ -126,3 +315,11 @@ Changelog
 See Changelog_.
 
 .. _Changelog: https://github.com/noqqe/cmddocs/blob/master/CHANGELOG.rst
+
+License
+-------
+
+See License_.
+
+.. _License: https://github.com/noqqe/cmddocs/blob/master/License.txt
+
