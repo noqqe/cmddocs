@@ -27,6 +27,8 @@ def demoenv():
         os.mkdir(d + "/dir" + x)
 
     repo = git.Repo.init(d)
+    repo.git.config("user.email", "mail@example.net")
+    repo.git.config("user.name", "Charlie Root")
     repo.git.add(".")
     repo.git.commit(m=" init")
 
