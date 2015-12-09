@@ -30,17 +30,22 @@ def demoenv():
 
     # initialize test config
     content = """
-    [General]
-    Datadir = %s
-    Default_Commit_Message = small changes
-    Excludedir = .git/
-    Editor = /usr/local/bin/vim
-    Pager = /usr/bin/less
-    Prompt = cmddocs>
-    Promptcolor = 37
-    Intro_Message = cmddocs - press ? for help
-    Mail = mail@example.com
-    Default_Extension = md
+[General]
+Datadir = %s
+Default_Commit_Message = small changes
+Excludedir = .git/
+Editor = /usr/local/bin/vim
+Pager = /usr/bin/less
+Prompt = cmddocs>
+Promptcolor = 37
+Intro_Message = cmddocs - press ? for help
+Mail = mail@example.com
+Default_Extension = md
+
+[Colors]
+Header12 = 37
+Header345 = 37
+Codeblock = 92
     """ % d
 
     config.write(content)
@@ -57,7 +62,7 @@ def test_do_exit(demoenv):
 def test_do_help(capsys):
     Cmddocs().do_help('exit')
     out, err = capsys.readouterr()
-    assert out == "Exit cmddocs\n"
+    assert out.startswith("\n        Exit cmddocs\n")
 
 def test_do_list_end(demoenv, capsys):
     c, d = demoenv
@@ -75,12 +80,46 @@ def test_do_pwd(demoenv, capsys):
     c, d = demoenv
     Cmddocs(c).do_pwd(d)
     out, err = capsys.readouterr()
-    assert out == '.\n'
+    assert "/tmp/demodocs" in out
 
-#def test_do_cd(demoenv, capsys):
-#    c, d = demoenv
-#    Cmddocs(c).do_cd("dir2")
-#    out, err = capsys.readouterr()
-#    assert out == "Changed to %s" % d + "dir2"
+def test_do_cd(demoenv, capsys):
+    c, d = demoenv
+    Cmddocs(c).do_cd("dir2")
+    out, err = capsys.readouterr()
+    assert "" in out
 
-# Test default-extension when called on a new file
+def test_do_stats_start(demoenv, capsys):
+    c, d = demoenv
+    Cmddocs(c).do_stats("test")
+    out, err = capsys.readouterr()
+    assert out.startswith("Newest Commit:")
+
+def test_do_stats_end(demoenv, capsys):
+    c, d = demoenv
+    Cmddocs(c).do_stats("test")
+    out, err = capsys.readouterr()
+    assert "Characters" in out
+
+def test_do_log(demoenv, capsys):
+    c, d = demoenv
+    Cmddocs(c).do_log("test")
+    out, err = capsys.readouterr()
+    assert out.startswith("Last test commits")
+
+def test_do_search(demoenv, capsys):
+    c, d = demoenv
+    Cmddocs(c).do_search("test")
+    out, err = capsys.readouterr()
+    assert out.startswith("Articles:")
+
+def test_do_search_results(demoenv, capsys):
+    c, d = demoenv
+    Cmddocs(c).do_search("test")
+    out, err = capsys.readouterr()
+    assert out.endswith("Results: 4\n")
+
+def test_do_mv(demoenv, capsys):
+    c, d = demoenv
+    Cmddocs(c).do_mv("dir1/testfile1 dir1/testfileX")
+    out, err = capsys.readouterr()
+    assert out == ("Error: File could not be moved\n")
