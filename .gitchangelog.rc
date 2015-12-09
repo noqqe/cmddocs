@@ -75,14 +75,17 @@ ignore_regexps = [
 ## of the regexps associated is matching.
 ##
 section_regexps = [
-    ('New', [
-	r'^[nN]ew\s*:\s*((dev|use?r|pkg|test|doc)\s*:\s*)?([^\n]*)$',
+    ('Feature', [
+	r'^[fF]eature\s*:\s*([^\n]*)$',
      ]),
     ('Changes', [
         r'^[cC]hg\s*:\s*((dev|use?r|pkg|test|doc)\s*:\s*)?([^\n]*)$',
      ]),
     ('Fix', [
         r'^[fF]ix\s*:\s*((dev|use?r|pkg|test|doc)\s*:\s*)?([^\n]*)$',
+     ]),
+    ('Documentation', [
+        r'^[dD]ocumentation\s*:\s*([^\n]*)$',
      ]),
 
     ('Other', None ## Match all lines
