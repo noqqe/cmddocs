@@ -26,6 +26,7 @@ class Cmddocs(cmd.Cmd):
         self.read_config(self, conf)
         self.initialize_docs(self)
         self.prompt = '\033[1m\033[' + self.promptcol + 'm' + self.prompt + " " + self.reset
+        self.do_cd(self.datadir)
 
     def read_config(self, sconf, conf):
         """

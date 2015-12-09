@@ -59,6 +59,7 @@ Codeblock = 92
     config.close()
 
     c = config.name
+    print(d)
 
     return c, d
 
@@ -88,7 +89,7 @@ def test_do_pwd(demoenv, capsys):
     c, d = demoenv
     Cmddocs(c).do_pwd(d)
     out, err = capsys.readouterr()
-    assert "/tmp/demodocs" in out
+    assert ".\n" in out
 
 def test_do_cd(demoenv, capsys):
     c, d = demoenv
