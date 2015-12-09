@@ -17,12 +17,15 @@ from cmddocs.rendering import md_to_ascii
 def list_articles(dir, extension):
     "lists all articles in current dir and below"
     try:
-        listing = subprocess.check_output(["tree", dir])
+        DEVNULL = open(os.devnull, 'wb')
+        listing = subprocess.check_output(["tree", dir], stderr=DEVNULL)
         listing = remove_fileextension(listing, extension)
         print(listing)
     except OSError:
         print("Error: tree not installed")
         return False
+    except subprocess.CalledProcessError:
+        print("Error: File or Directory not found")
 
 def list_directories(dir):
     "lists all directories in current dir and below"
