@@ -12,3 +12,9 @@ def test_do_list_start(demoenv, capsys):
     Cmddocs(c).do_list(d)
     out, err = capsys.readouterr()
     assert out.startswith(d)
+
+def test_do_list_fail(demoenv, capsys):
+    c, d = demoenv
+    Cmddocs(c).do_list("NEVEREVER")
+    out, err = capsys.readouterr()
+    assert out.startswith(d)
