@@ -124,7 +124,6 @@ class Cmddocs(cmd.Cmd):
 
         return
 
-
     def initialize_docs(self, docs):
         """ Read or initialize git repository """
         try:
@@ -148,102 +147,149 @@ class Cmddocs(cmd.Cmd):
             print("Error: Switching to Datadir %s not possible" % self.datadir)
             exit(1)
 
-    ### list
     def do_list(self, dir):
-        "Show files in current working dir"
+        """
+        Show files in current working dir
+
+        Usage:
+            list
+            l
+            list Databases/
+        """
         if not dir:
             dir = "."
         return list_articles(dir, self.extension)
 
-    # Aliases
     do_l = do_list
     do_ls = do_list
 
     def do_dirs(self, dir):
-        "Show only directories in cwd"
+        """
+        Show directories in current working dir
+
+        Usage:
+            dirs
+            d
+            dirs Databases/
+        """
         if not dir:
             dir = "."
         return list_directories(dir)
 
     do_d = do_dirs
 
-    ### directories
     def do_cd(self, dir):
-        "Change directory"
+        """
+        Change directory
+
+        Usage:
+            cd Programming/
+            cd
+        """
         change_directory(dir, self.datadir)
 
     def do_pwd(self, line):
-        "Show current directory"
+        """
+        Show current directory
+
+        Usage:
+            pwd
+        """
         print(os.path.relpath(os.getcwd(), self.datadir))
 
-    ### edit
     def do_edit(self, article):
         """
         Edit or create new article.
 
-        > edit databases/mongodb
-        > edit intro
+        Usage:
+            edit databases/mongodb
+            edit intro
         """
         return edit_article(article, os.getcwd(), self.editor, self.repo,
                             self.default_commit_msg, self.extension)
 
     do_e = do_edit
 
-    ### view
     def do_view(self, article):
         """
         View an article. Creates temporary file with converted markdown to
         ansi colored output. Opens your PAGER. (Only less supported atm)
 
-        > view databases/mongodb
-        > view intro
+        Usage:
+            view databases/mongodb
+            view intro
         """
         return view_article(article, os.getcwd(), self.pager, self.extension,
                             self.pagerflags, self.colors)
 
-    ### view
     def do_mail(self, article):
         """
         Mail an article to a friend
 
-        > mail databases/mongodb
-        > mail programming/r/loops
+        Usage:
+            mail databases/mongodb
+            Recipient: mail@example.net
+
+            mail programming/r/loops
+            mail intro
         """
         return mail_article(article, os.getcwd(), self.mailfrom, self.extension)
 
-    ### delete
     def do_delete(self, article):
-        """ Delete an article """
+        """
+        Delete an article
+
+        Usage:
+            delete databases/mongodb
+            rm databases/mssql
+        """
         delete_article(article, os.getcwd(), self.repo, self.extension)
 
     do_rm = do_delete
 
-    ### move
     def do_move(self, args):
-        "Move an article"
+        """
+        Move an article to a new location
+
+        Usage:
+            move databases/mongodb databases/MongoDB
+            move life/foo notes/foo
+            mv life/foo notes/foo
+        """
         move_article(os.getcwd(), args, self.repo, self.extension)
 
     do_mv = do_move
 
-    ### search
     def do_search(self, keyword):
-        "Search for keyword in current directory. Example: search mongodb"
+        """
+        Search for keyword in current directory
+
+        Usage:
+            search mongodb
+            search foo
+        """
         print(search_article(keyword, os.getcwd(), self.datadir,
                              self.exclude))
 
-    ### status
     def do_status(self, line):
-        "Show git repo status of your docs"
+        """
+        Show git repo status of your docs
+
+        Usage:
+            status
+
+        """
         print(self.repo.git.status())
 
     def do_log(self, args):
         """
         Show git logs of your docs.
 
-        Usage: log                      # default loglines: 10)
-               log 20                   # show 20 loglines
-               log 20 article           # show log for specific article
-               log databases/mongodb 3  # same
+        Usage:
+            log                      # default loglines: 10)
+            log 20                   # show 20 loglines
+            log 20 article           # show log for specific article
+            log databases/mongodb 3  # same
         """
         show_log(args, self.repo, self.extension)
 
@@ -251,7 +297,9 @@ class Cmddocs(cmd.Cmd):
         """
         Show infos for an article
 
-        Usage: info article
+        Usage:
+            info article
+            info Databases/mongodb
             Created: 2014-01-18 11:18:03 +0100
             Updated: 2015-10-23 14:14:44 +0200
             Commits: 26
@@ -265,21 +313,20 @@ class Cmddocs(cmd.Cmd):
         """
         Show git diffs between files and commits
 
-        Usage: diff 7                   # show diff for last 7 changes
-               diff 1 article           # show diff for last change to article
-               diff                     # show last 5 diffs
+        Usage:
+            diff 7                   # show diff for last 7 changes
+            diff 1 article           # show diff for last change to article
+            diff                     # show last 5 diffs
         """
         show_diff(args, self.repo, self.extension)
 
-
-    ### undo / revert
     def do_undo(self, args):
         """
         You can revert your changes (use revert from git)
 
         Usage:
-        > undo HEAD
-        > undo 355f375
+            undo HEAD
+            undo 355f375
 
         Will ask for confirmation.
         """
@@ -290,7 +337,7 @@ class Cmddocs(cmd.Cmd):
         Calculate some statistics on your docs
 
         Usage:
-        > stats
+            stats
 
         """
         show_stats(args, self.repo, self.datadir)
@@ -300,7 +347,7 @@ class Cmddocs(cmd.Cmd):
         Show version of cmddocs
 
         Usage:
-        > version
+            version
 
         """
         print("cmddocs %s" % __version__)
@@ -310,13 +357,15 @@ class Cmddocs(cmd.Cmd):
 
     ### exit
     def do_exit(self, args):
-        "Exit cmddocs"
+        """
+        Exit cmddocs
+
+        Usage:
+            exit
+        """
         return True
 
-    def do_EOF(self, args):
-        "Exit cmddocs"
-        print("exit")
-        return True
+    do_EOF = do_exit
 
     ### completions
     complete_l = path_complete
