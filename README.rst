@@ -122,7 +122,7 @@ Then you can start using cmddocs.
 Command Documentation
 ---------------------
 
-`cd`
+``cd``
 
 ::
         Change directory
@@ -131,7 +131,7 @@ Command Documentation
             cd Programming/
             cd
 
-`delete`, `rm`
+``delete``, ``rm``
 
 ::
         Delete an article
@@ -141,7 +141,7 @@ Command Documentation
             rm databases/mssql
 
 
-`dirs`, `d`
+``dirs``, ``d``
 
 ::
         Show directories in current working dir
@@ -152,7 +152,7 @@ Command Documentation
             dirs Databases/
 
 
-`e`, `edit`
+``e``, ``edit``
 
 ::
         Edit or create new article.
@@ -163,7 +163,7 @@ Command Documentation
 
 
 
-`list`, `l`, `ls`
+``list``, ``l``, ``ls``
 
 ::
         Show files in current working dir
@@ -174,7 +174,7 @@ Command Documentation
             list Databases/
 
 
-`move`, `mv`
+``move``, ``mv``
 
 ::
         Move an article to a new location
@@ -184,7 +184,7 @@ Command Documentation
             move life/foo notes/foo
             mv life/foo notes/foo
 
-`view`
+``view``
 
 ::
         View an article. Creates temporary file with converted markdown to
@@ -194,7 +194,7 @@ Command Documentation
             view databases/mongodb
             view intro
 
-`mail`
+``mail``
 
 ::
         Mail an article to a friend
@@ -206,7 +206,7 @@ Command Documentation
             mail programming/r/loops
             mail intro
 
-`pwd`
+``pwd``
 
 ::
         Show current directory
@@ -214,7 +214,7 @@ Command Documentation
         Usage:
             pwd
 
-`search`
+``search``
 
 ::
         Search for keyword in current directory
@@ -223,7 +223,7 @@ Command Documentation
             search mongodb
             search foo
 
-`undo`, `revert`
+``undo``, ``revert``
 
 ::
         You can revert your changes (use revert from git)
@@ -234,7 +234,7 @@ Command Documentation
 
         Will ask for confirmation.
 
-`diff`
+``diff``
 
 ::
         Show git diffs between files and commits
@@ -244,7 +244,7 @@ Command Documentation
             diff 1 article           # show diff for last change to article
             diff                     # show last 5 diffs
 
-`info`
+``info``
 
 ::
         Show infos for an article
@@ -259,7 +259,7 @@ Command Documentation
             Words: 356
             Characters: 2438
 
-`log`
+``log``
 
 ::
         Show git logs of your docs.
@@ -270,7 +270,7 @@ Command Documentation
             log 20 article           # show log for specific article
             log databases/mongodb 3  # same
 
-`status`
+``status``
 
 ::
         Show git repo status of your docs
@@ -278,7 +278,7 @@ Command Documentation
         Usage:
             status
 
-`stats`
+``stats``
 
 ::
         Calculate some statistics on your docs
@@ -286,7 +286,7 @@ Command Documentation
         Usage:
             stats
 
-`exit`, `EOF`
+``exit``, ``EOF``
 
 ::
         Exit cmddocs
@@ -295,12 +295,12 @@ Command Documentation
             exit
 
 
-`help`
+``help``
 
 ::
 	List available commands with "help" or detailed help with "help cmd".
 
-`version`
+``version``
 
 ::
         Show version of cmddocs
