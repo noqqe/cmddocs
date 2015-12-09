@@ -125,11 +125,11 @@ Command Documentation
 ``cd``
 
 ::
-        Change directory
+  Change directory
 
-        Usage:
-            cd Programming/
-            cd
+  Usage:
+      cd Programming/
+      cd
 
 ``delete``, ``rm``
 
