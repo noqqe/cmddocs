@@ -1,5 +1,6 @@
+""" File Extension Add/Remove Util"""
+
 import re
-import os
 
 def add_fileextension(article, extension):
     "add file extension to article"

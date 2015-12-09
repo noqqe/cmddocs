@@ -1,8 +1,10 @@
+""" Class to render ascii from md """
 import mistune
 
 class md_to_ascii(mistune.Renderer):
+    """ md_to_ascii class """
 
-    def __init__(self,colors):
+    def __init__(self, colors):
         mistune.Renderer.__init__(self)
         self.colors = colors
 
@@ -44,7 +46,7 @@ class md_to_ascii(mistune.Renderer):
     def linebreak(self):
         return '\n'
     def strikethrough(self, text):
-        return '%s' % content.strip()
+        return '%s' % text.strip()
     def text(self, text):
         return '%s' % text.strip()
     def autolink(self, link, is_email=False):

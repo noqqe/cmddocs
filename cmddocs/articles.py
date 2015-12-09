@@ -1,15 +1,17 @@
+""" Article class """
+
 import os
 import re
-import git
+import subprocess
 import socket
 import smtplib
-import mistune
 import tempfile
 import datetime
-import subprocess
-from rendering import md_to_ascii
 from email.mime.text import MIMEText
-from utils import *
+import mistune
+import git
+from cmddocs.utils import *
+from cmddocs.rendering import md_to_ascii
 
 # Function definitions
 def list_articles(dir, extension):
@@ -35,7 +37,7 @@ def change_directory(dir, datadir):
     d = os.path.join(os.getcwd(), dir)
 
     # dont cd out of datadir
-    if not datadir in d:
+    if datadir not in d:
         d = datadir
 
     # if empty, switch to datadir
@@ -81,8 +83,8 @@ def edit_article(article, directory, editor, repo, default_commit_msg, extension
             repo.git.commit(m=msg)
         else:
             print("Nothing to commit")
-    except:
-        pass
+    except OSError:
+        print("Error: Could not create commit")
 
 
 def info_article(article, dir, repo, extension):
@@ -92,7 +94,7 @@ def info_article(article, dir, repo, extension):
 
     # Create commit list
     try:
-        commits = repo.git.log(a,follow=True,format="%H")
+        commits = repo.git.log(a, follow=True, format="%H")
         commits = commits.split()
         n = len(commits)
     except git.exc.GitCommandError:
@@ -182,7 +184,7 @@ def view_article(article, dir, pager, extension, pagerflags, colors):
     # start pager and cleanup tmp file afterwards
     # also parse flags for local pager
     try:
-        if pagerflags == False:
+        if pagerflags is False:
             subprocess.call([pager, tmp.name])
         else:
             subprocess.call([pager, pagerflags, tmp.name])
@@ -195,7 +197,7 @@ def view_article(article, dir, pager, extension, pagerflags, colors):
         print("Error: Could not remove %s" % tmp.name)
 
 def delete_article(article, dir, repo, extension):
-    "delete an article"
+    """ delete an article """
     a = add_fileextension(article, extension)
     a = os.path.join(dir, a)
     try:
@@ -220,7 +222,7 @@ def delete_article(article, dir, repo, extension):
 def move_article(dir, args, repo, extension):
     "move an article from source to destination"
     args = args.split()
-    if len(args)!=2:
+    if len(args) != 2:
         print("Invalid usage\nUse: mv source dest")
         return False
 
@@ -256,7 +258,7 @@ def search_article(keyword, directory, datadir, exclude):
             path = os.path.join(dirpath, fname)
             if r.search(path) is not None:
                 print("* \033[92m%s\033[39m" %
-                        os.path.relpath(path, datadir))
+                      os.path.relpath(path, datadir))
                 c = c + 1
     print("Content:")
     for dirpath, dirs, files in os.walk(directory):
@@ -268,7 +270,7 @@ def search_article(keyword, directory, datadir, exclude):
                 if r.search(line):
                     c = c + 1
                     print("* \033[92m%s\033[39m: %s" % (os.path.relpath(path, datadir),
-                            line.rstrip('\n')))
+                                                        line.rstrip('\n')))
     return "Results: %s" % c
 
 def show_diff(args, repo, extension):
@@ -284,7 +286,7 @@ def show_diff(args, repo, extension):
             # diff 7 article
             try:
                 print(repo.git.diff('HEAD~'+args[0], add_fileextension(args[1], extension),
-                        unified=unifiedopt, color=colorization))
+                                    unified=unifiedopt, color=colorization))
             except git.exc.GitCommandError:
                 print("Error: Not a valid git commit reference")
         else:
@@ -293,7 +295,7 @@ def show_diff(args, repo, extension):
         # diff 7
         try:
             print(repo.git.diff('HEAD~'+args[0],
-                        unified=unifiedopt, color=colorization))
+                                unified=unifiedopt, color=colorization))
         except git.exc.GitCommandError:
             print("Error: Not a valid git commit reference")
     else:
@@ -305,8 +307,8 @@ def show_log(args, repo, extension):
     specific file.
     """
     args = args.split()
-    format="format:%C(blue)%h %Cgreen%C(bold)%ad %Creset%s"
-    dateformat="short"
+    format = "format:%C(blue)%h %Cgreen%C(bold)%ad %Creset%s"
+    dateformat = "short"
 
     if len(args) >= 1:
         if os.path.isfile(os.path.join(os.getcwd(), add_fileextension(args[0], extension))):
@@ -317,13 +319,13 @@ def show_log(args, repo, extension):
                 count = args[1]
                 print("Last %s commits for %s" % (count, file))
                 print(repo.git.log(file, pretty=format, n=count,
-                    date=dateformat, follow=True))
+                                   date=dateformat, follow=True))
             # Command: log Article
             except IndexError:
                 count = 10
                 print("Last %s commits for %s" % (count, file))
                 print(repo.git.log(file, pretty=format, n=count,
-                        date=dateformat, follow=True))
+                                   date=dateformat, follow=True))
             except git.exc.GitCommandError:
                 print("Error: git command resulted in an error")
         else:
@@ -333,12 +335,12 @@ def show_log(args, repo, extension):
                 file = add_fileextension(args[1], extension)
                 print("Last %s commits for %s" % (count, file))
                 print(repo.git.log(file, pretty=format, n=count,
-                        date=dateformat, follow=True))
+                                   date=dateformat, follow=True))
             # Command: log 12
             except IndexError:
                 print("Last %s commits" % count)
                 print(repo.git.log(pretty=format, n=count,
-                    date=dateformat))
+                                   date=dateformat))
             except git.exc.GitCommandError:
                 print("Error: git command resulted in an error")
 
@@ -383,7 +385,7 @@ def show_stats(args, repo, datadir):
     # Calculate Repo age
     f = commits[n-1].split()
     today = datetime.datetime.today()
-    first = datetime.datetime.strptime(f[0],"%Y-%m-%d")
+    first = datetime.datetime.strptime(f[0], "%Y-%m-%d")
     days = today - first
     print("Repository Age: %s" % days.days)
 
@@ -400,16 +402,16 @@ def show_stats(args, repo, datadir):
     ignore_re = re.compile(r'.*/.git/.*')
     for (path, dirs, files) in os.walk(datadir):
         for file in files:
-         if ignore_re.search(path) is None:
-            num_files += 1
-            filename = os.path.join(path, file)
-            folder_size += os.path.getsize(filename)
-            with open(filename, 'r') as f:
-               for line in f:
-                   words = line.split()
-                   num_lines += 1
-                   num_words += len(words)
-                   num_chars += len(line)
+            if ignore_re.search(path) is None:
+                num_files += 1
+                filename = os.path.join(path, file)
+                folder_size += os.path.getsize(filename)
+                with open(filename, 'r') as f:
+                    for line in f:
+                        words = line.split()
+                        num_lines += 1
+                        num_words += len(words)
+                        num_chars += len(line)
 
     print("Size of your Docs: %0.1f MB" % (folder_size/(1024*1024.0)))
     print("Total Articles: %s" % num_files)

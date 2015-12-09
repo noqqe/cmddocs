@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+""" cmddocs Class """
 
 import os
 import cmd
@@ -7,15 +8,19 @@ import signal
 import ConfigParser
 import git
 import pkg_resources
-from os.path import expanduser
-from .articles import *
-from .completions import *
-from .version import __version__
+from cmddocs.articles import *
+from cmddocs.completions import *
+from cmddocs.version import __version__
 
 class Cmddocs(cmd.Cmd):
     """ Basic commandline interface class """
 
-    def __init__(self, conf = "~/.cmddocsrc"):
+    def __init__(self, conf="~/.cmddocsrc"):
+        """
+        Initialize the class
+        Inherit from Cmd
+        Read config, initialize Datadir, create Prompt
+        """
         cmd.Cmd.__init__(self)
         self.reset = '\033[0m'
         self.read_config(self, conf)
@@ -23,22 +28,27 @@ class Cmddocs(cmd.Cmd):
         self.prompt = '\033[1m\033[' + self.promptcol + 'm' + self.prompt + " " + self.reset
 
     def read_config(self, sconf, conf):
+        """
+        All Config Options being read and defaulting
+        """
+
         self.colors = {}
         config = ConfigParser.ConfigParser()
-        if not config.read(expanduser(conf)):
+
+        if not config.read(os.path.expanduser(conf)):
             print("Error: your config %s could not be read" % conf)
             exit(1)
 
         try:
-            self.datadir = expanduser(config.get("General", "Datadir"))
+            self.datadir = os.path.expanduser(config.get("General", "Datadir"))
         except ConfigParser.NoOptionError:
             print("Error: Please set a Datadir in %s" % conf)
             exit(1)
 
         try:
-            self.exclude = expanduser(config.get("General", "Excludedir"))
+            self.exclude = os.path.expanduser(config.get("General", "Excludedir"))
         except ConfigParser.NoOptionError:
-            self.exclude = expanduser('.git/')
+            self.exclude = os.path.expanduser('.git/')
 
         try:
             self.default_commit_msg = config.get("General", "Default_Commit_Message")
@@ -66,6 +76,7 @@ class Cmddocs(cmd.Cmd):
                 print("Please specify one in config or set PAGER in your\
                 OS Environment")
                 exit(1)
+
         try:
             self.pagerflags = config.get("General", "PagerFlags")
         except ConfigParser.NoOptionError:
@@ -115,7 +126,7 @@ class Cmddocs(cmd.Cmd):
 
 
     def initialize_docs(self, docs):
-        # Read or initialize git repository
+        """ Read or initialize git repository """
         try:
             self.repo = git.Repo(self.datadir)
         except git.exc.NoSuchPathError:
@@ -159,7 +170,7 @@ class Cmddocs(cmd.Cmd):
     ### directories
     def do_cd(self, dir):
         "Change directory"
-        cwd = change_directory(dir, self.datadir)
+        change_directory(dir, self.datadir)
 
     def do_pwd(self, line):
         "Show current directory"
@@ -173,7 +184,8 @@ class Cmddocs(cmd.Cmd):
         > edit databases/mongodb
         > edit intro
         """
-        return edit_article(article, os.getcwd(), self.editor, self.repo, self.default_commit_msg, self.extension)
+        return edit_article(article, os.getcwd(), self.editor, self.repo,
+                            self.default_commit_msg, self.extension)
 
     do_e = do_edit
 
@@ -186,7 +198,8 @@ class Cmddocs(cmd.Cmd):
         > view databases/mongodb
         > view intro
         """
-        return view_article(article, os.getcwd(), self.pager, self.extension, self.pagerflags, self.colors)
+        return view_article(article, os.getcwd(), self.pager, self.extension,
+                            self.pagerflags, self.colors)
 
     ### view
     def do_mail(self, article):
@@ -200,8 +213,8 @@ class Cmddocs(cmd.Cmd):
 
     ### delete
     def do_delete(self, article):
-        "Delete an article"
-        delete_article(article, os.getcwd(), self.repo)
+        """ Delete an article """
+        delete_article(article, os.getcwd(), self.repo, self.extension)
 
     do_rm = do_delete
 
@@ -216,7 +229,7 @@ class Cmddocs(cmd.Cmd):
     def do_search(self, keyword):
         "Search for keyword in current directory. Example: search mongodb"
         print(search_article(keyword, os.getcwd(), self.datadir,
-            self.exclude))
+                             self.exclude))
 
     ### status
     def do_status(self, line):
@@ -296,11 +309,11 @@ class Cmddocs(cmd.Cmd):
     do_revert = do_undo
 
     ### exit
-    def do_exit(self, line):
+    def do_exit(self, args):
         "Exit cmddocs"
         return True
 
-    def do_EOF(self, line):
+    def do_EOF(self, args):
         "Exit cmddocs"
         print("exit")
         return True
@@ -330,12 +343,14 @@ class Cmddocs(cmd.Cmd):
     complete_info = path_complete
 
 def ctrlc(sig, frame):
+    """ Handle Interrupts """
     print("\n")
     sys.exit(0)
 
 signal.signal(signal.SIGINT, ctrlc)
 
 def main():
+    """ Call loop method """
     Cmddocs().cmdloop()
 
 if __name__ == '__main__':
