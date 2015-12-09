@@ -124,9 +124,9 @@ Command Documentation
 
 ``cd``
 
-::
+Change directory
 
-        Change directory
+::
 
         Usage:
             cd Programming/
@@ -134,9 +134,9 @@ Command Documentation
 
 ``delete``, ``rm``
 
-::
+Delete an article
 
-        Delete an article
+::
 
         Usage:
             delete databases/mongodb
@@ -145,9 +145,9 @@ Command Documentation
 
 ``dirs``, ``d``
 
-::
+Show directories in current working dir
 
-        Show directories in current working dir
+::
 
         Usage:
             dirs
@@ -157,9 +157,9 @@ Command Documentation
 
 ``e``, ``edit``
 
-::
+Edit or create new article.
 
-        Edit or create new article.
+::
 
         Usage:
             edit databases/mongodb
@@ -169,9 +169,9 @@ Command Documentation
 
 ``list``, ``l``, ``ls``
 
-::
+Show files in current working dir
 
-        Show files in current working dir
+::
 
         Usage:
             list
@@ -181,9 +181,9 @@ Command Documentation
 
 ``move``, ``mv``
 
-::
+Move an article to a new location
 
-        Move an article to a new location
+::
 
         Usage:
             move databases/mongodb databases/MongoDB
@@ -192,10 +192,10 @@ Command Documentation
 
 ``view``
 
-::
+View an article. Creates temporary file with converted markdown to
+ansi colored output. Opens your PAGER. (Only less supported atm)
 
-        View an article. Creates temporary file with converted markdown to
-        ansi colored output. Opens your PAGER. (Only less supported atm)
+::
 
         Usage:
             view databases/mongodb
@@ -203,9 +203,9 @@ Command Documentation
 
 ``mail``
 
-::
+Mail an article to a friend
 
-        Mail an article to a friend
+::
 
         Usage:
             mail databases/mongodb
@@ -216,18 +216,18 @@ Command Documentation
 
 ``pwd``
 
-::
+Show current directory
 
-        Show current directory
+::
 
         Usage:
             pwd
 
 ``search``
 
-::
+Search for keyword in current directory
 
-        Search for keyword in current directory
+::
 
         Usage:
             search mongodb
@@ -235,9 +235,10 @@ Command Documentation
 
 ``undo``, ``revert``
 
+You can revert your changes (use revert from git)
+
 ::
 
-        You can revert your changes (use revert from git)
 
         Usage:
             undo HEAD
@@ -247,9 +248,9 @@ Command Documentation
 
 ``diff``
 
-::
+Show git diffs between files and commits
 
-        Show git diffs between files and commits
+::
 
         Usage:
             diff 7                   # show diff for last 7 changes
@@ -258,9 +259,9 @@ Command Documentation
 
 ``info``
 
-::
+Show infos for an article
 
-        Show infos for an article
+::
 
         Usage:
             info article
@@ -274,9 +275,9 @@ Command Documentation
 
 ``log``
 
-::
+Show git logs of your docs.
 
-        Show git logs of your docs.
+::
 
         Usage:
             log                      # default loglines: 10)
@@ -286,27 +287,27 @@ Command Documentation
 
 ``status``
 
-::
+Show git repo status of your docs
 
-        Show git repo status of your docs
+::
 
         Usage:
             status
 
 ``stats``
 
-::
+Calculate some statistics on your docs
 
-        Calculate some statistics on your docs
+::
 
         Usage:
             stats
 
 ``exit``, ``EOF``
 
-::
+Exit cmddocs
 
-        Exit cmddocs
+::
 
         Usage:
             exit
@@ -314,15 +315,14 @@ Command Documentation
 
 ``help``
 
-::
-
-	      List available commands with "help" or detailed help with "help cmd".
+List available commands with "help" or detailed help with "help cmd".
 
 ``version``
 
+Show version of cmddocs
+
 ::
 
-        Show version of cmddocs
 
         Usage:
             version
