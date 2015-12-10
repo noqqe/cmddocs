@@ -8,6 +8,12 @@ def test_do_undo_fail(demoenv, capsys):
     out, err = capsys.readouterr()
     assert out == "Error: Could not find given commit reference\n"
 
+def test_do_revert_fail(demoenv, capsys):
+    c, d = demoenv
+    Cmddocs(c).do_revert('test')
+    out, err = capsys.readouterr()
+    assert out == "Error: Could not find given commit reference\n"
+
 #def test_do_undo_head(demoenv, capsys):
 #    c, d = demoenv
 #    Cmddocs(c).do_undo('HEAD')

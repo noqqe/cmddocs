@@ -3,7 +3,7 @@ import tempfile
 import pytest
 import git
 
-@pytest.fixture(scope="module", autouse=True)
+@pytest.fixture(scope="module")
 def demoenv():
     """
     Initializes a test environment to make
@@ -106,6 +106,44 @@ Promptcolor = 37
 Intro_Message = cmddocs - press ? for help
 Mail = mail@example.com
 Default_Extension = md
+
+[Colors]
+Header12 = 37
+Header345 = 37
+Codeblock = 92
+    """ % d
+
+    config.write(content)
+    config.close()
+
+    c = config.name
+    print(d)
+
+    return c, d
+
+
+@pytest.fixture(scope="module")
+def emptyenv():
+    """
+    Initializes a test environment to make
+    sure all tests can be applied properly
+    """
+
+    # init demo dir
+    d = tempfile.mkdtemp(dir="/tmp/", prefix="demodocs-")
+
+    repo = git.Repo.init(d)
+    repo.git.config("user.email", "mail@example.net")
+    repo.git.config("user.name", "Charlie Root")
+
+    # create test config
+    confpath = tempfile.mkdtemp(dir="/tmp/", prefix="demodocsconf-")
+    config = open(confpath + "/config", "ab+")
+
+    # initialize test config
+    content = """
+[General]
+Datadir = %s
 
 [Colors]
 Header12 = 37
