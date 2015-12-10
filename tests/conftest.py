@@ -13,17 +13,53 @@ def demoenv():
     # init demo dir
     d = tempfile.mkdtemp(dir="/tmp/", prefix="demodocs-")
 
+    doc = """
+# Header 1
+
+This is some test content
+hopefully no one will ever read this
+
+## Header 2
+
+py.test rocks...
+
+### Header 3
+
+there will be some codeblock
+
+```
+foo=$(echo foo)
+echo foo | sed -i 's#foo#bar#'
+```
+
+#### Header 4
+
+Test Test test
+
+##### Header 5
+
+This is some test content
+hopefully no one will ever read this
+"""
+
+    # create test dirs
+    for x in range(1, 4):
+        x = str(x)
+        os.mkdir(d + "/dir" + x)
+
     # create test files
-    for x in range(1, 5):
+    for x in range(1, 6):
         x = str(x)
         f = open(d + "/testfile" + x + ".md", "ab+")
         f.write("Test " + x)
         f.close()
 
-    # create test dirs
-    for x in range(1, 3):
+    for x in range(1, 4):
         x = str(x)
-        os.mkdir(d + "/dir" + x)
+        f = open(d + "/dir1/testfile" + x + ".md", "ab+")
+        f.write(doc)
+        f.close()
+
 
     repo = git.Repo.init(d)
     repo.git.config("user.email", "mail@example.net")
@@ -31,8 +67,31 @@ def demoenv():
     repo.git.add(".")
     repo.git.commit(m=" init")
 
+    # create new content
+    for x in range(1, 4):
+        x = str(x)
+        f = open(d + "/dir2/testfile" + x + ".md", "ab+")
+        f.write(doc)
+        f.close()
+
+    # create 2nd commit
+    repo.git.add(".")
+    repo.git.commit(m=" 2nd commit")
+
+    # create new content
+    for x in range(1, 4):
+        x = str(x)
+        f = open(d + "/dir3/testfile" + x + ".md", "ab+")
+        f.write(doc)
+        f.close()
+
+    # create 3rd commit
+    repo.git.add(".")
+    repo.git.commit(m=" 3rd commit")
+
     # create test config
-    config = open(d + "/config", "ab+")
+    confpath = tempfile.mkdtemp(dir="/tmp/", prefix="demodocsconf-")
+    config = open(confpath + "/config", "ab+")
 
     # initialize test config
     content = """

@@ -10,7 +10,7 @@ def test_do_search_results(demoenv, capsys):
     c, d = demoenv
     Cmddocs(c).do_search("test")
     out, err = capsys.readouterr()
-    assert out.endswith("Results: 4\n")
+    assert out.endswith("Results: 50\n")
 
 def test_do_search_content(demoenv, capsys):
     c, d = demoenv

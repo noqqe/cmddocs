@@ -402,12 +402,11 @@ def show_stats(args, repo, datadir):
     num_words = 0
     num_chars = 0
     num_files = 0
-    ignore_re = re.compile(r'.*/.git/.*')
     for (path, dirs, files) in os.walk(datadir):
         for file in files:
-            if ignore_re.search(path) is None:
+            filename = os.path.join(path, file)
+            if ".git/" not in filename:
                 num_files += 1
-                filename = os.path.join(path, file)
                 folder_size += os.path.getsize(filename)
                 with open(filename, 'r') as f:
                     for line in f:

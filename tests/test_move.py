@@ -18,3 +18,9 @@ def test_do_mv_ends(demoenv, capsys):
     Cmddocs(c).do_mv("testfileX testfile1")
     out, err = capsys.readouterr()
     assert out.endswith("testfile1.md\n")
+
+def test_do_mv_commitcheck(demoenv, capsys):
+    c, d = demoenv
+    Cmddocs(c).do_log("testfile1")
+    out, err = capsys.readouterr()
+    assert "testfileX.md" in out
