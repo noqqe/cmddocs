@@ -11,7 +11,8 @@ def test_do_mv_start(demoenv, capsys):
     c, d = demoenv
     Cmddocs(c).do_mv("testfile1 testfileX")
     out, err = capsys.readouterr()
-    assert out.startswith("Moved /tmp/d")
+    movemsg = "%s/testfile1.md" % d
+    assert movemsg in out
 
 def test_do_mv_ends(demoenv, capsys):
     c, d = demoenv
