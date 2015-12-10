@@ -23,10 +23,10 @@ def test_do_list_fail(demoenv, capsys):
     c, d = demoenv
     Cmddocs(c).do_list("NEVEREVER")
     out, err = capsys.readouterr()
-    assert out.startswith("Error: File or Directory not found\n")
+    assert out.startswith("NEVEREVER [error opening dir]")
 
 def test_do_l_fail(demoenv, capsys):
     c, d = demoenv
     Cmddocs(c).do_l("NEVEREVER")
     out, err = capsys.readouterr()
-    assert out.startswith("Error: File or Directory not found\n")
+    assert out.startswith("NEVEREVER [error opening dir]")

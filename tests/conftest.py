@@ -144,6 +144,8 @@ def emptyenv():
     content = """
 [General]
 Datadir = %s
+Editor = /usr/bin/vi
+Pager = /usr/bin/less
 
 [Colors]
 Header12 = 37

@@ -30,10 +30,14 @@ def list_articles(dir, extension):
 def list_directories(dir):
     "lists all directories in current dir and below"
     try:
-        subprocess.call(["tree", "-d", dir])
+        DEVNULL = open(os.devnull, 'wb')
+        listing = subprocess.check_output(["tree", "-d", dir], stderr=DEVNULL)
+        print(listing)
     except OSError:
         print("Error: tree not installed")
         return False
+    except subprocess.CalledProcessError:
+        print("Error: File or Directory not found")
 
 def change_directory(dir, datadir):
     "changes directory"
