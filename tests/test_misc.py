@@ -12,4 +12,3 @@ def test_do_help(demoenv, capsys):
     out, err = capsys.readouterr()
     assert out.startswith("\n        Exit cmddocs\n")
 
-
