@@ -12,3 +12,14 @@ def test_do_help(demoenv, capsys):
     out, err = capsys.readouterr()
     assert out.startswith("\n        Exit cmddocs\n")
 
+def test_do_status(demoenv, capsys):
+    c, d = demoenv
+    Cmddocs(c).do_status('test')
+    out, err = capsys.readouterr()
+    assert out == "On branch master\nnothing to commit, working directory clean\n"
+
+def test_do_version(demoenv, capsys):
+    c, d = demoenv
+    Cmddocs(c).do_version('test')
+    out, err = capsys.readouterr()
+    assert out.startswith('cmddocs ')
