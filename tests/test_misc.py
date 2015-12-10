@@ -16,7 +16,7 @@ def test_do_status(demoenv, capsys):
     c, d = demoenv
     Cmddocs(c).do_status('test')
     out, err = capsys.readouterr()
-    assert out == "On branch master\nnothing to commit, working directory clean\n"
+    assert "On branch master" in out
 
 def test_do_version(demoenv, capsys):
     c, d = demoenv
