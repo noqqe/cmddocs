@@ -19,3 +19,21 @@ def test_do_cd_fail(demoenv, capsys):
     Cmddocs(c).do_cd("dir7")
     out, err = capsys.readouterr()
     assert out == "Error: Directory dir7 not found\n"
+
+def test_do_dirs_fail(demoenv, capsys):
+    c, d = demoenv
+    Cmddocs(c).do_dirs("dir7")
+    out, err = capsys.readouterr()
+    assert out.startswith("Error: Directory dir7 not found")
+
+def test_do_dirs_subdir(demoenv, capsys):
+    c, d = demoenv
+    Cmddocs(c).do_dirs("dir1")
+    out, err = capsys.readouterr()
+    assert out.startswith("dir1")
+
+def test_do_dirs_pwd(demoenv, capsys):
+    c, d = demoenv
+    Cmddocs(c).do_dirs(".")
+    out, err = capsys.readouterr()
+    assert out.endswith("3 directories")
