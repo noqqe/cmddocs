@@ -54,7 +54,7 @@ def change_directory(dir, datadir):
     except OSError:
         print("Error: Directory %s not found" % dir)
 
-def edit_article(article, directory, editor, repo, default_commit_msg, extension):
+def edit_article(article, directory, editor, repo, default_commit_msg, extension, test):
     """edit an article within your docs"""
     # set paths
     a = add_fileextension(article, extension)
@@ -70,20 +70,41 @@ def edit_article(article, directory, editor, repo, default_commit_msg, extension
             return False
 
     # start editor
-    try:
-        subprocess.call([editor, a])
-    except OSError:
-        print("Error: '%s' No such file or directory" % editor)
-        return False
+    if test is False:
+        try:
+            subprocess.call([editor, a])
+        except OSError:
+            print("Error: '%s' No such file or directory" % editor)
+            return False
+    else:
+        try:
+            fp = open(a, "ab+")
+            content = "TEST CHANGE"
+            fp.write(content)
+            fp.close()
+        except OSError:
+            print("Error: '%s' No such file or directory" % editor)
+
 
     # commit into git
     try:
         repo.git.add(a)
         if repo.is_dirty():
-            msg = raw_input("Commit message: ")
-            if not msg:
+            if test is False:
+                try:
+                    msg = raw_input("Commit message: ")
+                    if not msg:
+                        msg = default_commit_msg
+                except OSError:
+                    print("Error: Could not create commit")
+            else:
                 msg = default_commit_msg
-            repo.git.commit(m=msg)
+                print("automatic change done")
+            try:
+                repo.git.commit(m=msg)
+            except OSError:
+                print("Error: Could not create commit")
+
         else:
             print("Nothing to commit")
     except OSError:

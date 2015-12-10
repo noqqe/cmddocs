@@ -3,7 +3,7 @@ import tempfile
 import pytest
 import git
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="module", autouse=True)
 def demoenv():
     """
     Initializes a test environment to make

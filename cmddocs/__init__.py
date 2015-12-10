@@ -198,7 +198,7 @@ class Cmddocs(cmd.Cmd):
         """
         print(os.path.relpath(os.getcwd(), self.datadir))
 
-    def do_edit(self, article):
+    def do_edit(self, article, test=False):
         """
         Edit or create new article.
 
@@ -207,7 +207,7 @@ class Cmddocs(cmd.Cmd):
             edit intro
         """
         return edit_article(article, os.getcwd(), self.editor, self.repo,
-                            self.default_commit_msg, self.extension)
+                            self.default_commit_msg, self.extension, test)
 
     do_e = do_edit
 
