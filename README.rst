@@ -123,6 +123,7 @@ Command Documentation
 ---------------------
 
 ``cd``
+------
 
 Change directory
 
@@ -133,6 +134,7 @@ Change directory
             cd
 
 ``delete``, ``rm``
+------------------
 
 Delete an article
 
@@ -144,6 +146,7 @@ Delete an article
 
 
 ``dirs``, ``d``
+---------------
 
 Show directories in current working dir
 
@@ -156,6 +159,7 @@ Show directories in current working dir
 
 
 ``e``, ``edit``
+---------------
 
 Edit or create new article.
 
@@ -168,6 +172,7 @@ Edit or create new article.
 
 
 ``list``, ``l``, ``ls``
+-----------------------
 
 Show files in current working dir
 
@@ -180,6 +185,7 @@ Show files in current working dir
 
 
 ``move``, ``mv``
+----------------
 
 Move an article to a new location
 
@@ -191,6 +197,7 @@ Move an article to a new location
             mv life/foo notes/foo
 
 ``view``
+--------
 
 View an article. Creates temporary file with converted markdown to
 ansi colored output. Opens your PAGER. (Only less supported atm)
@@ -202,6 +209,7 @@ ansi colored output. Opens your PAGER. (Only less supported atm)
             view intro
 
 ``mail``
+--------
 
 Mail an article to a friend
 
@@ -215,6 +223,7 @@ Mail an article to a friend
             mail intro
 
 ``pwd``
+-------
 
 Show current directory
 
@@ -224,6 +233,7 @@ Show current directory
             pwd
 
 ``search``
+----------
 
 Search for keyword in current directory
 
@@ -234,6 +244,7 @@ Search for keyword in current directory
             search foo
 
 ``undo``, ``revert``
+-------------------
 
 You can revert your changes (use revert from git)
 
@@ -247,6 +258,7 @@ You can revert your changes (use revert from git)
         Will ask for confirmation.
 
 ``diff``
+--------
 
 Show git diffs between files and commits
 
@@ -258,6 +270,7 @@ Show git diffs between files and commits
             diff                     # show last 5 diffs
 
 ``info``
+--------
 
 Show infos for an article
 
@@ -274,6 +287,7 @@ Show infos for an article
             Characters: 2438
 
 ``log``
+--------
 
 Show git logs of your docs.
 
@@ -286,6 +300,7 @@ Show git logs of your docs.
             log databases/mongodb 3  # same
 
 ``status``
+----------
 
 Show git repo status of your docs
 
@@ -295,6 +310,7 @@ Show git repo status of your docs
             status
 
 ``stats``
+---------
 
 Calculate some statistics on your docs
 
@@ -304,6 +320,7 @@ Calculate some statistics on your docs
             stats
 
 ``exit``, ``EOF``
+-----------------
 
 Exit cmddocs
 
@@ -314,15 +331,16 @@ Exit cmddocs
 
 
 ``help``
+--------
 
 List available commands with "help" or detailed help with "help cmd".
 
 ``version``
+-----------
 
 Show version of cmddocs
 
 ::
-
 
         Usage:
             version
