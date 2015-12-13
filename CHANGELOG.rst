@@ -1,16 +1,100 @@
 Changelog
 =========
 
+0.15.0 (2015-12-13)
+-------------------
+
+Feature
+~~~~~~~
+
+- Feature: Added more tests for dir, log, search. [Florian Baumann]
+
+- Feature: Added more tests. [Florian Baumann]
+
+Fix
+~~~
+
+- Status and Initialization tests. [Florian Baumann]
+
+- Fixed broken tree call for directories and added tests. [Florian Baumann]
+
+- Stats test. [Florian Baumann]
+
+- Catch exception when dir or file in list not found. [Florian Baumann]
+
+- Tests for pwd and properly change to datadir. [Florian Baumann]
+
+- Tests imporved. [Florian Baumann]
+
+- Make checks work in travis. [Florian Baumann]
+
+Documentation
+~~~~~~~~~~~~~
+
+- Documentation: Fixed directory checks. [Florian Baumann]
+
+- Documentation: more tests. [Florian Baumann]
+
+- Documentation: directory checks. [Florian Baumann]
+
+- Documentation: undo, version, status Tests. [Florian Baumann]
+
+- Documentation: new tests and new testenv. [Florian Baumann]
+
+- Documentation: info command tests. [Florian Baumann]
+
+- Documentation: Restructured Tests. [Florian Baumann]
+
+- Documentation: reformat readme. [Florian Baumann]
+
+- Documentation: Docs for each command in Readme. [Florian Baumann]
+
+- Documentation: new sections for changelog. [Florian Baumann]
+
+- Documentation: new help messages. [Florian Baumann]
+
+- Documentation: Readme updated. [Florian Baumann]
+
+Other
+~~~~~
+
+- Release version 0.15.0. [Florian Baumann]
+
+- Edit tests. [Florian Baumann]
+
+- Removed pypy build from travis. [Florian Baumann]
+
+- Added user and mail for tests. [Florian Baumann]
+
+- Fix readme. [Florian Baumann]
+
+- Fix readme. [Florian Baumann]
+
+- Markup fix. [Florian Baumann]
+
+- Applied pylint changes. [Florian Baumann]
+
+- Version bump. [Florian Baumann]
+
 0.14.0 (2015-12-08)
 -------------------
 
+Feature
+~~~~~~~
+
 - Feature: Configurable colors for md to ascii #22. [Florian Baumann]
 
-- More robust config in completions. [Florian Baumann]
+- Feature: Configure pager flags - #20. [Florian Baumann]
+
+Documentation
+~~~~~~~~~~~~~
 
 - Documentation: updated Readme for Pagerflags. [Florian Baumann]
 
-- Feature: Configure pager flags - #20. [Florian Baumann]
+Other
+~~~~~
+
+- More robust config in completions. [Florian Baumann]
 
 - Referenced Changelog in README.rst. [Florian Baumann]
 
