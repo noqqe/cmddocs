@@ -111,8 +111,9 @@ def edit_article(article, directory, editor, repo, default_commit_msg, extension
 
         else:
             print("Nothing to commit")
-    except OSError:
+    except (OSError, git.exc.GitCommandError) as e:
         print("Error: Could not create commit")
+
 
 
 def info_article(article, dir, repo, extension):

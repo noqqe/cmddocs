@@ -32,6 +32,16 @@ After switching to just plaintext files using
 ``vim`` and ``git`` it was also a bit annoying. So I wrote
 ``cmddocs`` to make it easier for me to handle my plaintext files.
 
+Markdown Rendering
+------------------
+
+``cmddocs`` uses the [mistune](https://github.com/lepture/mistune) lexer to
+wrap markdown with ansi control sequences instead of html tags.
+
+It looks something like this.
+
+![md2ascii](https://raw.github.com/noqqe/cmddocs/master/cmddocs-md2ascii.png)
+
 Demo
 ----
 
