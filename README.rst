@@ -40,7 +40,7 @@ wrap markdown with ansi control sequences instead of html tags.
 
 It looks something like this.
 
-![md2ascii](https://raw.github.com/noqqe/cmddocs/master/cmddocs-md2ascii.png)
+.. image:: https://raw.github.com/noqqe/cmddocs/master/cmddocs-md2ascii.png
 
 Demo
 ----
