@@ -35,7 +35,7 @@ After switching to just plaintext files using
 Markdown Rendering
 ------------------
 
-``cmddocs`` uses the [mistune](https://github.com/lepture/mistune) lexer to
+``cmddocs`` uses the `mistune <https://github.com/lepture/mistune>`__ lexer to
 wrap markdown with ansi control sequences instead of html tags.
 
 It looks something like this.
