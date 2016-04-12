@@ -328,7 +328,10 @@ def show_diff(args, repo, extension):
         except git.exc.GitCommandError:
             print("Error: Not a valid git commit reference")
     else:
-        print(repo.git.diff('HEAD~5', unified="0", color="always"))
+        try:
+            print(repo.git.diff('HEAD~1', unified="0", color="always"))
+        except git.exc.GitCommandError:
+            print("Error: Not a valid git commit reference")
 
 def show_log(args, repo, extension):
     """
