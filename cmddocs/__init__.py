@@ -84,6 +84,11 @@ class Cmddocs(cmd.Cmd):
             self.pagerflags = False
 
         try:
+            self.editorflags = config.get("General", "EditorFlags")
+        except ConfigParser.NoOptionError:
+            self.editorflags = False
+
+        try:
             self.prompt = config.get("General", "Prompt")
         except ConfigParser.NoOptionError:
             self.prompt = "cmddocs>"

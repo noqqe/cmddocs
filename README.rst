@@ -73,6 +73,7 @@ Create ``.cmddocsrc`` file in your $HOME with the following content
     Default_Commit_Message = small changes
     Excludedir = .git/
     Editor = /usr/local/bin/vim
+    # EditorFlags = -C
     Pager = /usr/bin/less
     PagerFlags = -fr
     Prompt = cmddocs>

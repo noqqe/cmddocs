@@ -76,7 +76,10 @@ def edit_article(article, directory, editor, repo, default_commit_msg, extension
     # start editor
     if test is False:
         try:
-            subprocess.call([editor, a])
+            if editorflags is False:
+                subprocess.call([editor, a])
+            else:
+                subprocess.call([editor, editorflags, a])
         except OSError:
             print("Error: '%s' No such file or directory" % editor)
             return False
