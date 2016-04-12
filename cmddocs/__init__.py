@@ -212,7 +212,7 @@ class Cmddocs(cmd.Cmd):
             edit intro
         """
         return edit_article(article, os.getcwd(), self.editor, self.repo,
-                            self.default_commit_msg, self.extension, test)
+                            self.default_commit_msg, self.extension, test, self.editorflags)
 
     do_e = do_edit
 

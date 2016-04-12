@@ -58,7 +58,7 @@ def change_directory(dir, datadir):
     except OSError:
         print("Error: Directory %s not found" % dir)
 
-def edit_article(article, directory, editor, repo, default_commit_msg, extension, test):
+def edit_article(article, directory, editor, repo, default_commit_msg, extension, test, editorflags):
     """edit an article within your docs"""
     # set paths
     a = add_fileextension(article, extension)
