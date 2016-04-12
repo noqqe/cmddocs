@@ -1,6 +1,40 @@
 Changelog
 =========
 
+0.16.0 (2016-04-12)
+-------------------
+
+Fix
+~~~
+
+- No [Colors] section is also okay for config parser now. #29. [Florian Baumann]
+
+- Catch error when accessing git objects with diff. [Florian Baumann]
+
+Documentation
+~~~~~~~~~~~~~
+
+- Documentation: Screenshot in Readme. [Florian Baumann]
+
+- Documentation: Screenshot in Readme. [Florian Baumann]
+
+- Documentation: Readme format update. [Florian Baumann]
+
+- Documentation: Screenshot in Readme. [Florian Baumann]
+
+- Documentation: Screenshot in Readme. [Florian Baumann]
+
+Other
+~~~~~
+
+- Version bump. [Florian Baumann]
+
+- Implemented editorflags #31. [Florian Baumann]
+
+- Merge branch &#x27;master&#x27; of github.com:noqqe/cmddocs. [Florian Baumann]
+
+- Changelog update. [Florian Baumann]
+
 0.15.0 (2015-12-13)
 -------------------
 
@@ -282,13 +316,13 @@ Other
 
 - Better presentation of path. [Florian Baumann]
 
-- Merge branch 'posativ-patch-3' [Florian Baumann]
+- Merge branch &#x27;posativ-patch-3&#x27; [Florian Baumann]
 
 - Merged. [Florian Baumann]
 
 - Use subprocess instead of os.system with string replacement. [Martin Zimmermann]
 
-- T push origin master Merge branch 'posativ-patch-4' [Florian Baumann]
+- T push origin master Merge branch &#x27;posativ-patch-4&#x27; [Florian Baumann]
 
 - Merged. [Florian Baumann]
 
@@ -303,7 +337,7 @@ Other
 - Simplify command declaration. [Martin Zimmermann]
 
   Minor drawback: the docstring for aliases is no longer available
-  (replaced with the actual function's docstring).
+  (replaced with the actual function&#x27;s docstring).
 
 - Merge pull request #2 from posativ/patch-1. [Florian Baumann]
 
@@ -325,7 +359,7 @@ Other
 
 - More variable passing. [Florian Baumann]
 
-- Merge branch 'master' into noglobals. [Florian Baumann]
+- Merge branch &#x27;master&#x27; into noglobals. [Florian Baumann]
 
 - Replaced dumb try with if. [Florian Baumann]
 
@@ -343,13 +377,13 @@ Other
 
 - Removed double check of datadir. [Florian Baumann]
 
-- Merge branch 'master' of github.com:noqqe/cmddocs. [Florian Baumann]
+- Merge branch &#x27;master&#x27; of github.com:noqqe/cmddocs. [Florian Baumann]
 
 - Update LICENSE.md. [Florian Baumann]
 
 - Pager and editor now configurable in config. [Florian Baumann]
 
-- Merge branch 'master' of github.com:noqqe/cmddocs. [Florian Baumann]
+- Merge branch &#x27;master&#x27; of github.com:noqqe/cmddocs. [Florian Baumann]
 
 - Added license. [Florian Baumann]
 
@@ -403,7 +437,7 @@ Other
 
 - Fix dir not found message. [Florian Baumann]
 
-- Added 'safe' cd function. [Florian Baumann]
+- Added &#x27;safe&#x27; cd function. [Florian Baumann]
 
 - Implemented search function.. start.. [Florian Baumann]
 
