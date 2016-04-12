@@ -110,17 +110,17 @@ class Cmddocs(cmd.Cmd):
 
         try:
             self.colors['h1'] = config.get("Colors", "Header12")
-        except ConfigParser.NoOptionError:
+        except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
             self.colors['h1'] = "37"
 
         try:
             self.colors['h2'] = config.get("Colors", "Header345")
-        except ConfigParser.NoOptionError:
+        except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
             self.colors['h2'] = "92"
 
         try:
             self.colors['code'] = config.get("Colors", "Codeblock")
-        except ConfigParser.NoOptionError:
+        except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
             self.colors['code'] = "92"
 
         return
