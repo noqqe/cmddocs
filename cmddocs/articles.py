@@ -168,9 +168,14 @@ def mail_article(article, dir, mailfrom, extension):
     a = os.path.join(dir, a)
 
     # Create a text/plain message
-    fp = open(a, 'r')
-    msg = MIMEText(fp.read())
-    fp.close()
+    try:
+        fp = open(a, 'r')
+        msg = MIMEText(fp.read())
+        fp.close()
+    except IOError:
+        print("Error: Please specify a document")
+        return False
+
 
     mailto = raw_input("Recipient: ")
     msg['Subject'] = article
