@@ -1,5 +1,8 @@
+.. image:: https://travis-ci.org/noqqe/cmddocs.svg?branch=master
+       :target: https://travis-ci.org/noqqe/cmddocs
 
-
+.. image:: https://codecov.io/gh/noqqe/cmddocs/branch/master/graph/badge.svg
+     :target: https://codecov.io/gh/noqqe/cmddocs
 
 cmddocs
 =======
