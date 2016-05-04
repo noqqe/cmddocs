@@ -3,8 +3,9 @@ python:
   - "2.7"
 before_install:
   - sudo apt-get install -y tree
+  - pip install pytest-cov
 install:
   - pip install .
-script: py.test
+script: PYTHONPATH=. py.test --cov=cmddocs
 after_success:
   - bash <(curl -s https://codecov.io/bash)
