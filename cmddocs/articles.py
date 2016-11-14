@@ -7,11 +7,13 @@ import socket
 import smtplib
 import tempfile
 import datetime
+from builtins import input
 from email.mime.text import MIMEText
 import mistune
 import git
 from cmddocs.utils import *
 from cmddocs.rendering import md_to_ascii
+
 
 # Function definitions
 def list_articles(dir, extension):
@@ -98,7 +100,7 @@ def edit_article(article, directory, editor, repo, default_commit_msg, extension
         if repo.is_dirty():
             if test is False:
                 try:
-                    msg = raw_input("Commit message: ")
+                    msg = input("Commit message: ")
                     if not msg:
                         msg = default_commit_msg
                 except OSError:
@@ -176,7 +178,7 @@ def mail_article(article, dir, mailfrom, extension):
         return False
 
 
-    mailto = raw_input("Recipient: ")
+    mailto = input("Recipient: ")
     msg['Subject'] = article
     msg['From'] = mailfrom
     msg['To'] = mailto
@@ -400,7 +402,7 @@ def undo_change(args, repo):
     if len(args) == 1:
         try:
             print(repo.git.show(args[0], '--oneline', '--patience'))
-            msg = raw_input("\nDo you really want to undo this? (y/n): ")
+            msg = input("\nDo you really want to undo this? (y/n): ")
             if msg == "y":
                 repo.git.revert(args[0], '--no-edit')
 
