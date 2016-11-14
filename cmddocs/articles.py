@@ -85,10 +85,9 @@ def edit_article(article, directory, editor, repo, default_commit_msg, extension
             return False
     else:
         try:
-            fp = open(a, "ab+")
-            content = "TEST CHANGE"
-            fp.write(content)
-            fp.close()
+            with open(a, "a") as fp:
+                content = "TEST CHANGE"
+                fp.write(content)
         except OSError:
             print("Error: '%s' No such file or directory" % editor)
 
@@ -214,7 +213,7 @@ def view_article(article, dir, pager, extension, pagerflags, colors):
     article.close()
 
     # hand everything over to mistune lexer
-    with tempfile.NamedTemporaryFile(delete=False) as tmp:
+    with tempfile.NamedTemporaryFile(delete=False, mode='w') as tmp:
         md = mistune.Markdown(renderer=md_to_ascii(colors))
         tmp.write(md.render(content))
 

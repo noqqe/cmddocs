@@ -50,13 +50,13 @@ hopefully no one will ever read this
     # create test files
     for x in range(1, 6):
         x = str(x)
-        f = open(d + "/testfile" + x + ".md", "ab+")
+        f = open(d + "/testfile" + x + ".md", "a")
         f.write("Test " + x)
         f.close()
 
     for x in range(1, 4):
         x = str(x)
-        f = open(d + "/dir1/testfile" + x + ".md", "ab+")
+        f = open(d + "/dir1/testfile" + x + ".md", "a")
         f.write(doc)
         f.close()
 
@@ -70,7 +70,7 @@ hopefully no one will ever read this
     # create new content
     for x in range(1, 4):
         x = str(x)
-        f = open(d + "/dir2/testfile" + x + ".md", "ab+")
+        f = open(d + "/dir2/testfile" + x + ".md", "a")
         f.write(doc)
         f.close()
 
@@ -81,7 +81,7 @@ hopefully no one will ever read this
     # create new content
     for x in range(1, 4):
         x = str(x)
-        f = open(d + "/dir3/testfile" + x + ".md", "ab+")
+        f = open(d + "/dir3/testfile" + x + ".md",  "a")
         f.write(doc)
         f.close()
 
@@ -91,7 +91,7 @@ hopefully no one will ever read this
 
     # create test config
     confpath = tempfile.mkdtemp(dir="/tmp/", prefix="demodocsconf-")
-    config = open(confpath + "/config", "ab+")
+    config = open(confpath + "/config",  "a")
 
     # initialize test config
     content = """
@@ -138,7 +138,7 @@ def emptyenv():
 
     # create test config
     confpath = tempfile.mkdtemp(dir="/tmp/", prefix="demodocsconf-")
-    config = open(confpath + "/config", "ab+")
+    config = open(confpath + "/config",  "a")
 
     # initialize test config
     content = """
