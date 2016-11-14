@@ -5,7 +5,7 @@ import os
 import cmd
 import sys
 import signal
-import ConfigParser
+import configparser
 import git
 import pkg_resources
 from cmddocs.articles import *
@@ -34,7 +34,7 @@ class Cmddocs(cmd.Cmd):
         """
 
         self.colors = {}
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
 
         if not config.read(os.path.expanduser(conf)):
             print("Error: your config %s could not be read" % conf)
@@ -42,23 +42,23 @@ class Cmddocs(cmd.Cmd):
 
         try:
             self.datadir = os.path.expanduser(config.get("General", "Datadir"))
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             print("Error: Please set a Datadir in %s" % conf)
             exit(1)
 
         try:
             self.exclude = os.path.expanduser(config.get("General", "Excludedir"))
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.exclude = os.path.expanduser('.git/')
 
         try:
             self.default_commit_msg = config.get("General", "Default_Commit_Message")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.default_commit_msg = "small changes"
 
         try:
             self.editor = config.get("General", "Editor")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             if os.environ.get('EDITOR') is not None:
                 self.editor = os.environ.get('EDITOR')
             else:
@@ -69,7 +69,7 @@ class Cmddocs(cmd.Cmd):
 
         try:
             self.pager = config.get("General", "Pager")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             if os.environ.get('PAGER') is not None:
                 self.editor = os.environ.get('PAGER')
             else:
@@ -80,52 +80,52 @@ class Cmddocs(cmd.Cmd):
 
         try:
             self.pagerflags = config.get("General", "PagerFlags")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.pagerflags = False
 
         try:
             self.editorflags = config.get("General", "EditorFlags")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.editorflags = False
 
         try:
             self.prompt = config.get("General", "Prompt")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.prompt = "cmddocs>"
 
         try:
             self.promptcol = config.get("General", "Promptcolor")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.promptcol = "37"
 
         try:
             self.intro = config.get("General", "Intro_Message")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.intro = "cmddocs - press ? for help"
 
         try:
             self.mailfrom = config.get("General", "Mail")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.mailfrom = "nobody"
 
         try:
             self.extension = config.get("General", "Default_Extension")
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             self.extension = "md"
 
         try:
             self.colors['h1'] = config.get("Colors", "Header12")
-        except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
+        except (configparser.NoOptionError, configparser.NoSectionError):
             self.colors['h1'] = "37"
 
         try:
             self.colors['h2'] = config.get("Colors", "Header345")
-        except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
+        except (configparser.NoOptionError, configparser.NoSectionError):
             self.colors['h2'] = "92"
 
         try:
             self.colors['code'] = config.get("Colors", "Codeblock")
-        except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
+        except (configparser.NoOptionError, configparser.NoSectionError):
             self.colors['code'] = "92"
 
         return

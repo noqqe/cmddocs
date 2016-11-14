@@ -1,5 +1,5 @@
 import os
-import ConfigParser
+import configparser
 from os.path import expanduser
 from utils import *
 
@@ -13,12 +13,12 @@ def path_complete(self, text, line, begidx, endidx):
     # this is a workaround to get default extension into the completion function
     # may (hopefully) gets replaced.
     try:
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         if not config.read(expanduser("~/.cmddocsrc")):
             print("Error: your config %s could not be read" % conf)
             exit(1)
         extension = config.get("General", "Default_Extension")
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         self.extension = "md"
 
     if not arg:
