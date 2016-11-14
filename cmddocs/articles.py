@@ -19,7 +19,7 @@ def list_articles(dir, extension):
     try:
         DEVNULL = open(os.devnull, 'wb')
         listing = subprocess.check_output(["tree", dir], stderr=DEVNULL)
-        listing = remove_fileextension(listing, extension)
+        listing = remove_fileextension(listing.decode('utf-8'), extension)
         print(listing)
     except OSError:
         print("Error: tree not installed")
@@ -32,7 +32,7 @@ def list_directories(dir):
     try:
         DEVNULL = open(os.devnull, 'wb')
         listing = subprocess.check_output(["tree", "-d", dir], stderr=DEVNULL)
-        print(listing)
+        print(listing.decode('utf-8'))
     except OSError:
         print("Error: tree not installed")
         return False
