@@ -42,6 +42,7 @@ setup(
         'Topic :: Terminals',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.5',
     ],
 
     keywords='markdown wiki commandline git',
