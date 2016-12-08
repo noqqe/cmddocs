@@ -1,6 +1,46 @@
 Changelog
 =========
 
+0.17.0 (2016-11-15)
+-------------------
+
+- Python 3.5 compatibility in setup and tests. [Florian Baumann]
+
+- Python3 compatibility: raw_input =&gt; input. [lonetwin]
+
+- Python3 compatibility: relative imports. [lonetwin]
+
+- Python3 compatibility: File mode changes. [lonetwin]
+
+  Use text mode instead of binary to avoid unnecesary bytes-to-string
+  conversions
+
+- Python3 compatibility: subprocess stdout bytes =&gt; utf-8 strings. [lonetwin]
+
+- Python3 compatibility: ConfigParser =&gt; configparser. [lonetwin]
+
+- Badges. [Florian Baumann]
+
+- Codecoverage for tests. [Florian Baumann]
+
+- Codecoverage for tests. [Florian Baumann]
+
+0.16.2 (2016-04-12)
+-------------------
+
+- Version bump. [Florian Baumann]
+
+- Fix mail with no parameters #32. [Florian Baumann]
+
+0.16.1 (2016-04-12)
+-------------------
+
+- Version bump. [Florian Baumann]
+
+- Fix for editorflags. [Florian Baumann]
+
+- Changelog update. [Florian Baumann]
+
 0.16.0 (2016-04-12)
 -------------------
 
