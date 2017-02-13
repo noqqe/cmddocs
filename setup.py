@@ -11,16 +11,13 @@ def read_from_file(path):
         with open(path,"rb","utf-8") as input:
             return input.read()
 
-# get version string
-exec(open('cmddocs/version.py').read())
-
 setup(
     name='cmddocs',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version=__version__,
+    version=read_from_file(VERSION).strip()
 
     description='An interactive commandline interface for your personal docs using python, Cmd, git and markdown',
     long_description=read_from_file('README.rst'),
