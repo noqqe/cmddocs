@@ -11,7 +11,7 @@ def read_from_file(path):
         with open(path,"rb","utf-8") as input:
             return input.read()
 
-version = "1.0.1"
+version = "1.0.2"
 
 setup(
     name='cmddocs',
