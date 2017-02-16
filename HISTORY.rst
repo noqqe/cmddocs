@@ -4,6 +4,9 @@ Changelog
 
 %%version%% (unreleased)
 ------------------------
+- Release: 1.0.3. [Florian Baumann]
+- Fix. [Florian Baumann]
+- Changelog: 1.0.2. [Florian Baumann]
 - Release: 1.0.2. [Florian Baumann]
 - Fix changelog. [Florian Baumann]
 - Release: 1.0.1. [Florian Baumann]
